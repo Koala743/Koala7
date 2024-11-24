@@ -400,7 +400,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if game.PlaceId == 5151400895 and data.Strength.Value <= 200000000 then
+            if getIsActive1() and game.PlaceId == 5151400895 and data.Strength.Value <= 200000000 then
                 game:GetService("ReplicatedStorage").Package.Events.TP:InvokeServer("Earth")
                 task.wait(4)
             end
@@ -485,7 +485,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if game.PlaceId ~= 5151400895 then
+            if getIsActive1() and game.PlaceId ~= 5151400895 then
                 game:GetService("ReplicatedStorage").Package.Events.cha:InvokeServer("Blacknwhite27")
             end
         end)
