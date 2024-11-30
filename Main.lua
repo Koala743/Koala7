@@ -260,6 +260,7 @@ local getIsActive5 = createSwitch(Barra1, UDim2.new(0.1, 25, 0.180, 0), "Switch5
 
 task.spawn(function()
     pcall(function()
+
 local player = game.Players.LocalPlayer
 local data = game.ReplicatedStorage.Datas[player.UserId]
 local events = game:GetService("ReplicatedStorage").Package.Events
@@ -284,52 +285,53 @@ local questDataInsideID = {
 
 local questData = game.PlaceId ~= 5151400895 and questDataOutsideID or questDataInsideID
 
-
-local function assignQuest()
-    local minimo = data.Strength.Value
-    for _, quest in pairs(questData) do
-        local minRange, maxRange = quest.range[1], quest.range[2]
-        if minimo >= minRange and minimo < maxRange then
-            for _, mob in pairs(quest.options) do
-                local boss = game:GetService("Workspace").Living:FindFirstChild(mob)
-                if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
-                    SelectedQuest, SelectedMob = mob, mob
-                    return
-                end
-            end
-        end
-    end
-end
-
-local function startMission()
-    if data.Quest.Value == ""  then
-        pcall(function()
-            local npc = game:GetService("Workspace").Others.NPCs:FindFirstChild(SelectedQuest)
-            if npc and npc:FindFirstChild("HumanoidRootPart")  then
-                player.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
-                events.Qaction:InvokeServer(npc)
-            end
-        end)
-    end
-end
-
---Ciclo Para Auto = Start Mission Farm - Boss
 task.spawn(function()
     while true do
-        game:GetService("RunService").Stepped:Wait()
-        local success, errorMessage = pcall(function()
-            assignQuest()
-            if getIsActive1() and data.Quest.Value == "" then
-                startMission()
+        pcall(function()
+            local stats = {"Strength", "Speed", "Defense", "Energy"}
+            local lowestStat = math.huge
+
+            for _, stat in ipairs(stats) do
+                local value = data[stat].Value
+                if value < lowestStat then
+                    lowestStat = value
+                end
             end
+
+            for _, quest in pairs(questData) do
+                local minRange, maxRange = quest.range[1], quest.range[2]
+                if lowestStat >= minRange and lowestStat < maxRange then
+                    for _, mob in pairs(quest.options) do
+                        local boss = game:GetService("Workspace").Living:FindFirstChild(mob)
+                        if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                            SelectedQuest, SelectedMob = mob, mob
+                            break
+                        end
+                    end
+                    break
+                end
+            end
+
+            if data.Quest.Value == "" then
+                local npc = game:GetService("Workspace").Others.NPCs:FindFirstChild(SelectedQuest)
+                if npc and npc:FindFirstChild("HumanoidRootPart") then
+                    player.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
+                    events.Qaction:InvokeServer(npc)
+                end
+            end
+
             local boss = game:GetService("Workspace").Living:FindFirstChild(SelectedMob)
             if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health <= 0 then
-                startMission() 
+                if data.Quest.Value == "" then
+                    local npc = game:GetService("Workspace").Others.NPCs:FindFirstChild(SelectedQuest)
+                    if npc and npc:FindFirstChild("HumanoidRootPart") then
+                        player.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
+                        events.Qaction:InvokeServer(npc)
+                    end
+                end
             end
         end)
-        if not success then
-            warn("Error en el script: " .. errorMessage)
-        end
+        wait()
     end
 end)
     
@@ -337,15 +339,13 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive1() then
-                local questValue = game.ReplicatedStorage.Datas[player.UserId].Quest.Value
-                local boss = game.Workspace.Living:FindFirstChild(questValue)            
-                if boss and boss:FindFirstChild("Humanoid") then
-                    lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
+            if getIsActive1()  then
+                if game.Workspace.Living:FindFirstChild(data.Quest.Value) then
+                    lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Living[data.Quest.Value].HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
                 end
             end
         end)
-       task.wait()
+        task.wait()
     end
 end)
 
@@ -355,12 +355,12 @@ task.spawn(function()
         pcall(function()
             if getIsActive2() then
                 local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour == 20 or currentGameHour == 2 then
+                if currentGameHour >= 20 or currentGameHour < 6 then
                     if data.Quest.Value == "" then
                         lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["Kid Nohag"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
                         game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(workspace.Others.NPCs["Kid Nohag"])
                     end
-                elseif currentGameHour ~= 20 and currentGameHour ~= 2 then
+                else
                     if data.Quest.Value == "" then
                         lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
                         game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(workspace.Others.NPCs["SSJG Kakata"])
@@ -372,23 +372,61 @@ task.spawn(function()
     end
 end)
 
---Ciclo Para Auto = Tp Boss y Ozaru
+
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive2() then
-                local questValue = game.ReplicatedStorage.Datas[lplr.UserId].Quest.Value
-                local boss = game.Workspace.Living:FindFirstChild(questValue)
-                if boss and boss:FindFirstChild("Humanoid") then
-                    if boss.Humanoid.Health > 0 then
-                        lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
-                    elseif boss.Humanoid.Health <= 0 then
-                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233.1953125, 18.168001174926758, -28942.220703125)
-                        local halloweenBoss = game.Workspace.Living:FindFirstChild("Halloween Boss")
-                        if halloweenBoss and halloweenBoss:FindFirstChild("Humanoid") then
-                            lplr.Character.HumanoidRootPart.CFrame = halloweenBoss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
+            if data.Quest.Value ~= "" then
+                wait(2)
+                local npcFolder = game:GetService("Workspace").Others.NPCs
+                for _, npc in ipairs(npcFolder:GetChildren()) do
+                    if npc:FindFirstChild("HumanoidRootPart") then
+                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
+                        if distance <= 300 and npc.Name ~= "Halloween NPC" then
+                            data.Quest.Value = ""
+                            break
                         end
                     end
+                end
+            end
+        end)
+        wait()
+    end
+end)
+
+
+
+
+--Ciclo Para Auto = Tp Boss y Ozaru
+spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive2() then
+                local boss = game.Workspace.Living[data.Quest.Value]
+                if boss and boss:FindFirstChild("Humanoid") then
+                    if boss.Humanoid.Health <= 0 then
+                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
+                        local halloweenBoss = game.Workspace.Living["Halloween Boss"]
+                        if halloweenBoss then
+                            lplr.Character.HumanoidRootPart.CFrame = halloweenBoss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
+                        end
+                    else
+                        lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
+                    end
+                end
+            end
+        end)
+        task.wait()
+    end
+end)
+
+spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive2() and  data.Quest.Value ~= "" then
+                local boss = game.Workspace.Living:FindFirstChild("Oozaru")
+                if boss and boss:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
                 end
             end
         end)
@@ -450,7 +488,7 @@ task.spawn(function()
                 end
             end
         end)
-        wait()
+        wait(.5)
     end
 end)
 
@@ -485,7 +523,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive1() and game.PlaceId ~= 5151400895 then
+            if getIsActive5() and game.PlaceId ~= 5151400895 then
                 game:GetService("ReplicatedStorage").Package.Events.cha:InvokeServer("Blacknwhite27")
             end
         end)
@@ -561,6 +599,57 @@ spawn(function()
     end
 end)
 
+
+
+local lplr = game.Players.LocalPlayer
+local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
+
+spawn(function()
+    local events = {
+        {"SSJ3", 9e5},
+        {"Godly SSJ2", 8e6},
+        {"God of Destruction", 30e6, "True God of Destruction"},
+        {"Astral Instinct", 120e6, "Divine Rose Prominence"}
+    }
+
+    while true do
+        pcall(function()
+            local transformation = lplr.Status.Transformation.Value
+            local strength = data.Strength.Value
+            if transformation == "None" then
+                for _, event in ipairs(events) do
+                    if strength >= event[2] then
+                        game:GetService("ReplicatedStorage").Package.Events.equipskill:InvokeServer(event[1])
+                        if event[3] then
+                            game:GetService("ReplicatedStorage").Package.Events.equipskill:InvokeServer(event[3])
+                        end
+                    end
+                end
+                game:GetService("ReplicatedStorage").Package.Events.ta:InvokeServer()
+            end
+        end)
+        wait()
+    end
+end)
+
+
+spawn(function()
+    while true do
+        pcall(function()
+            local playerCount = #game.Players:GetPlayers()
+            if playerCount > 1 then
+                if data.Zeni.Value >= 15000 then
+                    if game.PlaceId ~= 5151400895 then
+                        game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
+                    end
+                else
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
+                end
+            end
+        end)
+        wait(5)
+    end
+end)
 
 --fin de todo \/
        end)    
