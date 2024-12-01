@@ -288,6 +288,7 @@ local questData = game.PlaceId ~= 5151400895 and questDataOutsideID or questData
 task.spawn(function()
     while true do
         pcall(function()
+       if getIsActive1() then
             local stats = {"Strength", "Speed", "Defense", "Energy"}
             local lowestStat = math.huge
 
@@ -329,6 +330,7 @@ task.spawn(function()
                         events.Qaction:InvokeServer(npc)
                     end
                 end
+                end
             end
         end)
         wait()
@@ -339,9 +341,11 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive1()  then
-                if game.Workspace.Living:FindFirstChild(data.Quest.Value) then
-                    lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Living[data.Quest.Value].HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
+            if getIsActive1() or getIsActive2() then
+                local questValue = game.ReplicatedStorage.Datas[player.UserId].Quest.Value
+                local boss = game.Workspace.Living:FindFirstChild(questValue)
+                if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                    lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
                 end
             end
         end)
@@ -377,15 +381,12 @@ task.spawn(function()
     while true do
         pcall(function()
             if data.Quest.Value ~= "" then
-                wait(2)
-                local npcFolder = game:GetService("Workspace").Others.NPCs
-                for _, npc in ipairs(npcFolder:GetChildren()) do
-                    if npc:FindFirstChild("HumanoidRootPart") then
-                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 300 and npc.Name ~= "Halloween NPC" then
-                            data.Quest.Value = ""
-                            break
-                        end
+                local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
+                if npc and npc.Humanoid.Health <= 0 then
+                    lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
+                    local boss = game.Workspace.Living:FindFirstChild("Halloween NPC")
+                    if boss then
+                        lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
                     end
                 end
             end
@@ -394,39 +395,33 @@ task.spawn(function()
     end
 end)
 
-
-
-
 --Ciclo Para Auto = Tp Boss y Ozaru
-spawn(function()
+task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive2() then
-                local boss = game.Workspace.Living[data.Quest.Value]
-                if boss and boss:FindFirstChild("Humanoid") then
-                    if boss.Humanoid.Health <= 0 then
-                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
-                        local halloweenBoss = game.Workspace.Living["Halloween Boss"]
-                        if halloweenBoss then
-                            lplr.Character.HumanoidRootPart.CFrame = halloweenBoss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
-                        end
-                    else
-                        lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
-                    end
+            local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
+            if npc and npc.Humanoid.Health <= 0 then
+                lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
+                local boss = game.Workspace.Living:FindFirstChild("Halloween NPC")
+                if boss and boss.Humanoid.Health > 0 then
+                    lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
                 end
             end
         end)
-        task.wait()
+        wait()
     end
 end)
 
 spawn(function()
     while true do
         pcall(function()
-            if getIsActive2() and  data.Quest.Value ~= "" then
-                local boss = game.Workspace.Living:FindFirstChild("Oozaru")
-                if boss and boss:FindFirstChild("HumanoidRootPart") then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+            if getIsActive2() and data.Quest.Value == "Kid Nohag" then
+                local currentGameHour = math.floor(game.Lighting.ClockTime)
+                if currentGameHour >= 20 or currentGameHour < 6 then
+                    local boss = game.Workspace.Living:FindFirstChild("Oozaru")
+                    if boss and boss:FindFirstChild("HumanoidRootPart") then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                    end
                 end
             end
         end)
@@ -452,7 +447,7 @@ task.spawn(function()
     while true do
         if getIsActive1() and minStrength and game.PlaceId ~= 5151400895 and data.Strength.Value >= minStrength then
             game:GetService("ReplicatedStorage").Package.Events.TP:InvokeServer("Vills Planet")
-            task.wait(8)
+            task.wait(4)
         end
         wait(1)
     end
@@ -465,24 +460,14 @@ task.spawn(function()
             local moves = { "Super Dragon Fist", "God Slicer", "Spirit Barrage", "Mach Kick", "Wolf Fang Fist", 
                             "High Power Rush", "Meteor Strike", "Meteor Charge", "Spirit Breaking Cannon", 
                             "Vital Strike", "Flash Kick", "Vanish Strike", "Uppercut", "Sledgehammer", "Rock Impact" }
-
-            local Iplr = game.Players.LocalPlayer
-            local data = game.ReplicatedStorage.Datas[Iplr.UserId]
-            local dat = (game.PlaceId == 5151400895) and game.Workspace.Living:FindFirstChild(Iplr.Name) or game.Players.LocalPlayer
-
+            local dat = (game.PlaceId == 5151400895) and game.Workspace.Living:FindFirstChild(lplr.Name) or lplr
             if data.Quest.Value ~= "" and getIsActive3() then
-                local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)
-                if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
-                    local distance = (boss.HumanoidRootPart.Position - Iplr.Character.HumanoidRootPart.Position).Magnitude
-                    if distance <= 10 then
-                        if dat:FindFirstChild("Status") then
-                            for _, move in ipairs(moves) do
-                                if not dat.Status:FindFirstChild(move) then
-                                    task.spawn(function()
-                                        game:GetService("ReplicatedStorage").Package.Events.mel:InvokeServer(move, "Blacknwhite27")
-                                    end)
-                                end
-                            end
+                if dat:FindFirstChild("Status") then
+                    for _, move in ipairs(moves) do
+                        if not dat.Status:FindFirstChild(move) then
+                            task.spawn(function()
+                                game:GetService("ReplicatedStorage").Package.Events.mel:InvokeServer(move, "Blacknwhite27")
+                            end)
                         end
                     end
                 end
@@ -501,7 +486,7 @@ task.spawn(function()
                 game:GetService("ReplicatedStorage").Package.Events.p:FireServer("Blacknwhite27", 2)                    
             end
         end)
-        wait()
+        wait(.01)
     end
 end)
 
@@ -564,7 +549,6 @@ spawn(function()
         if lplr.PlayerGui:FindFirstChild("Start") then
             lplr.PlayerGui.Start:Destroy()
         end
-        -- Actualización del objeto 'bruh'
         lplr.PlayerGui.Main.bruh.Enabled = false
         lplr.PlayerGui.Main.bruh.Enabled = true
     end
@@ -638,10 +622,8 @@ spawn(function()
         pcall(function()
             local playerCount = #game.Players:GetPlayers()
             if playerCount > 1 then
-                if data.Zeni.Value >= 15000 then
-                    if game.PlaceId ~= 5151400895 then
-                        game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
-                    end
+                if game.PlaceId == 5151400895 then
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
                 else
                     game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
                 end
