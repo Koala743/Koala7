@@ -1,3 +1,80 @@
+local ClaveCorrecta = "Rafa"
+local ArchivoClave = "ClaveGuardada.json"
+local HttpService = game:GetService("HttpService")
+
+local KeyGui = Instance.new("ScreenGui")
+KeyGui.Parent = game.CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0.3, 0, 0.25, 0)
+Frame.Position = UDim2.new(0.35, 0, 0.35, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+Frame.BorderSizePixel = 0
+Frame.BackgroundTransparency = 0.1
+Frame.Parent = KeyGui
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0.1, 0)
+UICorner.Parent = Frame
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0.3, 0)
+Title.Position = UDim2.new(0, 0, 0, 0)
+Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextScaled = true
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Introduce tu clave"
+Title.Parent = Frame
+
+local TextBox = Instance.new("TextBox")
+TextBox.Size = UDim2.new(0.8, 0, 0.25, 0)
+TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
+TextBox.PlaceholderText = "Introduce la clave"
+TextBox.Font = Enum.Font.Gotham
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+TextBox.BorderSizePixel = 0
+TextBox.TextScaled = true
+TextBox.ClearTextOnFocus = false
+TextBox.Parent = Frame
+
+local UICornerTextBox = Instance.new("UICorner")
+UICornerTextBox.CornerRadius = UDim.new(0.1, 0)
+UICornerTextBox.Parent = TextBox
+
+local BotonInvitacion = Instance.new("TextButton")
+BotonInvitacion.Size = UDim2.new(0.2, 0, 0.2, 0)
+BotonInvitacion.Position = UDim2.new(0.8, 0, 0.8, 0)
+BotonInvitacion.Text = "🌐"
+BotonInvitacion.Font = Enum.Font.GothamBold
+BotonInvitacion.TextScaled = true
+BotonInvitacion.TextColor3 = Color3.fromRGB(255, 255, 255)
+BotonInvitacion.BackgroundTransparency = 1
+BotonInvitacion.BorderSizePixel = 0
+BotonInvitacion.Parent = Frame
+
+local BotonKeyUrl = Instance.new("TextButton")
+BotonKeyUrl.Size = UDim2.new(0.6, 0, 0.25, 0)
+BotonKeyUrl.Position = UDim2.new(0.2, 0, 0.75, 0)
+BotonKeyUrl.Text = "Copiar URL de la clave"
+BotonKeyUrl.Font = Enum.Font.GothamBold
+BotonKeyUrl.TextScaled = true
+BotonKeyUrl.TextColor3 = Color3.fromRGB(255, 255, 255)
+BotonKeyUrl.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
+BotonKeyUrl.BorderSizePixel = 0
+BotonKeyUrl.Parent = Frame
+
+local UICornerKeyUrl = Instance.new("UICorner")
+UICornerKeyUrl.CornerRadius = UDim.new(0.1, 0)
+UICornerKeyUrl.Parent = BotonKeyUrl
+
+local function guardarClave()
+    writefile(ArchivoClave, HttpService:JSONEncode({FechaGuardada = os.time()}))
+end
+
+
+local function main()
 local Fernando = game.CoreGui:FindFirstChild("Fernando")
 if Fernando then
     return  
@@ -261,7 +338,7 @@ local questDataOutsideID = {
     {range = {80000000, math.huge}, options = {"SSJG Kakata", "Broccoli"}}
 }
 local questDataInsideID = {
-    {range = {200000000, 1500000000}, options = {"Vegetable (GoD in-training)", "Wukong (Omen)"}},
+    {range = {100000000, 1500000000}, options = {"Vegetable (GoD in-training)", "Wukong (Omen)"}},
     {range = {1500000000, 2500000000}, options = {"Vis (20%)", "Vegetable (LBSSJ4)"}},
     {range = {2500000000, 3500000000}, options = {"Wukong (LBSSJ4)", "Vegetable (LBSSJ4)"}},
     {range = {3500000000, math.huge}, options = {"Vekuta (SSJBUI)", "Wukong Rose"}}
@@ -486,7 +563,7 @@ task.spawn(function()
         pcall(function()
             local Work = game.Workspace.Living[lplr.Name]
             if Work and Work.Status.Transformation.Value ~= "None" then
-                if getIsActive5() then
+                if getIsActive4() then
                     game:GetService("ReplicatedStorage").Package.Events.cha:InvokeServer("Blacknwhite27")
                 end
             end
@@ -498,7 +575,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive5() and game.PlaceId ~= 5151400895 then
+            if getIsActive4() and game.PlaceId ~= 5151400895 then
                 game:GetService("ReplicatedStorage").Package.Events.cha:InvokeServer("Blacknwhite27")
             end
         end)
@@ -670,6 +747,60 @@ spawn(function()
     end
 end)
 
+local TiempoValidez = 24 * 60 * 60
+local ArchivoClave = "ClaveGuardada.json"
+local HttpService = game:GetService("HttpService")
+
+
+local TiempoGui = Instance.new("ScreenGui")
+
+
+local TiempoLabel = Instance.new("TextLabel")
+TiempoLabel.Size = UDim2.new(0.3, 0, 0.1, 0)
+TiempoLabel.Position = UDim2.new(0.6, 0, -0.02, 0)
+TiempoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TiempoLabel.TextScaled = true
+TiempoLabel.BackgroundTransparency = 1
+TiempoLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TiempoLabel.BorderSizePixel = 0
+TiempoLabel.Text = "Cargando..."
+TiempoLabel.Parent = Barra1
+
+
+local function claveEsValida()
+    if isfile(ArchivoClave) then
+        local datosClave = HttpService:JSONDecode(readfile(ArchivoClave))
+        local tiempoRestante = TiempoValidez - (os.time() - datosClave.FechaGuardada)
+        return tiempoRestante > 0, tiempoRestante
+    end
+    return false, 0
+end
+
+local function mostrarTiempoRestante(tiempoRestante)
+    TiempoGui.Enabled = true
+
+    spawn(function()
+        while tiempoRestante > 0 do
+            tiempoRestante = tiempoRestante - 1
+            TiempoLabel.Text = string.format("%02d:%02d:%02d",
+                math.floor(tiempoRestante / 3600),
+                math.floor((tiempoRestante % 3600) / 60),
+                tiempoRestante % 60
+            )
+            wait(1)
+        end
+
+        TiempoGui.Enabled = false
+        print("El tiempo ha expirado. Debes ingresar una nueva clave.")
+    end)
+end
+
+local esValida, tiempoRestante = claveEsValida()
+if esValida then
+    mostrarTiempoRestante(tiempoRestante)
+else
+    print("La clave ha expirado o no existe. Debes ingresar una nueva clave.")
+end
 --fin de todo \/
        end)    
     wait(.5)
@@ -694,3 +825,47 @@ task.spawn(function()
         wait()
     end
 end)
+
+
+--fin del Function ()
+end
+
+
+
+local function claveEsValida()
+    if isfile(ArchivoClave) then
+        local datosClave = HttpService:JSONDecode(readfile(ArchivoClave))
+        return os.time() - datosClave.FechaGuardada < (24 * 60 * 60), datosClave.FechaGuardada
+    end
+    return false, 0
+end
+
+TextBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        if TextBox.Text == ClaveCorrecta then
+            guardarClave()
+            KeyGui.Enabled = false
+            main()
+        else
+            TextBox.Text = "Clave incorrecta"
+            TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
+            wait(1)
+            TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextBox.Text = ""
+        end
+    end
+end)
+
+BotonKeyUrl.MouseButton1Click:Connect(function()
+    setclipboard("Htt/ttpp_keye xd")
+end)
+
+BotonInvitacion.MouseButton1Click:Connect(function()
+    setclipboard("https://discord.com/invite/3pjp7ufjWv")
+end)
+
+local esValida, fechaGuardada = claveEsValida()
+if esValida then
+    KeyGui.Enabled = false
+    main()
+end
