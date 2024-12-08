@@ -1,4 +1,4 @@
-local ClaveCorrecta = "Rafa"
+local ClaveCorrecta = "Key:[jhsgsttqvqujhh926628hshsg]"
 local ArchivoClave = "ClaveGuardada.json"
 local HttpService = game:GetService("HttpService")
 
@@ -857,7 +857,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
 end)
 
 BotonKeyUrl.MouseButton1Click:Connect(function()
-    setclipboard("Htt/ttpp_keye xd")
+    setclipboard("https://direct-link.net/1258891/key-dbu")
 end)
 
 BotonInvitacion.MouseButton1Click:Connect(function()
