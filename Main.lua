@@ -797,7 +797,7 @@ local TiempoGui = Instance.new("ScreenGui")
 
 local TiempoLabel = Instance.new("TextLabel")
 TiempoLabel.Size = UDim2.new(0.3, 0, 0.1, 0)
-TiempoLabel.Position = UDim2.new(0.6, 0, 0.9, 0)
+TiempoLabel.Position = UDim2.new(0.6, 0, -0.02, 0)
 TiempoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TiempoLabel.TextScaled = true
 TiempoLabel.BackgroundTransparency = 1
