@@ -866,12 +866,11 @@ end)
 --fin del Function ()
 end
 
-local function ejecutarLopoiSiClaveValida()
-    if claveEsValida() and not claveValida then
+spawn(function()
+    if claveEsValida() then
         lopoi()
-        claveValida = true
     end
-end
+end)
 
 spawn(function()
     if claveEsValida() then
@@ -899,8 +898,8 @@ TextBox.FocusLost:Connect(function(enterPressed)
             if not claveExistente then
                 guardarClaveGuardada(clave)
                 actualizarHistorial(clave)
-                ejecutarLopoiSiClaveValida()  -- Ejecuta lopoi solo una vez
                 KeyGui.Enabled = false
+                lopoi()
             else
                 TextBox.Text = "Clave ya usada"
                 TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
