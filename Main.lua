@@ -793,13 +793,11 @@ local TiempoValidez = 24 * 60 * 60
 local ArchivoClave = "ClaveGuardada.json"
 local HttpService = game:GetService("HttpService")
 
-
 local TiempoGui = Instance.new("ScreenGui")
-
 
 local TiempoLabel = Instance.new("TextLabel")
 TiempoLabel.Size = UDim2.new(0.3, 0, 0.1, 0)
-TiempoLabel.Position = UDim2.new(0.6, 0, -0.02, 0)
+TiempoLabel.Position = UDim2.new(0.6, 0, 0.9, 0)
 TiempoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TiempoLabel.TextScaled = true
 TiempoLabel.BackgroundTransparency = 1
@@ -808,11 +806,10 @@ TiempoLabel.BorderSizePixel = 0
 TiempoLabel.Text = "Cargando..."
 TiempoLabel.Parent = Barra1
 
-
 local function claveEsValida()
     if isfile(ArchivoClave) then
         local datosClave = HttpService:JSONDecode(readfile(ArchivoClave))
-        local tiempoRestante = TiempoValidez - (os.time() - datosClave.FechaGuardada)
+        local tiempoRestante = TiempoValidez - (os.time() - datosClave.fecha)
         return tiempoRestante > 0, tiempoRestante
     end
     return false, 0
@@ -824,11 +821,10 @@ local function mostrarTiempoRestante(tiempoRestante)
     spawn(function()
         while tiempoRestante > 0 do
             tiempoRestante = tiempoRestante - 1
-            TiempoLabel.Text = string.format("%02d:%02d:%02d",
-                math.floor(tiempoRestante / 3600),
-                math.floor((tiempoRestante % 3600) / 60),
-                tiempoRestante % 60
-            )
+            TiempoLabel.Text = string.format("%02d:%02d:%02d", 
+                math.floor(tiempoRestante / 3600), 
+                math.floor((tiempoRestante % 3600) / 60), 
+                tiempoRestante % 60)
             wait(1)
         end
 
