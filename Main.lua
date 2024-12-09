@@ -363,7 +363,8 @@ local questDataOutsideID = {
     {range = {80000000, math.huge}, options = {"SSJG Kakata", "Broccoli"}}
 }
 local questDataInsideID = {
-    {range = {100000000, 1500000000}, options = {"Vegetable (GoD in-training)", "Wukong (Omen)"}},
+    {range = {100000000, 600000000}, options = {"Vegetable (GoD in-training)", "Wukong (Omen)"}},
+    {range = {600000000, 1500000000}, options = {"Vills (50%)", "Vis (20%)"}},
     {range = {1500000000, 2500000000}, options = {"Vis (20%)", "Vegetable (LBSSJ4)"}},
     {range = {2500000000, 3500000000}, options = {"Wukong (LBSSJ4)", "Vegetable (LBSSJ4)"}},
     {range = {3500000000, math.huge}, options = {"Vekuta (SSJBUI)", "Wukong Rose"}}
@@ -712,6 +713,22 @@ task.spawn(function()
             end
         end
         wait(3)
+    end
+end)
+
+
+spawn(function()
+    while true do
+        pcall(function()
+            if game.Workspace.Living[plr.Name].Status.Transformation.Value == "None" then
+                game:GetService("ReplicatedStorage").Package.Events.equipskill:InvokeServer("Divine Rose Prominence")
+                if game.Workspace.Living[plr.Name].Status.Transformation.Value == "None" then
+                    game:GetService("ReplicatedStorage").Package.Events.equipskill:InvokeServer("Astral Instinct")
+                end
+                game:GetService("ReplicatedStorage").Package.Events.ta:InvokeServer()
+            end
+        end)
+        wait()
     end
 end)
 
