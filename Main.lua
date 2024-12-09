@@ -1,5 +1,5 @@
-local ClaveCorrecta = "Key:[jhsgsttqvqujhh926628hshsg]"
-local ArchivoClave = "ClaveGuardada.json"
+local ArchivoClaveGuardada = "ClaveGuardada.json"
+local ArchivoHistorial = "HistorialClaves.json"
 local HttpService = game:GetService("HttpService")
 
 local KeyGui = Instance.new("ScreenGui")
@@ -54,27 +54,52 @@ BotonInvitacion.BackgroundTransparency = 1
 BotonInvitacion.BorderSizePixel = 0
 BotonInvitacion.Parent = Frame
 
-local BotonKeyUrl = Instance.new("TextButton")
-BotonKeyUrl.Size = UDim2.new(0.6, 0, 0.25, 0)
-BotonKeyUrl.Position = UDim2.new(0.2, 0, 0.75, 0)
-BotonKeyUrl.Text = "Copiar URL de la clave"
-BotonKeyUrl.Font = Enum.Font.GothamBold
-BotonKeyUrl.TextScaled = true
-BotonKeyUrl.TextColor3 = Color3.fromRGB(255, 255, 255)
-BotonKeyUrl.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
-BotonKeyUrl.BorderSizePixel = 0
-BotonKeyUrl.Parent = Frame
+local BotonUrl = Instance.new("TextButton")
+BotonUrl.Size = UDim2.new(0.6, 0, 0.25, 0)
+BotonUrl.Position = UDim2.new(0.2, 0, 0.75, 0)
+BotonUrl.Text = "Copiar URL Personalizada"
+BotonUrl.Font = Enum.Font.GothamBold
+BotonUrl.TextScaled = true
+BotonUrl.TextColor3 = Color3.fromRGB(255, 255, 255)
+BotonUrl.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
+BotonUrl.BorderSizePixel = 0
+BotonUrl.Parent = Frame
 
-local UICornerKeyUrl = Instance.new("UICorner")
-UICornerKeyUrl.CornerRadius = UDim.new(0.1, 0)
-UICornerKeyUrl.Parent = BotonKeyUrl
+local claveValida = false
 
-local function guardarClave()
-    writefile(ArchivoClave, HttpService:JSONEncode({FechaGuardada = os.time()}))
+local function guardarClaveGuardada(clave)
+    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time()}))
 end
 
+local function actualizarHistorial(clave)
+    local historial = {}
+    if isfile(ArchivoHistorial) then
+        historial = HttpService:JSONDecode(readfile(ArchivoHistorial))
+    end
+    table.insert(historial, clave)
+    if #historial > 5 then
+        table.remove(historial, 1)
+    end
+    writefile(ArchivoHistorial, HttpService:JSONEncode(historial))
+end
 
-local function main()
+local function claveEsValida()
+    if isfile(ArchivoClaveGuardada) then
+        local datos = HttpService:JSONDecode(readfile(ArchivoClaveGuardada))
+        if os.time() - datos.fecha < (24 * 60 * 60) then
+            return true
+        end
+    end
+    return false
+end
+
+local function resetearClave()
+    if isfile(ArchivoClaveGuardada) then
+        delfile(ArchivoClaveGuardada)
+    end
+end
+
+local function lopoi()
 local Fernando = game.CoreGui:FindFirstChild("Fernando")
 if Fernando then
     return  
@@ -809,15 +834,10 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            local count = 0
-            local firstFernando
-            for _, Fernando in pairs(game.CoreGui:GetChildren()) do
-                if Fernando.Name == "Fernando" then
-                    count = count + 1
-                    if count == 1 then
-                        firstFernando = Fernando
-                    else
-                        Fernando:Destroy()
+            if claveEsValida() then
+                for _, obj in pairs(game.CoreGui:GetChildren()) do
+                    if (obj.Name == "KeyGui" or obj.Name == "Fernando") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
+                        obj:Destroy()
                     end
                 end
             end
@@ -826,28 +846,53 @@ task.spawn(function()
     end
 end)
 
-
 --fin del Function ()
 end
 
-
-
-local function claveEsValida()
-    if isfile(ArchivoClave) then
-        local datosClave = HttpService:JSONDecode(readfile(ArchivoClave))
-        return os.time() - datosClave.FechaGuardada < (24 * 60 * 60), datosClave.FechaGuardada
+local function ejecutarLopoiSiClaveValida()
+    if claveEsValida() and not claveValida then
+        lopoi()
+        claveValida = true
     end
-    return false, 0
 end
+
+spawn(function()
+    if claveEsValida() then
+        KeyGui.Enabled = false
+    else
+        KeyGui.Enabled = true
+    end
+end)
 
 TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
-        if TextBox.Text == ClaveCorrecta then
-            guardarClave()
-            KeyGui.Enabled = false
-            main()
+        local texto = TextBox.Text
+        local clave = texto:match("KEY:%[(.-)%]$")
+        
+        if clave and #clave > 0 then
+            local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
+            local claveExistente = false
+            for _, v in pairs(historial) do
+                if v == clave then
+                    claveExistente = true
+                    break
+                end
+            end
+
+            if not claveExistente then
+                guardarClaveGuardada(clave)
+                actualizarHistorial(clave)
+                ejecutarLopoiSiClaveValida()  -- Ejecuta lopoi solo una vez
+                KeyGui.Enabled = false
+            else
+                TextBox.Text = "Clave ya usada"
+                TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
+                wait(1)
+                TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+                TextBox.Text = ""
+            end
         else
-            TextBox.Text = "Clave incorrecta"
+            TextBox.Text = "Clave inválida"
             TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
             wait(1)
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -856,16 +901,18 @@ TextBox.FocusLost:Connect(function(enterPressed)
     end
 end)
 
-BotonKeyUrl.MouseButton1Click:Connect(function()
-    setclipboard("https://direct-link.net/1258891/key-dbu")
-end)
-
 BotonInvitacion.MouseButton1Click:Connect(function()
     setclipboard("https://discord.com/invite/3pjp7ufjWv")
 end)
 
-local esValida, fechaGuardada = claveEsValida()
-if esValida then
-    KeyGui.Enabled = false
-    main()
+BotonUrl.MouseButton1Click:Connect(function()
+    setclipboard("https://tusitio.com/url")
+end)
+
+while true do
+    wait()
+    if not claveEsValida() then
+        resetearClave()
+        KeyGui.Enabled = true
+    end
 end
