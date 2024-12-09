@@ -906,7 +906,7 @@ BotonInvitacion.MouseButton1Click:Connect(function()
 end)
 
 BotonUrl.MouseButton1Click:Connect(function()
-    setclipboard("https://tusitio.com/url")
+    setclipboard("https://luatt11.github.io/Inivitacion/")
 end)
 
 while true do
