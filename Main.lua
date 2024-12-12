@@ -919,7 +919,7 @@ BotonInvitacion.MouseButton1Click:Connect(function()
 end)
 
 BotonUrl.MouseButton1Click:Connect(function()
-    setclipboard("https://luatt11.github.io/Inivitacion/")
+    setclipboard("https://luatt11.github.io/Keysistema/")
 end)
 
 while true do
