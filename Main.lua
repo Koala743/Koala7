@@ -881,7 +881,8 @@ TextBox.FocusLost:Connect(function(enterPressed)
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
         
-        if clave and #clave > 0 then
+        -- Asegurarse de que la clave tenga exactamente 14 caracteres
+        if clave and #clave == 14 then
             local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
             local claveExistente = false
             for _, v in pairs(historial) do
