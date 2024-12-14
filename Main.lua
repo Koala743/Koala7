@@ -378,17 +378,17 @@ local boss = {
 task.spawn(function()
     while true do
         wait()
-        pcall(function()       
+        pcall(function()        
             local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            if getIsActive1() and checkValue >= 200000000 and game.PlaceId ~= 5151400895 then
+            if checkValue >= 200000000 and game.PlaceId ~= 5151400895 and getIsActive1() then
                 local quest, npc = "SSJG Kakata", game.Workspace.Others.NPCs:FindFirstChild("SSJG Kakata")
-                if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest then
+                if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest and getIsActive1() then
                     lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
                     events.Qaction:InvokeServer(npc)
                 end
             else
                 for _, mission in ipairs(boss) do
-                    if checkValue >= mission[2] then
+                    if checkValue >= mission[2] and getIsActive1() then
                         local quest, npc = mission[1], game.Workspace.Others.NPCs:FindFirstChild(mission[1])
                         if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest then
                             lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
