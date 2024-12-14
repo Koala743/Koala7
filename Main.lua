@@ -240,10 +240,10 @@ end)
 --incio de color txt\/
 local textProperties = {
     {text = "Farm", position = UDim2.new(-0.150, 0, 0, 0), color = Color3.fromRGB(255, 0, 0)},
-    {text = "Mel", position = UDim2.new(-0.130, 0, 0.115, 0), color = Color3.fromRGB(0, 0, 255)},
-    {text = "Reb", position = UDim2.new(-0.180, 0, 0.176, 0), color = Color3.fromRGB(255, 255, 0)},
-    {text = "Puch", position = UDim2.new(-0.160, 0, 0.236, 0), color = Color3.fromRGB(0, 255, 255)},
-    {text = "Main", position = UDim2.new(-0.110, 0, 0.296, 0), color = Color3.fromRGB(255, 0, 255)},
+    {text = "Mel", position = UDim2.new(-0.140, 0, 0.06), color = Color3.fromRGB(0, 0, 255)},
+    {text = "Reb", position = UDim2.new(-0.130, 0, 0.115, 0), color = Color3.fromRGB(255, 255, 0)},
+    {text = "Puch", position = UDim2.new(-0.180, 0, 0.176, 0), color = Color3.fromRGB(0, 255, 255)},
+    {text = "Main", position = UDim2.new(-0.160, 0, 0.236, 0), color = Color3.fromRGB(255, 0, 255)},
 }
 
 for _, props in pairs(textProperties) do
