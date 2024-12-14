@@ -540,7 +540,7 @@ task.spawn(function()
                 game:GetService("ReplicatedStorage").Package.Events.ta:InvokeServer()
             end
         end)
-        wait()
+         task.wait()
     end
 end)
 
@@ -555,7 +555,7 @@ task.spawn(function()
                 game:GetService("ReplicatedStorage").Package.Events.ta:InvokeServer()
             end
         end)
-        wait()
+        task.wait()
     end
 end)
 local moves = {"Super Dragon Fist", "God Slicer", "Spirit Barrage", "Mach Kick", "Wolf Fang Fist", 
@@ -584,19 +584,17 @@ task.spawn(function()
     end
 end)
 
-local mel = {"God Slicer", "Spirit Barrage", "Mach Kick", "Wolf Fang Fist", 
-               "High Power Rush", "Sledgehammer", "God Slicer"}
+local mel = {"God Slicer", "Spirit Barrage", "Mach Kick", "Wolf Fang Fist"}
+
 task.spawn(function()
     while true do
         pcall(function()
-        local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)           
+            local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)
             if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and yo() >= 200e8 and game.PlaceId == 5151400895 then
-                for i = 1, #moves, 3 do
+                for _, move in ipairs(mel) do
                     task.spawn(function()
-                        for j = i, math.min(i + 2, #mel) do
-                            game:GetService("ReplicatedStorage").Package.Events.mel:InvokeServer(mel[j], "Blacknwhite27")
-                            game.ReplicatedStorage.Package.Events.voleys:InvokeServer("Energy Volley", {FaceMouse = false, MouseHit = CFrame.new()}, "Blacknwhite27")                                    
-                        end
+                        game:GetService("ReplicatedStorage").Package.Events.mel:InvokeServer(move, "Blacknwhite27")
+                        game.ReplicatedStorage.Package.Events.voleys:InvokeServer("Energy Volley", {FaceMouse = false, MouseHit = CFrame.new()}, "Blacknwhite27")
                     end)
                 end
             end
