@@ -1,6 +1,9 @@
 
 
-
+local Fernando = game.CoreGui:FindFirstChild("Fernando")
+if Fernando then
+    return  
+end
 local Fernando = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local TextLabel = Instance.new("TextLabel")
@@ -965,6 +968,21 @@ spawn(function()
                 player.Character:TranslateBy(hum.MoveDirection * speed)
             elseif hum.MoveDirection.Y < 0 then
                 speed = speed + 0.1
+            end
+        end)
+        wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if claveEsValida() then
+                for _, obj in pairs(game.CoreGui:GetChildren()) do
+                    if (obj.Name == "KeyGui" or obj.Name == "Fernando") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
+                        obj:Destroy()
+                    end
+                end
             end
         end)
         wait()
