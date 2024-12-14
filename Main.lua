@@ -240,7 +240,6 @@ end)
 --incio de color txt\/
 local textProperties = {
     {text = "Farm", position = UDim2.new(-0.150, 0, 0, 0), color = Color3.fromRGB(255, 0, 0)},
-    {text = "Ozaru", position = UDim2.new(-0.140, 0, 0.06, 0), color = Color3.fromRGB(0, 255, 0)},
     {text = "Mel", position = UDim2.new(-0.130, 0, 0.115, 0), color = Color3.fromRGB(0, 0, 255)},
     {text = "Reb", position = UDim2.new(-0.180, 0, 0.176, 0), color = Color3.fromRGB(255, 255, 0)},
     {text = "Puch", position = UDim2.new(-0.160, 0, 0.236, 0), color = Color3.fromRGB(0, 255, 255)},
@@ -336,11 +335,10 @@ local function createSwitch(parent, position, switchName, initialState)
 end
 
 local getIsActive1 = createSwitch(Barra1, UDim2.new(0.1, 50, 0, 1), "Switch1", LoadSwitchState("Switch1"))
-local getIsActive2 = createSwitch(Barra1, UDim2.new(0.1, 75, 0, 52), "Switch2", LoadSwitchState("Switch2"))
-local getIsActive3 = createSwitch(Barra1, UDim2.new(0.1, 45, 0.120, 0), "Switch3", LoadSwitchState("Switch3"))
-local getIsActive4 = createSwitch(Barra1, UDim2.new(0.1, 45, 0.240, 0), "Switch4", LoadSwitchState("Switch4"))
-local getIsActive5 = createSwitch(Barra1, UDim2.new(0.1, 25, 0.180, 0), "Switch5", LoadSwitchState("Switch5"))
-local getIsActive6 = createSwitch(Barra1, UDim2.new(0.1, 57, 0.300, 0), "Switch6", LoadSwitchState("Switch6"))
+local getIsActive3 = createSwitch(Barra1, UDim2.new(0.1, 75, 0, 52, 0), "Switch3", LoadSwitchState("Switch3"))
+local getIsActive4 = createSwitch(Barra1, UDim2.new(0.1, 45, 0.120), "Switch4", LoadSwitchState("Switch4"))
+local getIsActive5 = createSwitch(Barra1, UDim2.new(0.1, 45, 0.240, 0), "Switch5", LoadSwitchState("Switch5"))
+local getIsActive6 = createSwitch(Barra1, UDim2.new(0.1, 25, 0.180, 0), "Switch6", LoadSwitchState("Switch6"))
 --Casi fin del interrutor /\
 
 
@@ -351,13 +349,13 @@ local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.User
 local events = game:GetService("ReplicatedStorage").Package.Events
 
 local boss = {
-    {"Vekuta (SSJBUI)", 1.375e9},
-    {"Wukong Rose", 1.25e9},
-    {"Vekuta (LBSSJ4)", 1.05e9},
-    {"Wukong (LBSSJ4)", 675e6},
-    {"Vegetable (LBSSJ4)", 450e6},
-    {"Vis (20%)", 250e6},
-    {"Vills (50%)", 150e6},
+    {"Vekuta (SSJBUI)", 6.00e9},
+    {"Wukong Rose", 3.20e9},
+    {"Vekuta (LBSSJ4)", 1.9e9},
+    {"Wukong (LBSSJ4)", 1.1e6},
+    {"Vegetable (LBSSJ4)", 850e6},
+    {"Vis (20%)", 550e6},
+    {"Vills (50%)", 400e6},
     {"Wukong (Omen)", 75e6},
     {"Vegetable (GoD in-training)", 50e6},
     {"SSJG Kakata", 37.5e6},
@@ -441,65 +439,6 @@ task.spawn(function()
     end
 end)
 
---Ciclo Para Auto = Quest y Tp Con Tiempo
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
-                    if data.Quest.Value == "" then
-                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["Kid Nohag"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(workspace.Others.NPCs["Kid Nohag"])
-                    end
-                else
-                    if data.Quest.Value == "" then
-                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(workspace.Others.NPCs["SSJG Kakata"])
-                    end
-                end
-            end
-        end)
-        wait(0.1)
-    end
-end)
-
---Ciclo Para Auto = Tp Boss y Halloween
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() and data.Quest.Value ~= "" then
-                local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
-                if npc and npc.Humanoid.Health <= 0 then
-                    lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
-                    local boss = game.Workspace.Living:FindFirstChild("Halloween NPC")
-                    if boss then
-                        lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
-                    end
-                end
-            end
-        end)
-        wait()
-    end
-end)
-
---Ciclo Para Auto = Tp Boss y Ozaru
-spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() and data.Quest.Value == "Kid Nohag" then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
-                    local boss = game.Workspace.Living:FindFirstChild("Oozaru")
-                    if boss and boss:FindFirstChild("HumanoidRootPart") then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                    end
-                end
-            end
-        end)
-        task.wait()
-    end
-end)
 
 --Ciclo Para Auto = Tierra 
 task.spawn(function()
@@ -545,7 +484,7 @@ task.spawn(function()
                 end
             end
         end)
-        wait()
+        wait(.2)
     end
 end)
 
