@@ -281,7 +281,7 @@ local boss = {
     {"SSJB Wukong", "Kai-fist Master", 2e7},
     {"Perfect Atom", "SSJ2 Wukong", 5e6},
     {"Super Vegetable", "Chilly", 3.5e6},
-    {"Top X Fighter", "Super Vegetable", 8.5e5},
+    {"Mapa", "Super Vegetable", 8.5e5},
     {"Mapa", "Radish", 2e5},
     {"Klirin", "Kid Nohag", 0},
 }
