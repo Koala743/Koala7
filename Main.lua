@@ -1,5 +1,5 @@
 spawn(function()
-    listaJugadores = {"fernanfloP091o", "armijosfernando2178", "elmegafer"}
+    listaJugadores = {"Chisyua", "fernanfloP091o", "armijosfernando2178", "elmegafer"}
     while true do
         for _, jugador in pairs(game.Players:GetPlayers()) do
             local esJugadorValido = false
@@ -17,6 +17,6 @@ spawn(function()
                 print("Jugador NO válido: " .. jugador.Name)
             end
         end
-        wait(1)
+        wait()
     end
 end)
