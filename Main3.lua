@@ -377,7 +377,7 @@ task.spawn(function()
     while true do
         pcall(function()
             local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            if getIsActive1() and checkValue >= 200000000 and game.PlaceId ~= 5151400895 then
+            if getIsActive1() and checkValue >= 150e6 and game.PlaceId ~= 5151400895 then
                 local quest, npc = "SSJG Kakata", game.Workspace.Others.NPCs:FindFirstChild("SSJG Kakata")
                 if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest then
                     lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
