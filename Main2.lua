@@ -1,5 +1,5 @@
-local Fernando = game.CoreGui:FindFirstChild("Stalin")
-if Stalin then
+local Fernando = game.CoreGui:FindFirstChild("Fernando")
+if Fernando then
     return  
 end
 
@@ -18,7 +18,7 @@ local lplr = game.Players.LocalPlayer
 local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
 local Ex = game.ReplicatedStorage.Package.Events
 
-Fernando.Name = "Stalin"
+Fernando.Name = "Fernando"
 Fernando.Parent = game.CoreGui
 
 
@@ -943,7 +943,7 @@ task.spawn(function()
         pcall(function()
             if claveEsValida() then
                 for _, obj in pairs(game.CoreGui:GetChildren()) do
-                    if (obj.Name == "KeyGui" or obj.Name == "Stalin") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
+                    if (obj.Name == "KeyGui" or obj.Name == "Fernando") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
                         obj:Destroy()
                     end
                 end
