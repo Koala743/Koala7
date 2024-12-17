@@ -46,7 +46,7 @@ UICornerTextBox.Parent = TextBox
 local BotonInvitacion = Instance.new("TextButton")
 BotonInvitacion.Size = UDim2.new(0.2, 0, 0.2, 0)
 BotonInvitacion.Position = UDim2.new(0.8, 0, 0.8, 0)
-BotonInvitacion.Text = "🌐"
+BotonInvitacion.Text = "ðŸ«‚"
 BotonInvitacion.Font = Enum.Font.GothamBold
 BotonInvitacion.TextScaled = true
 BotonInvitacion.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -57,7 +57,7 @@ BotonInvitacion.Parent = Frame
 local BotonUrl = Instance.new("TextButton")
 BotonUrl.Size = UDim2.new(0.6, 0, 0.25, 0)
 BotonUrl.Position = UDim2.new(0.2, 0, 0.75, 0)
-BotonUrl.Text = "Copiar URL Personalizada"
+BotonUrl.Text = "Copiar Url Key"
 BotonUrl.Font = Enum.Font.GothamBold
 BotonUrl.TextScaled = true
 BotonUrl.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -287,7 +287,7 @@ Mix.MouseButton1Click:Connect(function()
         else
             Cuadro2.Visible = true
         end
-        Mix.Text = "×"
+        Mix.Text = "Ã—"
     end
 end)
 
@@ -400,6 +400,7 @@ task.spawn(function()
     end
 end)
 
+
 --Ciclo Para Auto = Tp Boss A Cualquier Tipo De Boss
 task.spawn(function()
     while true do
@@ -408,7 +409,7 @@ task.spawn(function()
             local questValue = data.Quest.Value
             local boss = game.Workspace.Living:FindFirstChild(questValue)
             if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
-                lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
+                lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4.5)
             end
           end
         end)
@@ -421,7 +422,7 @@ task.spawn(function()
     while true do
         pcall(function()
             if data.Quest.Value ~= "" then
-                wait(2)
+                wait(1)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
@@ -445,10 +446,10 @@ task.spawn(function()
         pcall(function()
             if getIsActive1() and game.PlaceId == 5151400895 and data.Strength.Value <= 200000000 then
                 game:GetService("ReplicatedStorage").Package.Events.TP:InvokeServer("Earth")
-                task.wait(4)
+                wait(2)
             end
         end)
-        wait(1)
+        task.wait()
     end
 end)
 
@@ -457,9 +458,9 @@ task.spawn(function()
     while true do
         if getIsActive1() and  game.PlaceId ~= 5151400895 and data.Strength.Value >= 200000000 then
             game:GetService("ReplicatedStorage").Package.Events.TP:InvokeServer("Vills Planet")
-            task.wait(4)
+            wait(2)
         end
-        wait(1)
+        wait()
     end
 end)
 
@@ -467,9 +468,9 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            local moves = { "Super Dragon Fist", "God Slicer", "Spirit Barrage", "Mach Kick", "Wolf Fang Fist", 
-                            "High Power Rush", "Meteor Strike", "Meteor Charge", "Spirit Breaking Cannon", 
-                            "Vital Strike", "Flash Kick", "Vanish Strike", "Uppercut", "Sledgehammer", "Rock Impact" }
+            local moves = { "God Slicer", "Spirit Barrage", "Mach Kick", "Wolf Fang Fist", 
+                            "High Power Rush", "Meteor Strike", 
+                            "Vital Strike", "Flash Kick", "Vanish Strike" }
             local dat = (game.PlaceId == 5151400895) and game.Workspace.Living:FindFirstChild(lplr.Name) or lplr
             if data.Quest.Value ~= "" and getIsActive3() then
                 if dat:FindFirstChild("Status") then
@@ -487,7 +488,7 @@ task.spawn(function()
     end
 end)
 
---Ciclo para Auto = Puños
+--Ciclo para Auto = PuÃ±os
 task.spawn(function()
     while true do
         pcall(function()
@@ -699,7 +700,7 @@ spawn(function()
             end
 
             Bars.Health.TextLabel.Text = "SALUD: " .. format_number(lplr.Character.Humanoid.Health) .. " / " .. format_number(lplr.Character.Humanoid.MaxHealth)
-            Bars.Energy.TextLabel.Text = "ENERGÍA: " .. format_number(lplr.Character.Stats.Ki.Value) .. " / " .. format_number(lplr.Character.Stats.Ki.MaxValue)
+            Bars.Energy.TextLabel.Text = "ENERGÃA: " .. format_number(lplr.Character.Stats.Ki.Value) .. " / " .. format_number(lplr.Character.Stats.Ki.MaxValue)
             end
         end)
         task.wait()
@@ -821,7 +822,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
                 TextBox.Text = ""
             end
         else
-            TextBox.Text = "Clave inválida (debe tener entre 10 y 17 caracteres)"
+            TextBox.Text = "Clave invÃ¡lida (debe tener entre 10 y 17 caracteres)"
             TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
             wait(1)
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
