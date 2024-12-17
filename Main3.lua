@@ -349,44 +349,43 @@ local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.User
 local events = game:GetService("ReplicatedStorage").Package.Events
 
 local boss = {
-    {"Vekuta (SSJBUI)", 6.00e9},
-    {"Wukong Rose", 3.20e9},
-    {"Vekuta (LBSSJ4)", 1.9e9},
-    {"Wukong (LBSSJ4)", 1.1e6},
-    {"Vegetable (LBSSJ4)", 850e6},
-    {"Vis (20%)", 550e6},
-    {"Vills (50%)", 400e6},
-    {"Wukong (Omen)", 75e6},
-    {"Vegetable (GoD in-training)", 50e6},
-    {"SSJG Kakata", 37.5e6},
-    {"Broccoli", 35.5e6},
-    {"SSJB Wukong", 2e6},
-    {"Kai-fist Master", 1625000},
-    {"SSJ2 Wukong", 1250000},
-    {"Perfect Atom", 875000},
-    {"Chilly", 550000},
-    {"Super Vegetable", 188000},
-    {"Top X Fighter", 115000},
-    {"Mapa", 75000},
-    {"Radish", 45000},
-    {"Kid Nohag", 20000},
+    {"Vekuta (SSJBUI)", 5.375e9},
+    {"Wukong Rose", 4.25e9},
+    {"Vekuta (LBSSJ4)", 3.35e9},
+    {"Wukong (LBSSJ4)", 2.35e9},
+    {"Vegetable (LBSSJ4)", 1.65e9},
+    {"Vis (20%)", 1.00e9},
+    {"Vills (50%)", 650e6},
+    {"Wukong (Omen)", 350e6},
+    {"Vegetable (GoD in-training)", 100e6},
+    {"SSJG Kakata", 150e6},
+    {"Broccoli", 50e6},
+    {"SSJB Wukong", 8e6},
+    {"Kai-fist Master", 4825000},
+    {"SSJ2 Wukong", 3050000},
+    {"Perfect Atom", 1075000},
+    {"Chilly", 950000},
+    {"Super Vegetable", 528000},
+    {"Top X Fighter", 315000},
+    {"Mapa", 95000},
+    {"Radish", 65000},
+    {"Kid Nohag", 40000},
     {"Klirin", 0}
 }
 
 task.spawn(function()
     while true do
-        wait()
-        pcall(function()        
+        pcall(function()
             local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            if checkValue >= 200000000 and game.PlaceId ~= 5151400895 and getIsActive1() then
+            if getIsActive1() and checkValue >= 200000000 and game.PlaceId ~= 5151400895 then
                 local quest, npc = "SSJG Kakata", game.Workspace.Others.NPCs:FindFirstChild("SSJG Kakata")
-                if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest and getIsActive1() then
+                if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest then
                     lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
                     events.Qaction:InvokeServer(npc)
                 end
             else
                 for _, mission in ipairs(boss) do
-                    if checkValue >= mission[2] and getIsActive1() then
+                    if checkValue >= mission[2] then
                         local quest, npc = mission[1], game.Workspace.Others.NPCs:FindFirstChild(mission[1])
                         if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest then
                             lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
@@ -397,9 +396,9 @@ task.spawn(function()
                 end
             end
         end)
+        task.wait()
     end
 end)
-
 
 --Ciclo Para Auto = Tp Boss A Cualquier Tipo De Boss
 task.spawn(function()
@@ -799,8 +798,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
         
-        -- Asegurarse de que la clave tenga exactamente 14 caracteres
-        if clave and #clave == 14 then
+        if clave and #clave >= 10 and #clave <= 17 then
             local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
             local claveExistente = false
             for _, v in pairs(historial) do
@@ -823,7 +821,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
                 TextBox.Text = ""
             end
         else
-            TextBox.Text = "Clave inválida"
+            TextBox.Text = "Clave inválida (debe tener entre 10 y 17 caracteres)"
             TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
             wait(1)
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
