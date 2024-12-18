@@ -420,6 +420,7 @@ task.spawn(function()
             local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value == "Top X Fighter" and "X Fighter Master" or data.Quest.Value)
             if boss and boss:FindFirstChild("HumanoidRootPart") and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
                 lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4.5)
+                end
             end
         end)
         task.wait()
