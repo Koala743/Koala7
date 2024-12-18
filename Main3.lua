@@ -367,7 +367,8 @@ local boss = {
     {"SSJ2 Wukong", 3050000},
     {"Perfect Atom", 1075000},
     {"Chilly", 950000},
-    {"Super Vegetable", 428000},
+    {"Super Vegetable", 528000},
+    {"Top X Fighter", 228000},
     {"Mapa", 95000},
     {"Radish", 65000},
     {"Kid Nohag", 40000},
@@ -416,17 +417,14 @@ task.spawn(function()
     while true do
         pcall(function()
         if getIsActive1() or getIsActive2() then
-            local questValue = data.Quest.Value
-            local boss = game.Workspace.Living:FindFirstChild(questValue)
-            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+            local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value == "Top X Fighter" and "X Fighter Master" or data.Quest.Value)
+            if boss and boss:FindFirstChild("HumanoidRootPart") and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
                 lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4.5)
             end
-          end
         end)
         task.wait()
     end
 end)
-
 
 task.spawn(function()
     while true do
