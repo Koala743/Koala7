@@ -367,8 +367,7 @@ local boss = {
     {"SSJ2 Wukong", 3050000},
     {"Perfect Atom", 1075000},
     {"Chilly", 950000},
-    {"Super Vegetable", 528000},
-    {"Top X Fighter", 315000},
+    {"Super Vegetable", 428000},
     {"Mapa", 95000},
     {"Radish", 65000},
     {"Kid Nohag", 40000},
@@ -393,6 +392,7 @@ task.spawn(function()
         task.wait()
     end
 end)
+
 
 task.spawn(function()
     while true do
@@ -609,6 +609,7 @@ end)
 --Ciclo Para = Traformation.Value           
 task.spawn(function()
     while true do
+    pcall(function()
         local Forms = {
             'Divine Rose Prominence', 'Astral Instinct', 'Ultra Ego', 'SSJB4', 'True God of Creation', 
             'True God of Destruction', 'Super Broly', 'LSSJG', 'LSSJ4', 'SSJG4', 'LSSJ3', 'Mystic Kaioken', 
@@ -645,6 +646,7 @@ task.spawn(function()
                 end
             end
         end
+        end)
         wait(3)
     end
 end)
