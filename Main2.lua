@@ -1,5 +1,5 @@
-local Fernando = game.CoreGui:FindFirstChild("Fernando")
-if Fernando then
+local fffg = game.CoreGui:FindFirstChild("fffg")
+if fffg then
     return  
 end
 
@@ -18,9 +18,22 @@ local lplr = game.Players.LocalPlayer
 local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
 local Ex = game.ReplicatedStorage.Package.Events
 
-Fernando.Name = "Fernando"
+Fernando.Name = "fffg"
 Fernando.Parent = game.CoreGui
 
+local function formatNumber(number)
+    if number < 1000 then
+        return tostring(number)
+    end
+    local suffixes = {"", "K", "M", "B", "T", "QD"}
+    local suffix_index = 1
+
+    while math.abs(number) >= 1000 and suffix_index < #suffixes do
+        number = number / 1000.0
+        suffix_index = suffix_index + 1
+    end
+    return string.format("%.2f%s", number, suffixes[suffix_index])
+end
 
 Frame.Parent = Fernando
 Frame.BackgroundTransparency = 1
@@ -115,6 +128,61 @@ imageLabel.BackgroundTransparency = 1
 imageLabel.Image = thumbnailUrl
 imageLabel.Parent = Barra1
 
+local masteryLabel = Instance.new("TextLabel")
+masteryLabel.Size = UDim2.new(0, 100, 0, 10)
+masteryLabel.Position = UDim2.new(0.120, 0, 0.009, 0)
+masteryLabel.BackgroundTransparency = 1
+masteryLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+masteryLabel.TextScaled = true
+masteryLabel.Text = "Mastery"
+masteryLabel.Parent = Barra1
+
+
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Size = UDim2.new(0, 100, 0, 23)
+statusLabel.Position = UDim2.new(0.134, 0, 0.03, 0)
+statusLabel.BackgroundTransparency = 1
+statusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+statusLabel.TextScaled = true
+statusLabel.Font = Enum.Font.SourceSansBold
+statusLabel.Text = "Stats..."
+statusLabel.Parent = Barra1
+
+local pingLabel = Instance.new("TextLabel")
+pingLabel.Size = UDim2.new(0, 40, 0, 10)
+pingLabel.Position = UDim2.new(0.380, 0, 0.009, 0)
+pingLabel.BackgroundTransparency = 1 
+pingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+pingLabel.TextSize = 7
+pingLabel.Parent = Barra1
+
+
+local timeLabel = Instance.new("TextLabel")
+timeLabel.Size = UDim2.new(0, 100, 0, 10)
+timeLabel.Position = UDim2.new(0.490, 0, 0.009, 0)
+timeLabel.BackgroundTransparency = 1
+timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timeLabel.TextSize = 7
+timeLabel.Parent = Barra1
+
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 100, 0, 10)
+fpsLabel.Position = UDim2.new(0.663, 0, 0.009, 0)
+fpsLabel.BackgroundTransparency = 1
+fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsLabel.TextSize = 7
+fpsLabel.Parent = Barra1
+
+local VS = Instance.new("TextLabel")
+VS.Parent = Barra1
+VS.Text = "V [0.4]"
+VS.Size = UDim2.new(0, 100, 0, 10)
+VS.Position = UDim2.new(0.783, 0, 0.009, 0)
+VS.TextColor3 = Color3.fromRGB(255, 255, 255)
+VS.BackgroundTransparency = 1
+VS.TextSize = 7
+VS.TextStrokeTransparency = 0.8
+
 --incio Borde color\/
 Borde1.Parent = Cuadro1
 Borde1.Thickness = 2
@@ -161,6 +229,8 @@ local textProperties = {
     {text = "Ɓºrª", position = UDim2.new(0.350, 0, 0.420, 0), color = Color3.fromRGB(200, 30, 70)},    
     {text = "Graf", position = UDim2.new(-0.160, 0, 0.495, 0), color = Color3.fromRGB(100, 200, 100)},   
     {text = "Plant", position = UDim2.new(0.350, 0, 0.495, 0), color = Color3.fromRGB(100, 200, 100)},
+    {text = "Zom", position = UDim2.new(-0.160, 0, 0.570, 0), color = Color3.fromRGB(200, 380, 90)},   
+    {text = "HA🎃", position = UDim2.new(0.360, 0, 0.570, 0), color = Color3.fromRGB(100, 200, 100)},  
 }
 
 for _, props in pairs(textProperties) do
@@ -263,6 +333,9 @@ local getIsActive7 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.420, 0), "Switch7"
 local getIsActive8 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.420, 0), "Switch8", LoadSwitchState("Switch8"))--Bºrª
 local getIsActive9 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.495, 0), "Switch9", LoadSwitchState("Switch9"))--Graf
 local getIsActive10 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.495, 0), "Switch10", LoadSwitchState("Switch10"))--Planet
+local getIsActive11 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.570, 0), "Switch11", LoadSwitchState("Switch11"))--Zom
+local getIsActive12 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.570, 0), "Switch12", LoadSwitchState("Switch12"))--Hall🎃
+
 --Casi fin del interrutor /\
 
 
@@ -292,12 +365,12 @@ local boss = {
     {"Vills (50%)", "Vis (20%)", 6e8},
     {"Vegetable (GoD in-training)", "Wukong (Omen)", 1e8},
     {"SSJG Kakata", "Broccoli", 8e7},
-    {"Broccoli", "SSJB Wukong", 3.4e7},
-    {"SSJB Wukong", "Kai-fist Master", 2e7},
-    {"Perfect Atom", "SSJ2 Wukong", 5e6},
-    {"Super Vegetable", "Chilly", 3.5e6},
-    {"Mapa", "Super Vegetable", 8.5e5},
-    {"Mapa", "Radish", 2e5},
+    {"Broccoli", "SSJB Wukong", 37.5e6},
+    {"SSJB Wukong", "Kai-fist Master", 3e6},
+    {"Perfect Atom", "SSJ2 Wukong", 1625000},
+    {"Super Vegetable", "Chilly", 228000},
+    {"Mapa", "Super Vegetable", 138000},
+    {"Mapa", "Radish", 75000},
     {"Klirin", "Kid Nohag", 0},
 }
 
@@ -330,7 +403,7 @@ task.spawn(function()
                 end
             end
         end)
-        task.wait()
+        wait()
     end
 end)
 
@@ -350,7 +423,19 @@ task.spawn(function()
                 end
             end
         end)
-        task.wait()
+        wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive12() and data.Quest.Value == "" then
+            lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+           game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["SSJG Kakata"])                    
+            end
+        end)
+        wait(0.1)
     end
 end)
 
@@ -360,7 +445,7 @@ task.spawn(function()
     while true do
         pcall(function()
             local questValue = data.Quest.Value
-            if getIsActive1() or getIsActive2() and questValue ~= "" then
+            if getIsActive1() or getIsActive2() or getIsActive12() and questValue ~= "" then
                 local boss = game.Workspace.Living:FindFirstChild(questValue)
                 if boss and boss:FindFirstChild("HumanoidRootPart") then
                     if boss:FindFirstChild("Humanoid") and boss.Humanoid.Health <= 0 then
@@ -374,17 +459,37 @@ task.spawn(function()
     end
 end)
 
-
 task.spawn(function()
     while true do
         pcall(function()
-            if data.Quest.Value ~= "" then
+            if getIsActive1() or getIsActive12()  and data.Quest.Value ~= "" then
                 wait(.5)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
                         local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
                         if distance <= 500 and npc.Name ~= "Halloween NPC" then
+                            data.Quest.Value = ""
+                            break
+                        end
+                    end
+                end
+            end
+        end)
+        wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive2() and data.Quest.Value ~= "" then
+                wait(.5)
+                local npcFolder = game:GetService("Workspace").Others.NPCs
+                for _, npc in ipairs(npcFolder:GetChildren()) do
+                    if npc:FindFirstChild("HumanoidRootPart") then
+                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
+                        if distance <= 500 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter" then
                             data.Quest.Value = ""
                             break
                         end
@@ -405,12 +510,12 @@ task.spawn(function()
                 if currentGameHour >= 20 or currentGameHour < 6 then
                     if data.Quest.Value == "" then
                         lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["Kid Nohag"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(workspace.Others.NPCs["Kid Nohag"])
+                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["Kid Nohag"])
                     end
                 else
                     if data.Quest.Value == "" then
                         lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(workspace.Others.NPCs["SSJG Kakata"])
+                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["SSJG Kakata"])
                     end
                 end
             end
@@ -423,14 +528,73 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-        if yo() >=70000000 and game.PlaceId ~= 5151400895 then
-            if getIsActive1() or getIsActive2() and  data.Quest.Value ~= "" then
-                local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
-                if npc and npc.Humanoid.Health <= 0 then
-                    lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
-                    local boss = game.Workspace.Living:FindFirstChild("Halloween NPC")
-                    if boss then
-                        lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 8)
+            if yo() >= 70000000 and game.PlaceId ~= 5151400895 then
+                if getIsActive1() or getIsActive2() and data.Quest.Value ~= "" then
+                    local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
+                    if npc and npc.Humanoid.Health <= 0 then
+                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
+                        local boss = game.Workspace.Living:FindFirstChild("Halloween Boss")
+                        if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                            lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)
+                        end
+                    end
+                end
+            end
+        end)
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if game.PlaceId ~= 5151400895 then
+                if getIsActive12() and data.Quest.Value ~= "" then
+                    local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
+                    if npc and npc.Humanoid.Health <= 0 then
+                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
+                        local boss = game.Workspace.Living:FindFirstChild("Halloween Boss")
+                        if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                            lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)
+                        end
+                    end
+                end
+            end
+        end)
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive1() and game.PlaceId == 5151400895 then
+                local lighting = game:GetService("Lighting")
+                if lighting then
+                    lighting.ClockTime = 21
+                end
+            end
+        end)
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive2() or getIsActive12() and data.Quest.Value == "" then
+                local halloweenBoss = game.Workspace.Living:FindFirstChild("Halloween Boss")
+                if halloweenBoss and halloweenBoss.Humanoid.Health <= 0 then
+                    lplr.Character.HumanoidRootPart.CFrame = CFrame.new(2869, 531, -1816)
+                    local evilSayas = game.Workspace.Living:GetChildren()                        
+                    for _, evilSaya in ipairs(evilSayas) do
+                        if evilSaya.Name == "Evil Saya" and evilSaya:FindFirstChild("Humanoid") then
+                            while evilSaya.Humanoid.Health > 0 do
+                                lplr.Character.HumanoidRootPart.CFrame = evilSaya.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)
+                                Ex.p:FireServer("Blacknwhite27", 1)
+                                Ex.p:FireServer("Blacknwhite27", 2)
+                                task.wait()
+                            end
                         end
                     end
                 end
@@ -452,6 +616,25 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    local clickCount = 0
+    while true do
+        pcall(function()
+            if getIsActive11() then
+                if data.Quest.Value == "" then
+                    if clickCount < 22 then
+                        keypress(Enum.KeyCode.I)
+                        clickCount = clickCount + 1
+                    end
+                elseif data.Quest.Value ~= "" then
+                    keypress(Enum.KeyCode.O)
+                    clickCount = 0 
+                end
+            end
+        end)
+        task.wait()
+    end
+end)
 
 --Ciclo Para Auto = Tp Boss y Ozaru
 spawn(function()
@@ -538,38 +721,8 @@ task.spawn(function()
 end)
 
 
---Ciclos de  Trafomaciones
-task.spawn(function()
-    while true do
-        pcall(function()
-            if yo()  >= 95000 and yo()  < 8e6 and lplr.Status.Transformation.Value == "None" then
-                Ex.equipskill:InvokeServer("SSJ3")
-                Ex.ta:InvokeServer()
-            elseif yo()  >= 8e6 and lplr.Status.Transformation.Value == "SSJ3" then
-                Ex.ta:InvokeServer()
-            end
-        end)
-         task.wait()
-    end
-end)
-
-
-task.spawn(function()
-    while true do
-        pcall(function()
-            if yo()  >= 8e6 and yo()  < 30e6 and lplr.Status.Transformation.Value == "None" then
-                Ex.equipskill:InvokeServer("Godly SSJ2")
-                Ex.ta:InvokeServer()
-            elseif yo()  >= 30e6 and lplr.Status.Transformation.Value == "Godly SSJ2" then
-                Ex.ta:InvokeServer()
-            end
-        end)
-        task.wait()
-    end
-end)
-
 local moves = {"Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", 
-               "God Slicer", "Super Dragon Fist"}
+               "God Slicer"}
 --Ciclo Para Auto = Atakes
 task.spawn(function()
 data.Quest.Value = ""
@@ -655,7 +808,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive1() then
+            if getIsActive1() or getIsActive2() then
                 lplr.Character.Humanoid:ChangeState(11)
                 lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
             end
@@ -663,6 +816,8 @@ task.spawn(function()
         wait()
     end
 end)
+
+
 spawn(function()
     while true do
         pcall(function()
@@ -798,8 +953,65 @@ task.spawn(function()
     end
 end)
             
+            
+  task.spawn(function()
+    while true do
+        local rebirthValue = data.Rebirth.Value
+        local strengthValue = data.Strength.Value
+        local nextRebirth = (rebirthValue * 3e6) + 2e6
+        local additionalStrength = lplr.Character and lplr.Character:FindFirstChild("Stats") and lplr.Character.Stats:FindFirstChild("Strength") and lplr.Character.Stats.Strength.Value or 0
+        statusLabel.Text = string.format(
+            "%s/%s/%s\n%s",
+            formatNumber(nextRebirth),
+            formatNumber(strengthValue),
+            formatNumber(additionalStrength),
+            formatNumber(rebirthValue)
+        )
+        wait(.2)
+    end
+end)
 
-spawn(function()
+
+task.spawn(function()
+    while true do
+        local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
+        pingLabel.Text = "Ping: " .. (ping < 1000 and ping or math.floor(ping / 10) * 10) .. " ms"
+        wait()
+    end
+end)
+
+
+--Ciclode maestria
+local playerGui = lplr:WaitForChild("PlayerGui")
+local maxMastery = 332526
+
+task.spawn(function()
+    while true do
+    pcall(function()
+        local currentMastery = 0
+        if game.PlaceId == 5151400895 then
+            local transformation = game.Workspace.Living[lplr.Name] and game.Workspace.Living[lplr.Name].Status.Transformation.Value
+            if transformation then
+                currentMastery = data:FindFirstChild(transformation) and data[transformation].Value or 0
+            end
+        else
+            local transformation = lplr.Status.Transformation.Value
+            currentMastery = data:FindFirstChild(transformation) and data[transformation].Value or 0
+        end
+        if currentMastery > 0 then
+            masteryLabel.Text = (currentMastery) .. " (" .. string.format("%.1f", (currentMastery / maxMastery) * 100) .. "%)"
+        else
+            masteryLabel.Text = "Mastery"
+        end
+      end)
+        wait()
+    end
+end)
+
+
+          
+
+task.spawn(function()
     while true do
         pcall(function()
             local playerCount = #game.Players:GetPlayers()
@@ -815,6 +1027,20 @@ spawn(function()
     end
 end)
 
+local lastTime = tick()
+local frameCount = 0
+task.spawn(function()
+    while true do
+        frameCount = frameCount + 1
+        local currentTime = tick()
+        if currentTime - lastTime >= 1 then
+            fpsLabel.Text = "FPS: " .. frameCount
+            frameCount = 0
+            lastTime = currentTime
+        end
+        task.wait(0)
+    end
+end)
 
 
 --Eleminar Aura del Astral y las particulas xd
@@ -827,7 +1053,7 @@ spawn(function()
                 end
             end
         end)
-        task.wait()
+        wait()
     end
 end)
 
@@ -938,12 +1164,13 @@ spawn(function()
     end
 end)
 
+
 task.spawn(function()
     while true do
         pcall(function()
             if claveEsValida() then
                 for _, obj in pairs(game.CoreGui:GetChildren()) do
-                    if (obj.Name == "KeyGui" or obj.Name == "Fernando") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
+                    if (obj.Name == "KeyGui" or obj.Name == "fffg") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
                         obj:Destroy()
                     end
                 end
@@ -953,6 +1180,47 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while true do
+        local clockTime = game.Lighting.ClockTime
+        local hour = math.floor(clockTime)
+        local minute = math.floor((clockTime - hour) * 60)
+        local period = (hour >= 7 and hour < 19) and "Dia" or "Nch"
+        local ampm = (hour >= 12) and "PM" or "AM"
+        local displayHour = (hour % 12 == 0) and 12 or hour % 12
+        timeLabel.Text = string.format("%s: %02d:%02d %s", period, displayHour, minute, ampm)
+        task.wait(1)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            game:GetService("GraphicsQuality"):SetQualityLevel(1)
+            game.Lighting.GlobalShadows = false
+            game.Lighting.FogEnd = 1000
+            game:GetService("Workspace").StreamingEnabled = true
+            game:GetService("Workspace").StreamingPauseMode = Enum.StreamingPauseMode.Immediate
+            game.Lighting.ShadowQuality = Enum.ShadowQuality.NoShadows
+            game.Lighting.MaterialRenderers = Enum.MaterialRenderers.SmoothPlastic
+            game.Lighting.TerrainRenderDistance = 300
+            game:GetService("Workspace").Physics.AllowSleep = true
+            game:GetService("Workspace").Physics.ContinuousCollisionExecution = false
+            game.Lighting.ClockTime = 12
+            game.Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+            game.Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+            game.Lighting.Brightness = 2
+            game.Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
+            game.Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
+            game:GetService("Workspace").Terrain.WaterWaveSize = 0
+            game:GetService("Workspace").Terrain.WaterReflectance = 0
+            game:GetService("Workspace").Terrain.WaterTransparency = 0
+            game:GetService("Lighting").GlobalShadows = false
+            game:GetService("Workspace").StreamingPauseMode = Enum.StreamingPauseMode.Automatic
+        end)
+        wait(2)
+    end
+end)
 
 spawn(function()
     while true do
@@ -1365,7 +1633,6 @@ if planet == "Bills" and lplr.Status.Transformation.Value == "None" and getlowes
     end]]
 end
 
-
 task.spawn(function() -- Pick quest
     while ScGui and getloweststat() < checkplr()[3] do
             transform()
@@ -1374,8 +1641,7 @@ task.spawn(function() -- Pick quest
 end)  
 
 
-
 --fin de todo \/
        end)    
-    wait(1)
+    task.wait()
 end)
