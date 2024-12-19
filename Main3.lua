@@ -348,9 +348,7 @@ task.spawn(function()
     pcall(function()
 local lplr = game.Players.LocalPlayer
 local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
-local events = game:GetService("ReplicatedStorage").Package.Events
-
-local boss = {
+local npcList = {
     {"Vekuta (SSJBUI)", 5.375e9},
     {"Wukong Rose", 4.25e9},
     {"Vekuta (LBSSJ4)", 3.35e9},
@@ -359,41 +357,40 @@ local boss = {
     {"Vis (20%)", 1.00e9},
     {"Vills (50%)", 650e6},
     {"Wukong (Omen)", 350e6},
-    {"Vegetable (GoD in-training)", 150000000},
-    {"SSJG Kakata", 140000000},
+    {"Vegetable (GoD in-training)", 150e6},
+    {"SSJG Kakata", 140e6},
     {"Broccoli", 50e6},
     {"SSJB Wukong", 8e6},
-    {"Kai-fist Master", 4825000},
-    {"SSJ2 Wukong", 3050000},
-    {"Perfect Atom", 1075000},
+    {"Kai-fist Master", 4.825e6},
+    {"SSJ2 Wukong", 3.05e6},
+    {"Perfect Atom", 1.075e6},
     {"Chilly", 950000},
-    {"Super Vegetable", 528000},
-    {"Top X Fighter", 228000},
+    {"Super Vegetable", 428000},
     {"Mapa", 95000},
     {"Radish", 65000},
-    {"Kid Nohag", 40000},
+    {"Kid Nohag", 7000},
     {"Klirin", 0}
 }
 
 task.spawn(function()
     while true do
         pcall(function()
-            local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            for _, mission in ipairs(boss) do
-                if checkValue >= mission[2] then
-                    local quest, npc = mission[1], game.Workspace.Others.NPCs:FindFirstChild(mission[1])
-                    if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest then
-                        lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
-                        events.Qaction:InvokeServer(npc)
+            if getIsActive1() and data.Quest.Value == "" then
+                local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
+                for _, npc in ipairs(npcList) do
+                    local npcName = npc[1]
+                    local targetNPC = game.Workspace.Others.NPCs:FindFirstChild(npcName)
+                    if targetNPC and checkValue >= npc[2] then
+                        lplr.Character:SetPrimaryPartCFrame(targetNPC.PrimaryPart.CFrame)
+                        game:GetService("ReplicatedStorage").Package.Events.Qaction:InvokeServer(targetNPC)
+                        break
                     end
-                    break
                 end
             end
         end)
         task.wait()
     end
 end)
-
 
 task.spawn(function()
     while true do
@@ -416,10 +413,14 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-        if getIsActive1() or getIsActive2() then
-            local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value == "Top X Fighter" and "X Fighter Master" or data.Quest.Value)
-            if boss and boss:FindFirstChild("HumanoidRootPart") and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
-                lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4.5)
+            local questValue = data.Quest.Value
+            if getIsActive1() and questValue ~= "" then
+                local boss = game.Workspace.Living:FindFirstChild(questValue)
+                if boss and boss:FindFirstChild("HumanoidRootPart") then
+                    if boss:FindFirstChild("Humanoid") and boss.Humanoid.Health <= 0 then
+                        wait(1)
+                    end
+                    lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4.5)
                 end
             end
         end)
