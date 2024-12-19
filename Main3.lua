@@ -358,7 +358,7 @@ local npcList = {
     {"Vills (50%)", 650e6},
     {"Wukong (Omen)", 350e6},
     {"Vegetable (GoD in-training)", 150e6},
-    {"SSJG Kakata", 140e6},
+    {"SSJG Kakata", 150e6},
     {"Broccoli", 50e6},
     {"SSJB Wukong", 8e6},
     {"Kai-fist Master", 4.825e6},
@@ -392,22 +392,6 @@ task.spawn(function()
     end
 end)
 
-task.spawn(function()
-    while true do
-        pcall(function()        
-            if getIsActive1() then
-            local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            if checkValue >= 150000000 and game.PlaceId ~= 5151400895 then
-                if data.Quest.Value == "" then
-                    lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                    game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(workspace.Others.NPCs["SSJG Kakata"])
-                    end
-                end
-            end
-        end)
-        wait()
-    end
-end)
 
 --Ciclo Para Auto = Tp Boss A Cualquier Tipo De Boss
 task.spawn(function()
