@@ -1182,6 +1182,17 @@ end)
 
 task.spawn(function()
     while true do
+        pcall(function()
+            if getIsActive5() then
+                Ex.reb:InvokeServer()
+            end
+        end)
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
         local clockTime = game.Lighting.ClockTime
         local hour = math.floor(clockTime)
         local minute = math.floor((clockTime - hour) * 60)
@@ -1598,18 +1609,6 @@ local function transform()
     end
 end
 
-
-
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive5() then
-                Ex.reb:InvokeServer()
-            end
-        end)
-        wait(.5)
-    end
-end)
 
 game.Workspace.FallenPartsDestroyHeight = 0/0
 local part = Instance.new("Part")
