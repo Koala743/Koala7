@@ -27,7 +27,6 @@ local function formatNumber(number)
     end
     local suffixes = {"", "K", "M", "B", "T", "QD"}
     local suffix_index = 1
-
     while math.abs(number) >= 1000 and suffix_index < #suffixes do
         number = number / 1000.0
         suffix_index = suffix_index + 1
@@ -165,13 +164,13 @@ timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 timeLabel.TextSize = 7
 timeLabel.Parent = Barra1
 
-local fpsLabel = Instance.new("TextLabel")
-fpsLabel.Size = UDim2.new(0, 100, 0, 10)
-fpsLabel.Position = UDim2.new(0.663, 0, 0.009, 0)
-fpsLabel.BackgroundTransparency = 1
-fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-fpsLabel.TextSize = 7
-fpsLabel.Parent = Barra1
+local Fps = Instance.new("TextLabel")
+Fps.Size = UDim2.new(0, 100, 0, 10)
+Fps.Position = UDim2.new(0.663, 0, 0.009, 0)
+Fps.TextSize = 7
+Fps.BackgroundTransparency = 1
+Fps.TextColor3 = Color3.fromRGB(255, 255, 255)
+Fps.Parent = Barra1
 
 local VS = Instance.new("TextLabel")
 VS.Parent = Barra1
@@ -365,8 +364,8 @@ local boss = {
     {"Vills (50%)", "Vis (20%)", 6e8},
     {"Vegetable (GoD in-training)", "Wukong (Omen)", 1e8},
     {"SSJG Kakata", "Broccoli", 8e7},
-    {"Broccoli", "SSJB Wukong", 37.5e6},
-    {"SSJB Wukong", "Kai-fist Master", 3e6},
+    {"Broccoli", "SSJB Wukong", 3e7},
+    {"SSJB Wukong", "Kai-fist Master", 5e6},
     {"Perfect Atom", "SSJ2 Wukong", 1625000},
     {"Super Vegetable", "Chilly", 228000},
     {"Mapa", "Super Vegetable", 138000},
@@ -427,6 +426,8 @@ task.spawn(function()
     end
 end)
 
+
+--Quest Para el Hallowen solito y la mission de este
 task.spawn(function()
     while true do
         pcall(function()
@@ -459,16 +460,18 @@ task.spawn(function()
     end
 end)
 
+
+--Borrador de Quets si algun Npc esta serca
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive1() or getIsActive12()  and data.Quest.Value ~= "" then
+            if getIsActive1() or getIsActive2() or getIsActive12()  and data.Quest.Value ~= "" then
                 wait(.5)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
                         local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 500 and npc.Name ~= "Halloween NPC" then
+                        if distance <= 500 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter"  then
                             data.Quest.Value = ""
                             break
                         end
@@ -480,28 +483,8 @@ task.spawn(function()
     end
 end)
 
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() and data.Quest.Value ~= "" then
-                wait(.5)
-                local npcFolder = game:GetService("Workspace").Others.NPCs
-                for _, npc in ipairs(npcFolder:GetChildren()) do
-                    if npc:FindFirstChild("HumanoidRootPart") then
-                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 500 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter" then
-                            data.Quest.Value = ""
-                            break
-                        end
-                    end
-                end
-            end
-        end)
-        wait()
-    end
-end)
 
---Ciclo Para Auto = Quest y Tp Con Tiempo
+--Ciclo Para Auto = Quest y Tp Con Tiempo/Ozaruu
 task.spawn(function()
     while true do
         pcall(function()
@@ -565,19 +548,6 @@ task.spawn(function()
     end
 end)
 
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive1() and game.PlaceId == 5151400895 then
-                local lighting = game:GetService("Lighting")
-                if lighting then
-                    lighting.ClockTime = 21
-                end
-            end
-        end)
-        task.wait()
-    end
-end)
 
 task.spawn(function()
     while true do
@@ -605,18 +575,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    while true do
-        pcall(function()
-        if getIsActive4() then
-            keypress(Enum.KeyCode.R)
-                  Ex.block:InvokeServer(true)
-            end
-        end)
-        wait(1)
-    end
-end)
-
-task.spawn(function()
     local clickCount = 0
     while true do
         pcall(function()
@@ -637,7 +595,7 @@ task.spawn(function()
 end)
 
 --Ciclo Para Auto = Tp Boss y Ozaru
-spawn(function()
+task.spawn(function()
     while true do
         pcall(function()
             if getIsActive2() and data.Quest.Value == "Kid Nohag" then
@@ -654,55 +612,55 @@ spawn(function()
     end
 end)
 
-
-spawn(function()
-    while true do
-        if getIsActive9() then
-            pcall(function()
-                for _, v in next, game:GetDescendants() do
-                    if v:IsA("Part") or v:IsA("BasePart") then v.Material = Enum.Material.SmoothPlastic end
-                    if v:IsA("ParticleEmitter") then v.Enabled = false end
-                    if v:IsA("Decal") then v.Texture = "" end
-                    if v:IsA("Sky") then v.Parent = nil end
-                end
-            end)
-            break
-        end
-        wait()
-    end
-end)
-
-
---Ciclo de Graficos
+-- Ciclo para eliminar objetos específicos
 task.spawn(function()
     while true do
         pcall(function()
-            for _, objeto in pairs(lplr.Character:GetDescendants()) do
-                if objeto:IsA("ParticleEmitter") or objeto:IsA("AnimationTrack") or 
-                   objeto:IsA("Animation") or objeto:IsA("Beam") or 
-                   objeto:IsA("Trail") or objeto:IsA("BillboardGui") then
-                    objeto:Destroy()
+            local targetFolder = game.Workspace            
+            for _, obj in pairs(targetFolder:GetDescendants()) do
+                if obj:IsA("ParticleEmitter") or 
+                   obj.Name == "Effects" or 
+                   obj:IsA("AnimationTrack") or 
+                   obj:IsA("BillboardGui") or 
+                   obj:IsA("Trail") or 
+                   obj:IsA("Blast") or 
+                   obj:IsA("Beam") then
+                    obj:Destroy()
                 end
             end
-        end)
-        wait()
-    end
-end)
-
---Ciclo de Main/Quest
-spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive6() then
+             if getIsActive6() then
                 local s = lplr.PlayerGui.Main.MainFrame.Frames.Quest
                 s.Visible = false
                 s.Position = UDim2.new(0.01, 0, 0.4, 0)
                 s.Position = UDim2.new(2, 0, 0, 0)
             end
+            if getIsActive4() then
+            keypress(Enum.KeyCode.R)
+                  Ex.block:InvokeServer(true)
+            end
         end)
         wait()
     end
 end)
+
+--Ciclo para eleminar el Caht de los boss
+local npcChatsBackup = {}
+task.spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive9() then
+                for _, npc in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
+                    local chat = npc:FindFirstChild("Chat")
+                    if chat then npcChatsBackup[npc] = chat; chat.Parent = nil end
+                end
+            else
+                for npc, chat in pairs(npcChatsBackup) do chat.Parent = npc end
+            end
+        end)
+        wait(1)
+    end
+end)
+
 
 --Ciclo Para Auto = Tierra/Bills
 task.spawn(function()
@@ -710,13 +668,23 @@ task.spawn(function()
         pcall(function()         
             if getIsActive10() and game.PlaceId == 5151400895 and yo() <= 200000000 then
                 Ex.TP:InvokeServer("Earth")
-                wait()
+                wait(2)
             elseif getIsActive10() and game.PlaceId ~= 5151400895 and yo() >= 200000000 then
                Ex.TP:InvokeServer("Vills Planet")
-                wait()                
+                wait(2)                
+            end
+            if getIsActive4() then
+            local kiValue = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.Value
+            local maxKi = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.MaxValue
+            local kiPercentage = kiValue / maxKi
+            if data.Quest.Value == "" and kiPercentage <= 0.3 then
+                keypress(Enum.KeyCode.C)
+            else
+                keyrelease(Enum.KeyCode.C)
+                end 
             end
         end)
-        task.wait()
+       wait()
     end
 end)
 
@@ -747,37 +715,6 @@ data.Quest.Value = ""
     end
 end)
 
---Ciclo para Auto = Puños
-task.spawn(function()
-    while true do
-        pcall(function()
-            if data.Quest.Value ~= "" and  getIsActive4() then
-                Ex.p:FireServer("Blacknwhite27", 1)
-                Ex.p:FireServer("Blacknwhite27", 2)                    
-            end
-        end)
-        task.wait()
-    end
-end)
-
-task.spawn(function()
-    while true do
-        pcall(function()
-        if getIsActive4() then
-            local kiValue = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.Value
-            local maxKi = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.MaxValue
-            local kiPercentage = kiValue / maxKi
-            if data.Quest.Value == "" and kiPercentage <= 0.2 then
-                keypress(Enum.KeyCode.C)
-            else
-                keyrelease(Enum.KeyCode.C)
-                end 
-            end
-        end)
-        wait()
-    end
-end)
-
 --Ciclo para ancti afk
 task.spawn(function()
     while true do
@@ -787,30 +724,33 @@ task.spawn(function()
                 bb:CaptureController()
                 bb:ClickButton2(Vector2.new())
             end)
+            if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
+                Ex.ta:InvokeServer()
+            end
         end)
-        wait(1)
+        wait(.2)
     end
 end)
 
-
---Ciclo del Vacio=Imortal
+--Ciclo Congelamiento  de movimiento /Puños
 task.spawn(function()
     while true do
         pcall(function()
-       game.Workspace.FallenPartsDestroyHeight = 0/0
-        end)
-        wait()
-    end
-end)
-
-
---Ciclo Congelamiento  de movimiento
-task.spawn(function()
-    while true do
-        pcall(function()
+            if data.Quest.Value ~= "" and getIsActive4() then
+                Ex.p:FireServer("Blacknwhite27", 1)
+                Ex.p:FireServer("Blacknwhite27", 2)
+            end
             if getIsActive1() or getIsActive2() then
                 lplr.Character.Humanoid:ChangeState(11)
                 lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+            end
+            for _, obj in pairs(game.CoreGui:GetChildren()) do
+                if (obj.Name == "KeyGui" or obj.Name == "fffg") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
+                    obj:Destroy()
+                end
+            end
+            if getIsActive5() then
+                Ex.reb:InvokeServer()
             end
         end)
         wait()
@@ -818,13 +758,12 @@ task.spawn(function()
 end)
 
 
-spawn(function()
+task.spawn(function()
     while true do
         pcall(function()
             local workspace = game:GetService("Workspace")
             local replicatedStorage = game:GetService("ReplicatedStorage")
             local others = workspace:FindFirstChild("Others")
-
             if others then
                 local bossMaps = others:FindFirstChild("BossMaps") or replicatedStorage:FindFirstChild("BossMaps")
                 if bossMaps then
@@ -842,7 +781,7 @@ end)
 
 local p = game.Players.LocalPlayer
 
-spawn(function()
+task.spawn(function()
     while true do
         pcall(function()
             if getIsActive7() then
@@ -877,40 +816,38 @@ task.spawn(function()
                     game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
                 end
             end
+              local playerCount = #game.Players:GetPlayers()
+            if playerCount > 1 then
+                if game.PlaceId == 5151400895 then
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
+                else
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
+                end
+            end
         end)
         task.wait(0.3)
     end
 end)
 
---Ciclo para Auto = Carga en bills
-task.spawn(function()
-    while true do
-        pcall(function()
-            local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
-            if Work and Wor ~= "None" then
-                if getIsActive4() then
-                    Ex.cha:InvokeServer("Blacknwhite27")
-                end
-            end
-        end)
-        wait()
-    end
-end)
-
---Ciclo de Auto carga en  tierra
+--Ciclo para Auto = Carga en bills/Tierra
 task.spawn(function()
     while true do
         pcall(function()
             if getIsActive4() and game.PlaceId ~= 5151400895 then
-         Ex.cha:InvokeServer("Blacknwhite27")            
+                Ex.cha:InvokeServer("Blacknwhite27")
+            else
+                local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
+                if Work and Work ~= "None" and getIsActive4() then
+                    Ex.cha:InvokeServer("Blacknwhite27")
+                end
             end
         end)
-        wait()
+        task.wait()
     end
 end)
 
 
-spawn(function()
+task.spawn(function()
     if data:FindFirstChild("Allignment") then
         local alignment = data.Allignment.Value
         if alignment == "Evil" then
@@ -927,28 +864,13 @@ spawn(function()
 end)
 
 
-task.spawn(function()
-    while true do
-        pcall(function()
-            local questValue = data.Quest.Value or ""
-            local Trf = (game.PlaceId == 5151400895 and game.Workspace.Living[lplr.Name].Status.Transformation.Value) or lplr.Status.Transformation.Value
-            questLabel.Text = "Mission: " .. questValue .. " | Form: " .. Trf
-        end)
-        wait()
-    end
-end)
-
 --Ciclo Para Auto = Main y Start
 task.spawn(function()
-    while true do
-        pcall(function()
             local gui = lplr.PlayerGui.Main.bruh
             if workspace.Others:FindFirstChild("Title") then
                 Ex.Start:InvokeServer()
                 gui.Disabled = true
-                gui.Disabled = false
-            end
-        end)
+                gui.Disabled = false    
         wait()
     end
 end)
@@ -971,14 +893,6 @@ end)
     end
 end)
 
-
-task.spawn(function()
-    while true do
-        local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
-        pingLabel.Text = "Ping: " .. (ping < 1000 and ping or math.floor(ping / 10) * 10) .. " ms"
-        wait()
-    end
-end)
 
 
 --Ciclode maestria
@@ -1009,56 +923,36 @@ task.spawn(function()
 end)
 
 
-          
-
 task.spawn(function()
     while true do
-        pcall(function()
-            local playerCount = #game.Players:GetPlayers()
-            if playerCount > 1 then
-                if game.PlaceId == 5151400895 then
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
-                else
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
-                end
-            end
-        end)
-        wait(5)
-    end
-end)
+    pcall(function()
+        local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
+        pingLabel.Text = "Ping: " .. (ping < 1000 and ping or math.floor(ping / 10) * 10) .. " ms"---PING
 
-local lastTime = tick()
-local frameCount = 0
-task.spawn(function()
-    while true do
-        frameCount = frameCount + 1
-        local currentTime = tick()
-        if currentTime - lastTime >= 1 then
-            fpsLabel.Text = "FPS: " .. frameCount
-            frameCount = 0
-            lastTime = currentTime
-        end
-        task.wait(0)
+        local fpsValue = math.floor(game:GetService("Stats").Workspace["Heartbeat"]:GetValue())
+        Fps.Text = "FPS: " .. tostring(fpsValue)
+         
+         local questValue = data.Quest.Value or ""
+            local Trf = (game.PlaceId == 5151400895 and game.Workspace.Living[lplr.Name].Status.Transformation.Value) or lplr.Status.Transformation.Value
+            questLabel.Text = "Mission: " .. questValue .. " | Form: " .. Trf
+            
+        local clockTime = game.Lighting.ClockTime
+        local hour = math.floor(clockTime)
+        local minute = math.floor((clockTime - hour) * 60)
+        local period = (hour >= 7 and hour < 19) and "Dia" or "Nch"
+        local ampm = (hour >= 12) and "PM" or "AM"
+        local displayHour = (hour % 12 == 0) and 12 or hour % 12
+        timeLabel.Text = string.format("%s: %02d:%02d %s", period, displayHour, minute, ampm)
+            end)
+        wait(.2)
     end
 end)
 
 
---Eleminar Aura del Astral y las particulas xd
-spawn(function()
-    while true do
-        pcall(function()
-        if getIsActive9() then
-            for _, folderName in ipairs({"AstralInstinct", "Effects", "Animations", "FormAnims"}) do
-                game.ReplicatedStorage.Vfx:FindFirstChild(folderName):ClearAllChildren()
-                end
-            end
-        end)
-        wait()
-    end
-end)
+
 
 --Detroy de Ropa Boss
-spawn(function()
+task.spawn(function()
     while true do
         pcall(function()
             if getIsActive9() then
@@ -1078,45 +972,6 @@ spawn(function()
     end
 end)
 
---Ciclo para eleminar el Caht de los boss
-local npcChatsBackup = {}
-spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive9() then
-                for _, npc in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
-                    local chat = npc:FindFirstChild("Chat")
-                    if chat then npcChatsBackup[npc] = chat; chat.Parent = nil end
-                end
-            else
-                for npc, chat in pairs(npcChatsBackup) do chat.Parent = npc end
-            end
-        end)
-        wait(1)
-    end
-end)
-
---Ciclo para Effect y particulas
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive9() then
-                for _, obj in pairs(game.Workspace:GetDescendants()) do
-                    if (obj:IsA("ParticleEmitter") or obj.Name == "Effects") and not obj:IsDescendantOf(game.ReplicatedStorage) then
-                        obj.Parent = game.ReplicatedStorage
-                    end
-                end
-            else
-                for _, obj in pairs(game.ReplicatedStorage:GetDescendants()) do
-                    if obj:IsA("ParticleEmitter") or obj.Name == "Effects" then
-                        obj.Parent = game.Workspace
-                    end
-                end
-            end
-        end)
-        wait()
-    end
-end)
 
     --Ciclo Para = Traformation.Value           
 task.spawn(function()
@@ -1134,106 +989,13 @@ task.spawn(function()
 end)
 
 
-task.spawn(function()
-    while true do
-        pcall(function()
-            if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
-                Ex.ta:InvokeServer()
-            end
-        end)
-        wait()
-    end
-end)
-
-spawn(function()
-    while true do
-        pcall(function()
-            if game.Workspace.Living[game.Players.LocalPlayer.Name].Status.Transformation.Value == "None" then
-                if not lastNoneTime then
-                    lastNoneTime = tick()
-                end
-            else
-                lastNoneTime = nil
-            end
-            if lastNoneTime and tick() - lastNoneTime > 4 then
-                game.Workspace.Living[game.Players.LocalPlayer.Name].Status.SelectedTransformation.Value = "None"
-                lastNoneTime = nil
-            end
-        end)
-        wait(1)
-    end
-end)
-
 
 task.spawn(function()
-    while true do
-        pcall(function()
-            if claveEsValida() then
-                for _, obj in pairs(game.CoreGui:GetChildren()) do
-                    if (obj.Name == "KeyGui" or obj.Name == "fffg") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
-                        obj:Destroy()
-                    end
-                end
-            end
-        end)
-        wait()
-    end
+            game.Workspace.FallenPartsDestroyHeight = 0/0
+            game:GetService("Lighting").ClockTime = 18
 end)
 
 task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive5() then
-                Ex.reb:InvokeServer()
-            end
-        end)
-        task.wait()
-    end
-end)
-
-task.spawn(function()
-    while true do
-        local clockTime = game.Lighting.ClockTime
-        local hour = math.floor(clockTime)
-        local minute = math.floor((clockTime - hour) * 60)
-        local period = (hour >= 7 and hour < 19) and "Dia" or "Nch"
-        local ampm = (hour >= 12) and "PM" or "AM"
-        local displayHour = (hour % 12 == 0) and 12 or hour % 12
-        timeLabel.Text = string.format("%s: %02d:%02d %s", period, displayHour, minute, ampm)
-        task.wait(1)
-    end
-end)
-
-task.spawn(function()
-    while true do
-        pcall(function()
-            game:GetService("GraphicsQuality"):SetQualityLevel(1)
-            game.Lighting.GlobalShadows = false
-            game.Lighting.FogEnd = 1000
-            game:GetService("Workspace").StreamingEnabled = true
-            game:GetService("Workspace").StreamingPauseMode = Enum.StreamingPauseMode.Immediate
-            game.Lighting.ShadowQuality = Enum.ShadowQuality.NoShadows
-            game.Lighting.MaterialRenderers = Enum.MaterialRenderers.SmoothPlastic
-            game.Lighting.TerrainRenderDistance = 300
-            game:GetService("Workspace").Physics.AllowSleep = true
-            game:GetService("Workspace").Physics.ContinuousCollisionExecution = false
-            game.Lighting.ClockTime = 12
-            game.Lighting.Ambient = Color3.fromRGB(255, 255, 255)
-            game.Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
-            game.Lighting.Brightness = 2
-            game.Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
-            game.Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
-            game:GetService("Workspace").Terrain.WaterWaveSize = 0
-            game:GetService("Workspace").Terrain.WaterReflectance = 0
-            game:GetService("Workspace").Terrain.WaterTransparency = 0
-            game:GetService("Lighting").GlobalShadows = false
-            game:GetService("Workspace").StreamingPauseMode = Enum.StreamingPauseMode.Automatic
-        end)
-        wait(2)
-    end
-end)
-
-spawn(function()
     while true do
         pcall(function()
            if getIsActive6() then
@@ -1241,30 +1003,18 @@ spawn(function()
             local StatsFrame = MainFrame.Frames.Stats
             local ZeniLabel = MainFrame.Indicator:FindFirstChild("Zeni")
             local Bars = MainFrame:WaitForChild("Bars")
-
-            local function format_number(num)
-                local suffixes = {"", "K", "M", "B", "T", "QT"}
-                local i = 1
-                while math.abs(num) >= 1000 do 
-                    num, i = num / 1000, i + 1 
-                end
-                return string.format("%.1f%s", num, suffixes[i])
-            end
-
             local stats = {"Strength", "Speed", "Defense", "Energy"}
             for _, stat in ipairs(stats) do
                 local statLabel = StatsFrame:FindFirstChild(stat)
                 if statLabel then
-                    statLabel.Text = stat .. ": " .. format_number(data[stat].Value)
+                    statLabel.Text = stat .. ": " .. formatNumber(data[stat].Value)
                 end
             end
-
             if ZeniLabel then 
-                ZeniLabel.Text = format_number(data.Zeni.Value) .. " Zeni"
+                ZeniLabel.Text = formatNumber(data.Zeni.Value) .. " Zeni"
             end
-
-            Bars.Health.TextLabel.Text = "SALUD: " .. format_number(lplr.Character.Humanoid.Health) .. " / " .. format_number(lplr.Character.Humanoid.MaxHealth)
-            Bars.Energy.TextLabel.Text = "ENERGÍA: " .. format_number(lplr.Character.Stats.Ki.Value) .. " / " .. format_number(lplr.Character.Stats.Ki.MaxValue)
+            Bars.Health.TextLabel.Text = "SALUD: " .. formatNumber(lplr.Character.Humanoid.Health) .. " / " .. formatNumber(lplr.Character.Humanoid.MaxHealth)
+            Bars.Energy.TextLabel.Text = "ENERGÍA: " .. formatNumber(lplr.Character.Stats.Ki.Value) .. " / " .. formatNumber(lplr.Character.Stats.Ki.MaxValue)
             end
         end)
         task.wait()
@@ -1367,7 +1117,7 @@ end
 create(Barra1, 0, "Vuelo", Color3.new(1, 0, 0), 0.37, 100, updateFlySpeed, "Vuelo")
 create(Barra1, 0.513, "Ambient", Color3.new(0, 1, 0), 0.37, 700, updateAmbient, "Ambient")
 
-spawn(function()
+task.spawn(function()
     while flying do
         pcall(function()
             local hum = player.Character:WaitForChild("Humanoid")
@@ -1377,7 +1127,7 @@ spawn(function()
                 speed = speed + 0.1
             end
         end)
-        wait()
+        wait(.2)
     end
 end)
 
@@ -1609,8 +1359,6 @@ local function transform()
     end
 end
 
-
-game.Workspace.FallenPartsDestroyHeight = 0/0
 local part = Instance.new("Part")
 part.Parent = Workspace
 part.Position = Vector3.new(0,20000,0)
