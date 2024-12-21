@@ -130,6 +130,7 @@ local function formatNumber(number)
     end
     local suffixes = {"", "K", "M", "B", "T", "QD"}
     local suffix_index = 1
+
     while math.abs(number) >= 1000 and suffix_index < #suffixes do
         number = number / 1000.0
         suffix_index = suffix_index + 1
@@ -277,7 +278,7 @@ Fps.Parent = Barra1
 
 local VS = Instance.new("TextLabel")
 VS.Parent = Barra1
-VS.Text = "V [0.5]"
+VS.Text = "V [0.6]"
 VS.Size = UDim2.new(0, 100, 0, 10)
 VS.Position = UDim2.new(0.783, 0, 0.009, 0)
 VS.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -467,8 +468,8 @@ local boss = {
     {"Vills (50%)", "Vis (20%)", 6e8},
     {"Vegetable (GoD in-training)", "Wukong (Omen)", 1e8},
     {"SSJG Kakata", "Broccoli", 8e7},
-    {"Broccoli", "SSJB Wukong", 3e7},
-    {"SSJB Wukong", "Kai-fist Master", 5e6},
+    {"Broccoli", "SSJB Wukong", 37.5e6},
+    {"SSJB Wukong", "Kai-fist Master", 3e6},
     {"Perfect Atom", "SSJ2 Wukong", 1625000},
     {"Super Vegetable", "Chilly", 228000},
     {"Mapa", "Super Vegetable", 138000},
@@ -509,12 +510,19 @@ task.spawn(function()
     end
 end)
 
+--Ciclo Para Auto = Main y Start
+local gui = lplr.PlayerGui.Main.bruh
+if workspace.Others:FindFirstChild("Title") then
+    Ex.Start:InvokeServer()
+    gui.Disabled = true
+    gui.Disabled = false
+end
 
 local boss = {"SSJG Kakata", "Broccoli", 1e8}
 task.spawn(function()
     while true do
         pcall(function()
-        if getIsActive1() then
+        if getIsActive1() or getIsActive12() then
             if math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value) >= boss[3] and data.Quest.Value == "" then
                 local currentBoss = game.Workspace.Living:FindFirstChild(boss[1])
                 local target = currentBoss and currentBoss.Humanoid.Health <= 0 and game.Workspace.Others.NPCs:FindFirstChild(boss[2]) or game.Workspace.Others.NPCs:FindFirstChild(boss[1])
@@ -526,20 +534,6 @@ task.spawn(function()
             end
         end)
         wait()
-    end
-end)
-
-
---Quest Para el Hallowen solito y la mission de este
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive12() and data.Quest.Value == "" then
-            lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-           game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["SSJG Kakata"])                    
-            end
-        end)
-        wait(0.1)
     end
 end)
 
@@ -564,7 +558,6 @@ task.spawn(function()
 end)
 
 
---Borrador de Quets si algun Npc esta serca
 task.spawn(function()
     while true do
         pcall(function()
@@ -574,7 +567,7 @@ task.spawn(function()
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
                         local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 500 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter"  then
+                        if distance <= 500 and npc.Name ~= "Halloween NPC" then
                             data.Quest.Value = ""
                             break
                         end
@@ -587,196 +580,47 @@ task.spawn(function()
 end)
 
 
---Ciclo Para Auto = Quest y Tp Con Tiempo/Ozaruu
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
-                    if data.Quest.Value == "" then
-                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["Kid Nohag"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["Kid Nohag"])
-                    end
-                else
-                    if data.Quest.Value == "" then
-                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["SSJG Kakata"])
-                    end
-                end
-            end
-        end)
-        wait(0.1)
-    end
-end)
-
---Ciclo Para Auto = Tp Boss y Halloween_Farm
-task.spawn(function()
-    while true do
-        pcall(function()
-            if game.PlaceId ~= 5151400895 and getIsActive1() or getIsActive2() and getIsActive12() and data.Quest.Value ~= "" then
-                    local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
-                    if npc and npc.Humanoid.Health <= 0 then
-                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
-                        local boss = game.Workspace.Living:FindFirstChild("Halloween Boss")
-                        if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
-                            lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)
-                    end
-                end
-            end
-        end)
-        task.wait()
-    end
-end)
-
-
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() or getIsActive12() and data.Quest.Value == "" then
-                local halloweenBoss = game.Workspace.Living:FindFirstChild("Halloween Boss")
-                if halloweenBoss and halloweenBoss.Humanoid.Health <= 0 then
-                    lplr.Character.HumanoidRootPart.CFrame = CFrame.new(2869, 531, -1816)
-                    local evilSayas = game.Workspace.Living:GetChildren()                        
-                    for _, evilSaya in ipairs(evilSayas) do
-                        if evilSaya.Name == "Evil Saya" and evilSaya:FindFirstChild("Humanoid") then
-                            while evilSaya.Humanoid.Health > 0 do
-                                lplr.Character.HumanoidRootPart.CFrame = evilSaya.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)
-                                Ex.p:FireServer("Blacknwhite27", 1)
-                                Ex.p:FireServer("Blacknwhite27", 2)
-                                task.wait()
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-        task.wait()
-    end
-end)
 
 task.spawn(function()
     local clickCount = 0
     while true do
-        pcall(function()
-            if getIsActive11() then
-                if data.Quest.Value == "" then
-                    if clickCount < 22 then
-                        keypress(Enum.KeyCode.I)
-                        clickCount = clickCount + 1
-                    end
-                elseif data.Quest.Value ~= "" then
-                    keypress(Enum.KeyCode.O)
-                    clickCount = 0 
+        if getIsActive11() then
+            if data.Quest.Value == "" then
+                if clickCount < 22 then
+                    keypress(Enum.KeyCode.I)
+                    clickCount = clickCount + 1
                 end
+            elseif data.Quest.Value ~= "" then
+                keypress(Enum.KeyCode.O)
+                clickCount = 0
             end
-        end)
-        task.wait()
-    end
-end)
-
---Ciclo Para Auto = Tp Boss y Ozaru
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() and data.Quest.Value == "Kid Nohag" then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
-                    local boss = game.Workspace.Living:FindFirstChild("Oozaru")
-                    if boss and boss:FindFirstChild("HumanoidRootPart") then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                    end
-                end
-            end
-        end)
+        end
         task.wait()
     end
 end)
 
 
---Ciclo para eleminar el Caht de los boss
-local npcChatsBackup = {}
-task.spawn(function()
+
+
+local moves = {"sledgehammer", "Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", "God Slicer"}
+spawn(function()
     while true do
-        pcall(function()
-            if getIsActive9() then
-                for _, npc in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
-                    local chat = npc:FindFirstChild("Chat")
-                    if chat then npcChatsBackup[npc] = chat; chat.Parent = nil end
-                end
-            else
-                for npc, chat in pairs(npcChatsBackup) do chat.Parent = npc end
+    if getIsActive3() and data.Quest.Value ~= ""   then
+        for _, move in pairs(moves) do
+            if game.PlaceId == 5151400895 or not lplr.Status:FindFirstChild(move) then
+                task.spawn(function()
+                    game.ReplicatedStorage.Package.Events.mel:InvokeServer(move, "Blacknwhite27")                    
+                end)
             end
-        end)
-        wait(1)
+            end
+        end
+        task.wait()
     end
 end)
 
-
---Ciclo Para Auto = Tierra/Bills
-task.spawn(function()
-    while true do
-        pcall(function()         
-            if getIsActive10() and game.PlaceId == 5151400895 and yo() <= 200000000 then
-                Ex.TP:InvokeServer("Earth")
-                wait(2)
-            elseif getIsActive10() and game.PlaceId ~= 5151400895 and yo() >= 200000000 then
-               Ex.TP:InvokeServer("Vills Planet")
-                wait(2)                
-            end
-        end)
-       wait()
-    end
-end)
-
-task.spawn(function()
-    while true do
-        pcall(function()         
-       if getIsActive4() then
-            local kiValue = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.Value
-            local maxKi = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.MaxValue
-            local kiPercentage = kiValue / maxKi
-            if data.Quest.Value == "" and kiPercentage <= 0.3 then
-                keypress(Enum.KeyCode.C)
-            else
-              keyrelease(Enum.KeyCode.C)
-               keypress(Enum.KeyCode.R)
-                Ex.block:InvokeServer(true)
-                end 
-            end
-        end)
-       wait()
-    end
-end)
-
-local moves = {"Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", 
-               "God Slicer"}
---Ciclo Para Auto = Atakes
-task.spawn(function()
-data.Quest.Value = ""
-    while true do
-        pcall(function()
-        local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)           
-            local dat = (game.PlaceId == 5151400895) and game.Workspace.Living:FindFirstChild(lplr.Name) or lplr
-            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and yo() >= 2e5  and data.Quest.Value ~= "" and getIsActive3() then
-                if dat:FindFirstChild("Status") then
-                    for _, move in ipairs(moves) do
-                        if not dat.Status:FindFirstChild(move) then
-                            task.spawn(function()
-                                Ex.mel:InvokeServer(move, "Blacknwhite27")
-                                game.ReplicatedStorage.Package.Events.voleys:InvokeServer("Energy Volley", {FaceMouse = false, MouseHit = CFrame.new()}, "Blacknwhite27")                                    
-                            end)
-                        end
-                    end
-                end
-            end
-        end)
-        wait()
-    end
-end)
 
 --Ciclo para ancti afk
-task.spawn(function()
+spawn(function()
     while true do
         pcall(function()
             game:GetService('Players').LocalPlayer.Idled:Connect(function()
@@ -784,60 +628,38 @@ task.spawn(function()
                 bb:CaptureController()
                 bb:ClickButton2(Vector2.new())
             end)
+            map()
             if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
-                Ex.ta:InvokeServer()
+                Ex.ta:InvokeServer()          
             end
         end)
-        wait(.2)
+        wait(.3)
     end
 end)
 
---Ciclo Congelamiento  de movimiento /Puños
-task.spawn(function()
-    while true do
-        pcall(function()
-            if data.Quest.Value ~= "" and getIsActive4() then
-                Ex.p:FireServer("Blacknwhite27", 1)
-                Ex.p:FireServer("Blacknwhite27", 2)
-            end
-            if getIsActive1() or getIsActive2() then
-                lplr.Character.Humanoid:ChangeState(11)
-                lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-            end
-            for _, obj in pairs(game.CoreGui:GetChildren()) do
-                if (obj.Name == "KeyGui" or obj.Name == "fffg") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
-                    obj:Destroy()
+            for _, obj in pairs(game.Workspace:GetDescendants()) do
+            if obj:IsA("Sound") or obj.Name == "Effects" or obj:IsA("ParticleEmitter") then
+              obj:Destroy()
                 end
-            end
-            if getIsActive5() then
-                Ex.reb:InvokeServer()
-            end
-        end)
-        wait()
-    end
-end)
+            end          
 
-
-task.spawn(function()
-    while true do
-        pcall(function()
-            local bossMaps = game.Workspace.Others:FindFirstChild("BossMaps") or game.ReplicatedStorage:FindFirstChild("BossMaps")
-            if bossMaps then
-                if getIsActive8()  then
-                lplr.PlayerGui:WaitForChild("Main").Enabled = false
-                    bossMaps.Parent = game.ReplicatedStorage
-                else
-                lplr.PlayerGui:WaitForChild("Main").Enabled = true
-                    bossMaps.Parent = game.Workspace.Others                  
-                end
-            end
-        end)
-        wait()
+function map()
+    local bossMaps = game.Workspace.Others:FindFirstChild("BossMaps") or game.ReplicatedStorage:FindFirstChild("BossMaps")
+    if bossMaps then
+        if getIsActive8() then
+            lplr.PlayerGui:WaitForChild("Main").Enabled = false
+            bossMaps.Parent = game.ReplicatedStorage
+        else
+            lplr.PlayerGui:WaitForChild("Main").Enabled = true
+            bossMaps.Parent = game.Workspace.Others
+        end
     end
-end)
+    wait()
+end
 
 local p = game.Players.LocalPlayer
-task.spawn(function()
+
+spawn(function()
     while true do
         pcall(function()
             if getIsActive7() then
@@ -857,14 +679,37 @@ task.spawn(function()
                 p.Character.HumanoidRootPart.Transparency = 0
             end
         end)
-        wait(1)
+        wait(.5)
     end
 end)
 
---Ciclo Para el Ozaru tp tierra
-task.spawn(function()
+
+spawn(function()
     while true do
         pcall(function()
+            if getIsActive2() then
+                local currentGameHour = math.floor(game.Lighting.ClockTime)
+                if currentGameHour >= 20 or currentGameHour < 6 then
+                    if data.Quest.Value == "" then
+                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["Kid Nohag"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["Kid Nohag"])
+                    end
+                else
+                    if data.Quest.Value == "" then
+                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["SSJG Kakata"])
+                    end
+                end
+            end
+            if getIsActive2() and data.Quest.Value == "Kid Nohag" then
+                local currentGameHour = math.floor(game.Lighting.ClockTime)
+                if currentGameHour >= 20 or currentGameHour < 6 then
+                    local boss = game.Workspace.Living:FindFirstChild("Oozaru")
+                    if boss and boss:FindFirstChild("HumanoidRootPart") then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                    end
+                end
+            end
             if getIsActive2() then
                 local currentGameHour = math.floor(game.Lighting.ClockTime)
                 local currentGameMinute = math.floor((game.Lighting.ClockTime % 1) * 60)
@@ -872,34 +717,63 @@ task.spawn(function()
                     game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
                 end
             end
-              local playerCount = #game.Players:GetPlayers()
-            if playerCount > 1 then
-                if game.PlaceId == 5151400895 then
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
-                else
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
+          if getIsActive2() or getIsActive1() then
+                lplr.Character.Humanoid:ChangeState(11)
+                lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+            end
+           if getIsActive4() and data.Quest.Value ~= "" then
+                Ex.p:FireServer("Blacknwhite27", 1)
+                Ex.p:FireServer("Blacknwhite27", 2)            
+                 keypress(Enum.KeyCode.R)
+                  Ex.block:InvokeServer(true)     
+            end
+          if getIsActive10() and game.PlaceId == 5151400895 and yo() <= 200000000 then
+                Ex.TP:InvokeServer("Earth")
+            elseif getIsActive10() and game.PlaceId ~= 5151400895 and yo() >= 200000000 then
+               Ex.TP:InvokeServer("Vills Planet")
+            end
+           if getIsActive4() then
+                local player = game.Players.LocalPlayer
+                local stats = player.Character:WaitForChild("Stats")
+                local kiValue = stats.Ki.Value
+                local maxKi = stats.Ki.MaxValue
+                local kiPercentage = kiValue / maxKi               
+                if data.Quest.Value == "" then
+                    if kiPercentage <= 0.2 then
+                        keypress(Enum.KeyCode.C)
+                    else
+                        keyrelease(Enum.KeyCode.C)
+                    end
                 end
             end
-            for _, obj in pairs(game.Workspace:GetDescendants()) do
-            if obj:IsA("Sound") or obj.Name == "Effects" or obj:IsA("ParticleEmitter") then
-              obj:Destroy()
-                end
-            end          
-        end)
-        task.wait(0.3)
-    end
-end)
-
---Ciclo para Auto = Carga en bills/Tierra
-task.spawn(function()
-    while true do
-        pcall(function()                    
-            if getIsActive4() and game.PlaceId ~= 5151400895 then
+          if getIsActive4() and game.PlaceId ~= 5151400895 then
                 Ex.cha:InvokeServer("Blacknwhite27")
             else
                 local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
                 if Work and Work ~= "None" then
                     Ex.cha:InvokeServer("Blacknwhite27")
+                end
+            end
+             if getIsActive5() then
+                Ex.reb:InvokeServer()
+            end
+        end)        
+        task.wait()
+    end
+end)
+
+spawn(function()
+allig()
+    while true do
+        pcall(function()
+                        if getIsActive2() or getIsActive1() or getIsActive12() and game.PlaceId ~= 5151400895 and data.Quest.Value ~= "" then
+                    local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
+                    if npc and npc.Humanoid.Health <= 0 then
+                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
+                        local boss = game.Workspace.Living:FindFirstChild("Halloween Boss")
+                        if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                            lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)
+                    end
                 end
             end
         end)
@@ -908,7 +782,8 @@ task.spawn(function()
 end)
 
 
-task.spawn(function()
+
+function allig()
     if data:FindFirstChild("Allignment") then
         local alignment = data.Allignment.Value
         if alignment == "Evil" then
@@ -921,12 +796,38 @@ task.spawn(function()
             ligaLabel.TextStrokeTransparency = 0
         end
         ligaLabel.Text = alignment
+        game.Workspace.FallenPartsDestroyHeight = 0/0
     end
-    game:GetService("Lighting").ClockTime = 18
+end
+
+
+spawn(function()
+    while true do
+        pcall(function()
+        local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
+        pingLabel.Text = "Ping: " .. (ping < 1000 and ping or math.floor(ping / 10) * 10) .. " ms"---PING
+
+        local fpsValue = math.floor(game:GetService("Stats").Workspace["Heartbeat"]:GetValue())
+        Fps.Text = "FPS: " .. tostring(fpsValue)
+         
+         local questValue = data.Quest.Value or ""
+            local Trf = (game.PlaceId == 5151400895 and game.Workspace.Living[lplr.Name].Status.Transformation.Value) or lplr.Status.Transformation.Value
+            questLabel.Text = "Mission: " .. questValue .. " | Form: " .. Trf
+            
+        local clockTime = game.Lighting.ClockTime
+        local hour = math.floor(clockTime)
+        local minute = math.floor((clockTime - hour) * 60)
+        local period = (hour >= 7 and hour < 19) and "Dia" or "Nch"
+        local ampm = (hour >= 12) and "PM" or "AM"
+        local displayHour = (hour % 12 == 0) and 12 or hour % 12
+        timeLabel.Text = string.format("%s: %02d:%02d %s", period, displayHour, minute, ampm)
+        end)
+        wait()
+    end
 end)
             
             
-  task.spawn(function()
+ spawn(function()
     while true do
         local rebirthValue = data.Rebirth.Value
         local strengthValue = data.Strength.Value
@@ -948,7 +849,7 @@ end)
 local playerGui = lplr:WaitForChild("PlayerGui")
 local maxMastery = 332526
 
-task.spawn(function()
+spawn(function()
     while true do
     pcall(function()
         local currentMastery = 0
@@ -972,47 +873,42 @@ task.spawn(function()
 end)
 
 
-task.spawn(function()
-    while true do
-    pcall(function()
-        local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
-        pingLabel.Text = "Ping: " .. (ping < 1000 and ping or math.floor(ping / 10) * 10) .. " ms"---PING
+          
 
-        local fpsValue = math.floor(game:GetService("Stats").Workspace["Heartbeat"]:GetValue())
-        Fps.Text = "FPS: " .. tostring(fpsValue)
-         
-         local questValue = data.Quest.Value or ""
-            local Trf = (game.PlaceId == 5151400895 and game.Workspace.Living[lplr.Name].Status.Transformation.Value) or lplr.Status.Transformation.Value
-            questLabel.Text = "Mission: " .. questValue .. " | Form: " .. Trf
-            
-        local clockTime = game.Lighting.ClockTime
-        local hour = math.floor(clockTime)
-        local minute = math.floor((clockTime - hour) * 60)
-        local period = (hour >= 7 and hour < 19) and "Dia" or "Nch"
-        local ampm = (hour >= 12) and "PM" or "AM"
-        local displayHour = (hour % 12 == 0) and 12 or hour % 12
-        timeLabel.Text = string.format("%s: %02d:%02d %s", period, displayHour, minute, ampm)
-            end)
-        wait(.2)
+spawn(function()
+    while true do
+        pcall(function()
+            local playerCount = #game.Players:GetPlayers()
+            if playerCount > 1 then
+                if game.PlaceId == 5151400895 then
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
+                else
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
+                end
+            end
+        end)
+        wait(5)
     end
 end)
 
-
-
-
---Detroy de Ropa Boss
-if getIsActive9() then
-    for _, obj in ipairs(game.Workspace.Living:GetChildren()) do
-        if obj:FindFirstChild("Humanoid") and obj ~= game.Players.LocalPlayer.Character then
-            if obj:FindFirstChild("Shirt") then obj.Shirt:Destroy() end
-            if obj:FindFirstChild("Pants") then obj.Pants:Destroy() end
-        end
+--Ciclo para eleminar el Caht de los boss
+local npcChatsBackup = {}
+spawn(function()
+    while true do
+        pcall(function()
+            if getIsActive9() then
+                for _, npc in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
+                    local chat = npc:FindFirstChild("Chat")
+                    if chat then npcChatsBackup[npc] = chat; chat.Parent = nil end
+                end
+            else
+                for npc, chat in pairs(npcChatsBackup) do chat.Parent = npc end
+            end
+        end)
+        wait(1)
     end
-    for _, obj in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
-        if obj:FindFirstChild("Shirt") then obj.Shirt:Destroy() end
-        if obj:FindFirstChild("Pants") then obj.Pants:Destroy() end
-    end
-end
+end)
+
 
 
     --Ciclo Para = Traformation.Value           
@@ -1030,7 +926,24 @@ task.spawn(function()
     end
 end)
 
-task.spawn(function()
+
+spawn(function()
+    while true do
+        pcall(function()
+            if claveEsValida() then
+                for _, obj in pairs(game.CoreGui:GetChildren()) do
+                    if (obj.Name == "KeyGui" or obj.Name == "fffg") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
+                        obj:Destroy()
+                    end
+                end
+            end
+        end)
+        wait()
+    end
+end)
+
+
+spawn(function()
     while true do
         pcall(function()
            if getIsActive6() then
@@ -1060,15 +973,6 @@ task.spawn(function()
     end
 end)
 
---Ciclo Para Auto = Main y Start
-local gui = lplr.PlayerGui.Main.bruh
-if workspace.Others:FindFirstChild("Title") then
-    Ex.Start:InvokeServer()
-    gui.Disabled = true
-    gui.Disabled = false
-end
-
-game.Workspace.FallenPartsDestroyHeight = 0/0
 
 
 local player = game.Players.LocalPlayer
@@ -1166,7 +1070,7 @@ end
 create(Barra1, 0, "Vuelo", Color3.new(1, 0, 0), 0.37, 100, updateFlySpeed, "Vuelo")
 create(Barra1, 0.513, "Ambient", Color3.new(0, 1, 0), 0.37, 700, updateAmbient, "Ambient")
 
-task.spawn(function()
+spawn(function()
     while flying do
         pcall(function()
             local hum = player.Character:WaitForChild("Humanoid")
@@ -1176,7 +1080,7 @@ task.spawn(function()
                 speed = speed + 0.1
             end
         end)
-        wait(.2)
+        wait()
     end
 end)
 
@@ -1408,6 +1312,8 @@ local function transform()
     end
 end
 
+
+game.Workspace.FallenPartsDestroyHeight = 0/0
 local part = Instance.new("Part")
 part.Parent = Workspace
 part.Position = Vector3.new(0,20000,0)
@@ -1441,8 +1347,8 @@ end)
        end)    
     task.wait()
 end)
-end
 
+end
 
 spawn(function()
     if claveEsValida() then
