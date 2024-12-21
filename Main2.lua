@@ -337,26 +337,9 @@ local getIsActive12 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.570, 0), "Switc
 
 --Casi fin del interrutor /\
 
---Ciclo Para Auto = Main y Start
-local gui = lplr.PlayerGui.Main.bruh
-if workspace.Others:FindFirstChild("Title") then
-    Ex.Start:InvokeServer()
-    gui.Disabled = true
-    gui.Disabled = false
-end
 
-function Invicible()
-	return lplr.Character
-end
-
-function player()
-	return lplr.Character and lplr.Character.Humanoid and lplr.Character.Humanoid.Health > 0 and lplr.Character:FindFirstChild("HumanoidRootPart")
-end
-
-game.Workspace.FallenPartsDestroyHeight = 0/0
 task.spawn(function()
     pcall(function()
-    if player() then
 local sts = {"Strength", "Speed", "Defense", "Energy"}
 function yo()
     local l = math.huge
@@ -974,6 +957,16 @@ task.spawn(function()
     end
 end)
 
+--Ciclo Para Auto = Main y Start
+local gui = lplr.PlayerGui.Main.bruh
+if workspace.Others:FindFirstChild("Title") then
+    Ex.Start:InvokeServer()
+    gui.Disabled = true
+    gui.Disabled = false
+end
+
+game.Workspace.FallenPartsDestroyHeight = 0/0
+
 
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
@@ -1342,7 +1335,6 @@ end)
 
 
 --fin de todo \/
-end
        end)    
     task.wait()
 end)
