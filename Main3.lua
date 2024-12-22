@@ -509,13 +509,13 @@ task.spawn(function()
                     if currentBoss and currentBoss:FindFirstChild("Humanoid") and currentBoss.Humanoid.Health <= 0 then
                         if nextNpc and nextNpc:FindFirstChild("HumanoidRootPart") then
                             lplr.Character.HumanoidRootPart.CFrame = nextNpc.HumanoidRootPart.CFrame
-                            
+                            game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(nextNpc)
                             if getIsActive1() and data.Quest.Value == "" then return end
                         end
                     elseif game.Workspace.Others.NPCs:FindFirstChild(mission[1]) then
                         local npc = game.Workspace.Others.NPCs[mission[1]]
                         lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame                     
-                      
+                      game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(npc)   
                         if getIsActive1() and data.Quest.Value == "" then return end
                     end
                     break
@@ -523,35 +523,6 @@ task.spawn(function()
             end
         end)
         wait()
-    end
-end)
-
-local lplr = game.Players.LocalPlayer
-local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
-
-task.spawn(function()
-    while true do
-        pcall(function()
-            if data.Quest.Value == "" then
-                local closestNPC = nil
-                local shortestDistance = math.huge                
-                for _, npc in pairs(workspace.Others.NPCs:GetChildren()) do
-                    local distance = (lplr.Character.HumanoidRootPart.Position - npc.HumanoidRootPart.Position).Magnitude
-                    if distance < shortestDistance and distance <= 30 then
-                        shortestDistance = distance
-                        closestNPC = npc
-                    end
-                end                
-                if closestNPC then
-                    game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(closestNPC)                 
-                    task.wait(1)
-                    if data.Quest.Value ~= "" then
-                        return
-                    end
-                end
-            end
-        end)
-        task.wait()
     end
 end)
 
@@ -602,7 +573,7 @@ task.spawn(function()
     while true do
         pcall(function()
             if getIsActive1() or getIsActive2() or getIsActive12()  and data.Quest.Value ~= "" then
-                wait(.6)
+                wait(.5)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
