@@ -466,12 +466,12 @@ task.spawn(function()
     while true do
         pcall(function()
             if getIsActive1() or getIsActive2() or getIsActive12()  and data.Quest.Value ~= "" then
-                wait(.5)
+                wait(2)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
                         local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 500 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter"  then
+                        if distance <= 300 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter"  then
                             data.Quest.Value = ""
                             break
                         end
