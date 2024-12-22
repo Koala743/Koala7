@@ -409,7 +409,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            Ex.Qaction:InvokeServer(npc)
+            game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(npc)
         end)
         task.wait()
     end
