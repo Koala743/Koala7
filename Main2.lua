@@ -406,12 +406,41 @@ task.spawn(function()
     end
 end)
 
+local lplr = game.Players.LocalPlayer
+local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if data.Quest.Value == "" then
+                local closestNPC = nil
+                local shortestDistance = math.huge                
+                for _, npc in pairs(workspace.Others.NPCs:GetChildren()) do
+                    local distance = (lplr.Character.HumanoidRootPart.Position - npc.HumanoidRootPart.Position).Magnitude
+                    if distance < shortestDistance and distance <= 30 then
+                        shortestDistance = distance
+                        closestNPC = npc
+                    end
+                end                
+                if closestNPC then
+                    game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(closestNPC)                 
+                    task.wait(1)
+                    if data.Quest.Value ~= "" then
+                        return
+                    end
+                end
+            end
+        end)
+        task.wait()
+    end
+end)
+
 
 local boss = {"SSJG Kakata", "Broccoli", 1e8}
 task.spawn(function()
     while true do
         pcall(function()
-        if getIsActive1() then
+        if getIsActive1() and getIsActive12() then
             if math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value) >= boss[3] and data.Quest.Value == "" then
                 local currentBoss = game.Workspace.Living:FindFirstChild(boss[1])
                 local target = currentBoss and currentBoss.Humanoid.Health <= 0 and game.Workspace.Others.NPCs:FindFirstChild(boss[2]) or game.Workspace.Others.NPCs:FindFirstChild(boss[1])
@@ -426,19 +455,6 @@ task.spawn(function()
     end
 end)
 
-
---Quest Para el Hallowen solito y la mission de este
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive12() and data.Quest.Value == "" then
-            lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-           game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["SSJG Kakata"])                    
-            end
-        end)
-        wait(0.1)
-    end
-end)
 
 
 --Ciclo Para Auto = Tp Boss A Cualquier Tipo De Boss
