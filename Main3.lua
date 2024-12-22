@@ -217,6 +217,8 @@ imageLabel.BackgroundTransparency = 1
 imageLabel.Image = thumbnailUrl
 imageLabel.Parent = Barra1
 
+
+
 --incio Borde color\/
 Borde1.Parent = Cuadro1
 Borde1.Thickness = 2
@@ -482,18 +484,25 @@ end)
 
 task.spawn(function()
     while true do
-        if data.Quest.Value ~= "" then
-            wait(0.5)
-            for _, npc in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
-                if npc:FindFirstChild("HumanoidRootPart") and (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude <= 500 and npc.Name ~= "Halloween NPC" then
-                    data.Quest.Value = ""
-                    break
+        pcall(function()
+            if data.Quest.Value ~= "" then
+                wait(1)
+                local npcFolder = game:GetService("Workspace").Others.NPCs
+                for _, npc in ipairs(npcFolder:GetChildren()) do
+                    if npc:FindFirstChild("HumanoidRootPart") then
+                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
+                        if distance <= 500 and npc.Name ~= "Halloween NPC" then
+                            data.Quest.Value = ""
+                            break
+                        end
+                    end
                 end
             end
-        end
+        end)
         wait()
     end
 end)
+
 
 --Ciclo Para Auto = Quest y Tp Con Tiempo
 task.spawn(function()
@@ -671,7 +680,7 @@ task.spawn(function()
     while true do
         pcall(function()
             local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)
-            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and yo() >= 200e8 and game.PlaceId == 5151400895 then
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and game.PlaceId == 5151400895 then
                 for _, move in ipairs(mel) do
                     task.spawn(function()
                         Ex.mel:InvokeServer(move, "Blacknwhite27")
@@ -1352,6 +1361,9 @@ end)
        end)    
     wait(1)
 end)
+
+
+ 
 
 end
 
