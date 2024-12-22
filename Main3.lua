@@ -644,9 +644,6 @@ spawn(function()
                 bb:ClickButton2(Vector2.new())
             end)
             map()
-            if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
-                Ex.ta:InvokeServer()          
-            end
         end)
         wait(.5)
     end
@@ -755,14 +752,6 @@ spawn(function()
                     else
                         keyrelease(Enum.KeyCode.C)
                     end
-                end
-            end
-          if getIsActive4() and game.PlaceId ~= 5151400895 then
-                Ex.cha:InvokeServer("Blacknwhite27")
-            else
-                local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
-                if Work and Work ~= "None" then
-                    Ex.cha:InvokeServer("Blacknwhite27")
                 end
             end
              if getIsActive5() then
@@ -936,6 +925,27 @@ task.spawn(function()
         wait()
     end
 end)
+
+
+task.spawn(function()
+    while true do
+        pcall(function()
+          if getIsActive4() and game.PlaceId ~= 5151400895 then
+                Ex.cha:InvokeServer("Blacknwhite27")
+            else
+                local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
+                if Work and Work ~= "None" then
+                    Ex.cha:InvokeServer("Blacknwhite27")
+                end
+            end
+          if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
+                Ex.ta:InvokeServer()          
+            end
+        end)
+        wait()
+    end
+end)
+
 
 
 spawn(function()
