@@ -471,10 +471,11 @@ local questDataOutsideID = {
     {range = {80000000, math.huge}, options = {"SSJG Kakata", "Broccoli"}}
 }
 local questDataInsideID = {
-    {range = {200000000, 1500000000}, options = {"Vegetable (GoD in-training)", "Wukong (Omen)"}},
+    {range = {100000000, 600000000}, options = {"Vegetable (GoD in-training)", "Wukong (Omen)"}},
+    {range = {600000000, 1500000000}, options = {"Vills (50%)", "Vis (20%)"}},
     {range = {1500000000, 2500000000}, options = {"Vis (20%)", "Vegetable (LBSSJ4)"}},
-    {range = {2500000000, 3000000000}, options = {"Wukong (LBSSJ4)", "Vegetable (LBSSJ4)"}},
-    {range = {3000000000, math.huge}, options = {"Vekuta (SSJBUI)", "Wukong Rose"}}
+    {range = {2500000000, 3500000000}, options = {"Wukong (LBSSJ4)", "Vegetable (LBSSJ4)"}},
+    {range = {3500000000, math.huge}, options = {"Vekuta (SSJBUI)", "Wukong Rose"}}
 }
 
 local questData = game.PlaceId ~= 5151400895 and questDataOutsideID or questDataInsideID
