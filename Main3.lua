@@ -3,51 +3,73 @@ local ArchivoHistorial = "HistorialClaves.json"
 local HttpService = game:GetService("HttpService")
 
 local KeyGui = Instance.new("ScreenGui")
-KeyGui.Name = "Key_7"
 KeyGui.Parent = game.CoreGui
 
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0.3, 0, 0.25, 0)
-Frame.Position = UDim2.new(0.35, 0, 0.35, 0)
-Frame.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+Frame.Size = UDim2.new(0.318272662, 0, 0.318272662, 0)
+Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 Frame.BorderSizePixel = 0
-Frame.BackgroundTransparency = 0.1
 Frame.Parent = KeyGui
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0.1, 0)
+UICorner.CornerRadius = UDim.new(0.05, 0)
 UICorner.Parent = Frame
 
+local Gradient = Instance.new("UIGradient")
+Gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 45, 50)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 15, 20))
+}
+Gradient.Rotation = 45
+Gradient.Parent = Frame
+
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0.3, 0)
-Title.Position = UDim2.new(0, 0, 0, 0)
+Title.Size = UDim2.new(0.950000000, 0, 0.150000000, 0)
+Title.Position = UDim2.new(0.025000000, 0, 0.050000000, 0)
 Title.BackgroundTransparency = 1
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextColor3 = Color3.fromRGB(220, 220, 220)
 Title.TextScaled = true
 Title.Font = Enum.Font.GothamBold
-Title.Text = "Introduce tu clave"
+Title.Text = "🔐 Sistema de Claves"
 Title.Parent = Frame
 
 local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.8, 0, 0.25, 0)
-TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
-TextBox.PlaceholderText = "Introduce la clave"
+TextBox.Size = UDim2.new(0.900635200, 0, 0.126137561, 0)
+TextBox.Position = UDim2.new(0.049682240, 0, 0.278634136, 0)
+TextBox.PlaceholderText = "Introduce tu clave aquí"
 TextBox.Font = Enum.Font.Gotham
 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+TextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 TextBox.BorderSizePixel = 0
 TextBox.TextScaled = true
 TextBox.ClearTextOnFocus = false
 TextBox.Parent = Frame
 
 local UICornerTextBox = Instance.new("UICorner")
-UICornerTextBox.CornerRadius = UDim.new(0.1, 0)
+UICornerTextBox.CornerRadius = UDim.new(0.05, 0)
 UICornerTextBox.Parent = TextBox
 
+local BotonUrl = Instance.new("TextButton")
+BotonUrl.Size = UDim2.new(0.715488320, 0, 0.147448120, 0)
+BotonUrl.Position = UDim2.new(0.142255450, 0, 0.550486350, 0)
+BotonUrl.Text = "Copiar URL de Clave"
+BotonUrl.Font = Enum.Font.GothamBold
+BotonUrl.TextScaled = true
+BotonUrl.TextColor3 = Color3.fromRGB(255, 255, 255)
+BotonUrl.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
+BotonUrl.BorderSizePixel = 0
+BotonUrl.Parent = Frame
+
+local UICornerBotonUrl = Instance.new("UICorner")
+UICornerBotonUrl.CornerRadius = UDim.new(0.05, 0)
+UICornerBotonUrl.Parent = BotonUrl
+
 local BotonInvitacion = Instance.new("TextButton")
-BotonInvitacion.Size = UDim2.new(0.2, 0, 0.2, 0)
-BotonInvitacion.Position = UDim2.new(0.8, 0, 0.8, 0)
-BotonInvitacion.Text = "ðŸ«‚"
+BotonInvitacion.Size = UDim2.new(0.157682243, 0, 0.126241136, 0)
+BotonInvitacion.Position = UDim2.new(0.840682243, 0, 0.562241136, 0)
+BotonInvitacion.Text = "🌍"
 BotonInvitacion.Font = Enum.Font.GothamBold
 BotonInvitacion.TextScaled = true
 BotonInvitacion.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -55,16 +77,11 @@ BotonInvitacion.BackgroundTransparency = 1
 BotonInvitacion.BorderSizePixel = 0
 BotonInvitacion.Parent = Frame
 
-local BotonUrl = Instance.new("TextButton")
-BotonUrl.Size = UDim2.new(0.6, 0, 0.25, 0)
-BotonUrl.Position = UDim2.new(0.2, 0, 0.75, 0)
-BotonUrl.Text = "Copiar Url Key"
-BotonUrl.Font = Enum.Font.GothamBold
-BotonUrl.TextScaled = true
-BotonUrl.TextColor3 = Color3.fromRGB(255, 255, 255)
-BotonUrl.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
-BotonUrl.BorderSizePixel = 0
-BotonUrl.Parent = Frame
+
+
+local UICornerBotonUrl = Instance.new("UICorner")
+UICornerBotonUrl.CornerRadius = UDim.new(0.1, 0)
+UICornerBotonUrl.Parent = BotonUrl
 
 local claveValida = false
 
@@ -585,12 +602,12 @@ task.spawn(function()
     while true do
         pcall(function()
             if getIsActive1() or getIsActive2() or getIsActive12()  and data.Quest.Value ~= "" then
-                wait(1)
+                wait(.5)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
                         local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 300 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter"  then
+                        if distance <= 500 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter"  then
                             data.Quest.Value = ""
                             break
                         end
@@ -765,29 +782,22 @@ task.spawn(function()
     end
 end)
 
-local moves = {"Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", 
-               "God Slicer"}
---Ciclo Para Auto = Atakes
+
+local moves = {"Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", "God Slicer"}
 task.spawn(function()
-data.Quest.Value = ""
     while true do
         pcall(function()
-        local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)           
-            local dat = (game.PlaceId == 5151400895) and game.Workspace.Living:FindFirstChild(lplr.Name) or lplr
-            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and yo() >= 2e5  and data.Quest.Value ~= "" and getIsActive3() then
-                if dat:FindFirstChild("Status") then
-                    for _, move in ipairs(moves) do
-                        if not dat.Status:FindFirstChild(move) then
-                            task.spawn(function()
-                                Ex.mel:InvokeServer(move, "Blacknwhite27")
-                                game.ReplicatedStorage.Package.Events.voleys:InvokeServer("Energy Volley", {FaceMouse = false, MouseHit = CFrame.new()}, "Blacknwhite27")                                    
-                            end)
-                        end
+            if yo() >= 2e5 and data.Quest.Value ~= "" and getIsActive3() then
+                for _, move in pairs(moves) do
+                    if game.PlaceId == 5151400895 or not lplr.Status:FindFirstChild(move) then
+                        task.spawn(function()
+                            game.ReplicatedStorage.Package.Events.mel:InvokeServer(move, "Blacknwhite27")
+                        end)
                     end
                 end
             end
         end)
-        wait()
+        task.wait()
     end
 end)
 
@@ -1473,25 +1483,12 @@ spawn(function()
     end
 end)
 
-task.spawn(function()
-    while true do
-        pcall(function()
-                for _, obj in pairs(game.CoreGui:GetChildren()) do
-                    if (obj.Name == "KeyGui" or obj.Name == "Key_7") and obj ~= game.CoreGui:FindFirstChild(obj.Name) then
-                        obj:Destroy()                    
-                end
-            end
-        end)
-        wait()
-    end
-end)
-
 TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
         
-        if clave and #clave >= 10 and #clave <= 17 then
+        if clave and #clave == 14 then
             local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
             local claveExistente = false
             for _, v in pairs(historial) do
@@ -1514,7 +1511,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
                 TextBox.Text = ""
             end
         else
-            TextBox.Text = "Clave invalidad ðŸš«"
+            TextBox.Text = "Clave inválida"
             TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
             wait(1)
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -1532,7 +1529,7 @@ BotonUrl.MouseButton1Click:Connect(function()
 end)
 
 while true do
-    wait()
+    wait(0.5)
     if not claveEsValida() then
         resetearClave()
         KeyGui.Enabled = true
