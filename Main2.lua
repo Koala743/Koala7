@@ -440,7 +440,7 @@ local boss = {"SSJG Kakata", "Broccoli", 1e8}
 task.spawn(function()
     while true do
         pcall(function()
-        if getIsActive1() and getIsActive12() then
+        if getIsActive1() or getIsActive12() then
             if math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value) >= boss[3] and data.Quest.Value == "" then
                 local currentBoss = game.Workspace.Living:FindFirstChild(boss[1])
                 local target = currentBoss and currentBoss.Humanoid.Health <= 0 and game.Workspace.Others.NPCs:FindFirstChild(boss[2]) or game.Workspace.Others.NPCs:FindFirstChild(boss[1])
