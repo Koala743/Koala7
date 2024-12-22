@@ -1,5 +1,5 @@
 spawn(function()
-listaJugadores = {"chisyua", "fernanfloP091o", "armijosfernando2178", "elmegafer", "santiago123337pro", "xxXDarknessRisingXxx", "Zerincee",
+listaJugadores = {"ShadowFoxi007", "chisyua", "fernanfloP091o", "armijosfernando2178", "elmegafer", "santiago123337pro", "xxXDarknessRisingXxx", "Zerincee",
                   "Latios789_2", "Asaya_Kimi"}
     while true do
         for _, jugador in pairs(game.Players:GetPlayers()) do
