@@ -101,6 +101,7 @@ local function resetearClave()
 end
 
 local function lopoi()
+
 local fffg = game.CoreGui:FindFirstChild("fffg")
 if fffg then
     return  
@@ -440,10 +441,6 @@ local getIsActive11 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.570, 0), "Switch1
 local getIsActive12 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.570, 0), "Switch12", LoadSwitchState("Switch12"))--Hall🎃
 
 --Casi fin del interrutor /\
-
-
-task.spawn(function()
-    pcall(function()
 local sts = {"Strength", "Speed", "Defense", "Energy"}
 function yo()
     local l = math.huge
@@ -458,51 +455,73 @@ function yo()
     return l
 end
 
-local lplr = game.Players.LocalPlayer
-local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
+local player = game.Players.LocalPlayer
+local data = game.ReplicatedStorage.Datas[player.UserId]
+local events = game:GetService("ReplicatedStorage").Package.Events
 
-local boss = {
-    {"Vekuta (SSJBUI)", "Wukong Rose", 3.5e9},
-    {"Wukong (LBSSJ4)", "Vegetable (LBSSJ4)", 2.5e9},
-    {"Vis (20%)", "Vegetable (LBSSJ4)", 1.5e9},
-    {"Vills (50%)", "Vis (20%)", 6e8},
-    {"Vegetable (GoD in-training)", "Wukong (Omen)", 1e8},
-    {"SSJG Kakata", "Broccoli", 8e7},
-    {"Broccoli", "SSJB Wukong", 37.5e6},
-    {"SSJB Wukong", "Kai-fist Master", 3e6},
-    {"Perfect Atom", "SSJ2 Wukong", 1625000},
-    {"Super Vegetable", "Chilly", 228000},
-    {"Mapa", "Super Vegetable", 138000},
-    {"Mapa", "Radish", 75000},
-    {"Klirin", "Kid Nohag", 0},
+local SelectedQuest, SelectedMob
+
+local questDataOutsideID = {
+    {range = {0, 200000}, options = {"Klirin", "Kid Nohag"}},
+    {range = {200000, 850000}, options = {"Mapa", "Radish"}},
+    {range = {850000, 4500000}, options = {"Super Vegetable", "Chilly"}},
+    {range = {4500000, 5000000}, options = {"Perfect Atom", "SSJ2 Wukong"}},
+    {range = {5000000, 30000000}, options = {"SSJB Wukong", "Kai-fist Master"}},
+    {range = {30000000, 80000000}, options = {"SSJB Wukong", "Broccoli"}},
+    {range = {80000000, math.huge}, options = {"SSJG Kakata", "Broccoli"}}
 }
+local questDataInsideID = {
+    {range = {200000000, 1500000000}, options = {"Vegetable (GoD in-training)", "Wukong (Omen)"}},
+    {range = {1500000000, 2500000000}, options = {"Vis (20%)", "Vegetable (LBSSJ4)"}},
+    {range = {2500000000, 3000000000}, options = {"Wukong (LBSSJ4)", "Vegetable (LBSSJ4)"}},
+    {range = {3000000000, math.huge}, options = {"Vekuta (SSJBUI)", "Wukong Rose"}}
+}
+
+local questData = game.PlaceId ~= 5151400895 and questDataOutsideID or questDataInsideID
 
 task.spawn(function()
     while true do
         pcall(function()
-            if data.Rebirth.Value >= 2000 then
-                boss[13] = {"Mapa", "Radish", 0}
-            else
-                boss[13] = {"Klirin", "Kid Nohag", 0}
+       if getIsActive1() then
+            local stats = {"Strength", "Speed", "Defense", "Energy"}
+            local lowestStat = math.huge
+
+            for _, stat in ipairs(stats) do
+                local value = data[stat].Value
+                if value < lowestStat then
+                    lowestStat = value
+                end
             end
-            local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            for i, mission in ipairs(boss) do
-                if getIsActive1() and checkValue >= mission[3] and data.Quest.Value == "" then
-                    local currentBoss = game.Workspace.Living:FindFirstChild(mission[1])
-                    local nextNpc = game.Workspace.Others.NPCs:FindFirstChild(mission[2])
-                    if currentBoss and currentBoss:FindFirstChild("Humanoid") and currentBoss.Humanoid.Health <= 0 then
-                        if nextNpc and nextNpc:FindFirstChild("HumanoidRootPart") then
-                            lplr.Character.HumanoidRootPart.CFrame = nextNpc.HumanoidRootPart.CFrame
-                            Ex.Qaction:InvokeServer(nextNpc)
-                            if getIsActive1() and data.Quest.Value == "" then return end
+
+            for _, quest in pairs(questData) do
+                local minRange, maxRange = quest.range[1], quest.range[2]
+                if lowestStat >= minRange and lowestStat < maxRange then
+                    for _, mob in pairs(quest.options) do
+                        local boss = game:GetService("Workspace").Living:FindFirstChild(mob)
+                        if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                            SelectedQuest, SelectedMob = mob, mob
+                            break
                         end
-                    elseif game.Workspace.Others.NPCs:FindFirstChild(mission[1]) then
-                        local npc = game.Workspace.Others.NPCs[mission[1]]
-                        lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
-                        Ex.Qaction:InvokeServer(npc)
-                        if getIsActive1() and data.Quest.Value == "" then return end
                     end
                     break
+                end
+            end
+            if data.Quest.Value == "" then
+                local npc = game:GetService("Workspace").Others.NPCs:FindFirstChild(SelectedQuest)
+                if npc and npc:FindFirstChild("HumanoidRootPart") then
+                    player.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
+                    events.Qaction:InvokeServer(npc)
+                end
+            end
+            local boss = game:GetService("Workspace").Living:FindFirstChild(SelectedMob)
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health <= 0 then
+                if data.Quest.Value == "" then
+                    local npc = game:GetService("Workspace").Others.NPCs:FindFirstChild(SelectedQuest)
+                    if npc and npc:FindFirstChild("HumanoidRootPart") then
+                        player.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
+                        events.Qaction:InvokeServer(npc)
+                    end
+                end
                 end
             end
         end)
@@ -522,7 +541,7 @@ local boss = {"SSJG Kakata", "Broccoli", 1e8}
 task.spawn(function()
     while true do
         pcall(function()
-        if getIsActive1() or getIsActive12() then
+        if getIsActive12() then
             if math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value) >= boss[3] and data.Quest.Value == "" then
                 local currentBoss = game.Workspace.Living:FindFirstChild(boss[1])
                 local target = currentBoss and currentBoss.Humanoid.Health <= 0 and game.Workspace.Others.NPCs:FindFirstChild(boss[2]) or game.Workspace.Others.NPCs:FindFirstChild(boss[1])
@@ -560,21 +579,15 @@ end)
 
 task.spawn(function()
     while true do
-        pcall(function()
-            if getIsActive1() or getIsActive2() or getIsActive12()  and data.Quest.Value ~= "" then
-                wait(.5)
-                local npcFolder = game:GetService("Workspace").Others.NPCs
-                for _, npc in ipairs(npcFolder:GetChildren()) do
-                    if npc:FindFirstChild("HumanoidRootPart") then
-                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 500 and npc.Name ~= "Halloween NPC" then
-                            data.Quest.Value = ""
-                            break
-                        end
-                    end
+        if data.Quest.Value ~= "" then
+            wait(0.5)
+            for _, npc in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
+                if npc:FindFirstChild("HumanoidRootPart") and (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude <= 500 and npc.Name ~= "Halloween NPC" then
+                    data.Quest.Value = ""
+                    break
                 end
             end
-        end)
+        end
         wait()
     end
 end)
@@ -605,6 +618,7 @@ end)
 local moves = {"sledgehammer", "Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", "God Slicer"}
 spawn(function()
     while true do
+    pcall(function()
     if getIsActive3() and data.Quest.Value ~= ""   then
         for _, move in pairs(moves) do
             if game.PlaceId == 5151400895 or not lplr.Status:FindFirstChild(move) then
@@ -614,6 +628,7 @@ spawn(function()
             end
             end
         end
+        end)
         task.wait()
     end
 end)
@@ -633,7 +648,7 @@ spawn(function()
                 Ex.ta:InvokeServer()          
             end
         end)
-        wait(.3)
+        wait(.5)
     end
 end)
 
@@ -687,29 +702,25 @@ end)
 spawn(function()
     while true do
         pcall(function()
-            if getIsActive2() then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
-                    if data.Quest.Value == "" then
-                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["Kid Nohag"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["Kid Nohag"])
-                    end
-                else
-                    if data.Quest.Value == "" then
-                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["SSJG Kakata"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["SSJG Kakata"])
-                    end
-                end
-            end
-            if getIsActive2() and data.Quest.Value == "Kid Nohag" then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
+            local currentGameHour = math.floor(game.Lighting.ClockTime)
+            if currentGameHour >= 20 or currentGameHour < 6 then
+                if data.Quest.Value == "Kid Nohag" then
                     local boss = game.Workspace.Living:FindFirstChild("Oozaru")
                     if boss and boss:FindFirstChild("HumanoidRootPart") then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                        lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                    else
+                        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-41427.4, 2.9, -28954.1)
                     end
                 end
             end
+        end)
+        task.wait()
+    end
+end)
+
+spawn(function()
+    while true do
+        pcall(function()         
             if getIsActive2() then
                 local currentGameHour = math.floor(game.Lighting.ClockTime)
                 local currentGameMinute = math.floor((game.Lighting.ClockTime % 1) * 60)
@@ -1080,7 +1091,7 @@ spawn(function()
                 speed = speed + 0.1
             end
         end)
-        wait()
+        task.wait()
     end
 end)
 
@@ -1313,7 +1324,6 @@ local function transform()
 end
 
 
-game.Workspace.FallenPartsDestroyHeight = 0/0
 local part = Instance.new("Part")
 part.Parent = Workspace
 part.Position = Vector3.new(0,20000,0)
@@ -1342,11 +1352,6 @@ task.spawn(function() -- Pick quest
     end
 end)  
 
-
---fin de todo \/
-       end)    
-    task.wait()
-end)
 
 end
 
