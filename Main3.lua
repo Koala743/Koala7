@@ -509,13 +509,13 @@ task.spawn(function()
                     if currentBoss and currentBoss:FindFirstChild("Humanoid") and currentBoss.Humanoid.Health <= 0 then
                         if nextNpc and nextNpc:FindFirstChild("HumanoidRootPart") then
                             lplr.Character.HumanoidRootPart.CFrame = nextNpc.HumanoidRootPart.CFrame
-                            game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(nextNpc)
+                            
                             if getIsActive1() and data.Quest.Value == "" then return end
                         end
                     elseif game.Workspace.Others.NPCs:FindFirstChild(mission[1]) then
                         local npc = game.Workspace.Others.NPCs[mission[1]]
                         lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame                     
-                      game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(npc)   
+                      
                         if getIsActive1() and data.Quest.Value == "" then return end
                     end
                     break
@@ -602,7 +602,7 @@ task.spawn(function()
     while true do
         pcall(function()
             if getIsActive1() or getIsActive2() or getIsActive12()  and data.Quest.Value ~= "" then
-                wait(.5)
+                wait(.6)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
