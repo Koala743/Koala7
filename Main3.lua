@@ -921,11 +921,11 @@ task.spawn(function()
     while true do
         pcall(function()                    
             if getIsActive4() and game.PlaceId ~= 5151400895 then
-                Ex.cha:InvokeServer("Blacknwhite27")
+                game.ReplicatedStorage.Package.Events.cha:InvokeServer("Blacknwhite27")
             else
                 local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
                 if Work and Work ~= "None" then
-                    Ex.cha:InvokeServer("Blacknwhite27")
+                    game.ReplicatedStorage.Package.Events.cha:InvokeServer("Blacknwhite27")
                 end
             end
         end)
