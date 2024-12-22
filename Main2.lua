@@ -389,12 +389,13 @@ task.spawn(function()
                     if currentBoss and currentBoss:FindFirstChild("Humanoid") and currentBoss.Humanoid.Health <= 0 then
                         if nextNpc and nextNpc:FindFirstChild("HumanoidRootPart") then
                             lplr.Character.HumanoidRootPart.CFrame = nextNpc.HumanoidRootPart.CFrame
-                            Ex.Qaction:InvokeServer(nextNpc)
+                            game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(nextNpc)
                             if getIsActive1() and data.Quest.Value == "" then return end
                         end
                     elseif game.Workspace.Others.NPCs:FindFirstChild(mission[1]) then
                         local npc = game.Workspace.Others.NPCs[mission[1]]
-                        lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame                        
+                        lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame                     
+                      game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(npc)   
                         if getIsActive1() and data.Quest.Value == "" then return end
                     end
                     break
@@ -405,15 +406,6 @@ task.spawn(function()
     end
 end)
 
-
-task.spawn(function()
-    while true do
-        pcall(function()
-            game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(npc)
-        end)
-        task.wait()
-    end
-end)
 
 local boss = {"SSJG Kakata", "Broccoli", 1e8}
 task.spawn(function()
