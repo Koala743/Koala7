@@ -578,7 +578,7 @@ task.spawn(function()
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
                         local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 500 and npc.Name ~= "Halloween NPC" and npc.Name ~= "Top X Fighter"  then
+                        if distance <= 500 and npc.Name ~= "Halloween NPC" then
                             data.Quest.Value = ""
                             break
                         end
@@ -786,16 +786,7 @@ task.spawn(function()
     end
 end)
 
-task.spawn(function()
-    while true do
-        pcall(function()
-            if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
-                game.ReplicatedStorage.Package.Events.ta:InvokeServer()
-            end
-        end)
-        wait()
-    end
-end)
+
 
 
 
@@ -1032,10 +1023,22 @@ task.spawn(function()
     while true do
         pcall(function()
             Ex.equipskill:InvokeServer("Divine Rose Prominence")
-            wait(1)
+            wait()
             if game.Workspace.Living[lplr.Name].Status.SelectedTransformation.Value == "None" then
                 Ex.equipskill:InvokeServer("Astral Instinct")
             elseif game.Workspace.Living[lplr.Name].Status.SelectedTransformation.Value == "Divine Rose Prominence" then
+            end
+        end)
+        wait(.1)
+    end
+end)
+
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
+                Ex.ta:InvokeServer()
             end
         end)
         wait(.1)
