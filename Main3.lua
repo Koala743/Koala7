@@ -843,6 +843,28 @@ end
         task.wait()
     end
 end)  
+
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if data.Quest.Value ~= "" then
+                wait(2)
+                local npcFolder = game:GetService("Workspace").Others.NPCs
+                for _, npc in ipairs(npcFolder:GetChildren()) do
+                    if npc:FindFirstChild("HumanoidRootPart") then
+                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
+                        if distance <= 500 and npc.Name ~= "Halloween NPC" then
+                            data.Quest.Value = ""
+                            break
+                        end
+                    end
+                end
+            end
+        end)
+        wait()
+    end
+end)
                 
 --fin de todo \/
        end)    
