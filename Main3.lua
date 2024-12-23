@@ -1,123 +1,3 @@
-local ArchivoClaveGuardada = "ClaveGuardada.json"
-local ArchivoHistorial = "HistorialClaves.json"
-local HttpService = game:GetService("HttpService")
-
-local KeyGui = Instance.new("ScreenGui")
-KeyGui.Parent = game.CoreGui
-
-local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0.318272662, 0, 0.318272662, 0)
-Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
-Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-Frame.BorderSizePixel = 0
-Frame.Parent = KeyGui
-
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0.05, 0)
-UICorner.Parent = Frame
-
-local Gradient = Instance.new("UIGradient")
-Gradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 45, 50)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 15, 20))
-}
-Gradient.Rotation = 45
-Gradient.Parent = Frame
-
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0.950000000, 0, 0.150000000, 0)
-Title.Position = UDim2.new(0.025000000, 0, 0.050000000, 0)
-Title.BackgroundTransparency = 1
-Title.TextColor3 = Color3.fromRGB(220, 220, 220)
-Title.TextScaled = true
-Title.Font = Enum.Font.GothamBold
-Title.Text = "🔐 Sistema de Claves"
-Title.Parent = Frame
-
-local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.900635200, 0, 0.126137561, 0)
-TextBox.Position = UDim2.new(0.049682240, 0, 0.278634136, 0)
-TextBox.PlaceholderText = "Introduce tu clave aquí"
-TextBox.Font = Enum.Font.Gotham
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
-TextBox.BorderSizePixel = 0
-TextBox.TextScaled = true
-TextBox.ClearTextOnFocus = false
-TextBox.Parent = Frame
-
-local UICornerTextBox = Instance.new("UICorner")
-UICornerTextBox.CornerRadius = UDim.new(0.05, 0)
-UICornerTextBox.Parent = TextBox
-
-local BotonUrl = Instance.new("TextButton")
-BotonUrl.Size = UDim2.new(0.715488320, 0, 0.147448120, 0)
-BotonUrl.Position = UDim2.new(0.142255450, 0, 0.550486350, 0)
-BotonUrl.Text = "Copiar URL de Clave"
-BotonUrl.Font = Enum.Font.GothamBold
-BotonUrl.TextScaled = true
-BotonUrl.TextColor3 = Color3.fromRGB(255, 255, 255)
-BotonUrl.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
-BotonUrl.BorderSizePixel = 0
-BotonUrl.Parent = Frame
-
-local UICornerBotonUrl = Instance.new("UICorner")
-UICornerBotonUrl.CornerRadius = UDim.new(0.05, 0)
-UICornerBotonUrl.Parent = BotonUrl
-
-local BotonInvitacion = Instance.new("TextButton")
-BotonInvitacion.Size = UDim2.new(0.157682243, 0, 0.126241136, 0)
-BotonInvitacion.Position = UDim2.new(0.840682243, 0, 0.562241136, 0)
-BotonInvitacion.Text = "🌍"
-BotonInvitacion.Font = Enum.Font.GothamBold
-BotonInvitacion.TextScaled = true
-BotonInvitacion.TextColor3 = Color3.fromRGB(255, 255, 255)
-BotonInvitacion.BackgroundTransparency = 1
-BotonInvitacion.BorderSizePixel = 0
-BotonInvitacion.Parent = Frame
-
-
-
-local UICornerBotonUrl = Instance.new("UICorner")
-UICornerBotonUrl.CornerRadius = UDim.new(0.1, 0)
-UICornerBotonUrl.Parent = BotonUrl
-
-local claveValida = false
-
-local function guardarClaveGuardada(clave)
-    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time()}))
-end
-
-local function actualizarHistorial(clave)
-    local historial = {}
-    if isfile(ArchivoHistorial) then
-        historial = HttpService:JSONDecode(readfile(ArchivoHistorial))
-    end
-    table.insert(historial, clave)
-    if #historial > 5 then
-        table.remove(historial, 1)
-    end
-    writefile(ArchivoHistorial, HttpService:JSONEncode(historial))
-end
-
-local function claveEsValida()
-    if isfile(ArchivoClaveGuardada) then
-        local datos = HttpService:JSONDecode(readfile(ArchivoClaveGuardada))
-        if os.time() - datos.fecha < (24 * 60 * 60) then
-            return true
-        end
-    end
-    return false
-end
-
-local function resetearClave()
-    if isfile(ArchivoClaveGuardada) then
-        delfile(ArchivoClaveGuardada)
-    end
-end
-
-local function lopoi()
 getgenv().Stats = {}
 
 local lplr = game.Players.LocalPlayer
@@ -651,17 +531,33 @@ task.spawn(function() -- Move/Attack
     end
 end)
 
+spawn(function()
+    while true do
+        pcall(function()
+            local playerCount = #game.Players:GetPlayers()
+            if playerCount > 1 then
+                if game.PlaceId == 5151400895 then
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
+                else
+                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
+                end
+            end
+        end)
+        wait()
+    end
+end)
+
 task.spawn(function() -- Pick quest
     while ScGui and getloweststat() < checkplr()[3] do
         if Farming  then
             transform()
             --while not CanAttack do wait() end
-            if ldata.Quest.Value == "" or not Boss  then
+            if ldata.Quest.Value == "" or not Boss then
                 for i,boss in pairs(bosses) do
                     if ldata.Rebirth.Value >= 2000 and boss[1] == "Mapa" then
                         boss[2] = 0
                     end
-                    if getloweststat()/2 >= boss[2] and game.Workspace.Living:FindFirstChild(boss[1]) and game.Workspace.Living[boss[1]]:FindFirstChild("Humanoid") and game.Workspace.Living[boss[1]].Humanoid.Health > 0 then
+                    if getloweststat()/2 >= boss[2] and game.Workspace.Living:FindFirstChild(boss[1]) and game.Workspace.Living[boss[1]]:FindFirstChild("Humanoid") and game.Workspace.Living[boss[1]].Humanoid.Health > 0  then
                         if ldata.Quest.Value ~= boss[1] then
               local npc = game.Workspace.Others.NPCs:FindFirstChild(boss[1])  -- Cambié Boss por boss[1] para encontrar el NPC correcto
                  if npc then
@@ -695,72 +591,4 @@ end
         task.wait()
     end
 end)  
-
-end
-
-spawn(function()
-    if claveEsValida() then
-        lopoi()
-    end
-end)
-
-spawn(function()
-    if claveEsValida() then
-        KeyGui.Enabled = false
-    else
-        KeyGui.Enabled = true
-    end
-end)
-
-TextBox.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local texto = TextBox.Text
-        local clave = texto:match("KEY:%[(.-)%]$")
-        
-        if clave and #clave == 14 then
-            local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
-            local claveExistente = false
-            for _, v in pairs(historial) do
-                if v == clave then
-                    claveExistente = true
-                    break
-                end
-            end
-
-            if not claveExistente then
-                guardarClaveGuardada(clave)
-                actualizarHistorial(clave)
-                KeyGui.Enabled = false
-                lopoi()
-            else
-                TextBox.Text = "Clave ya usada"
-                TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
-                wait(1)
-                TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-                TextBox.Text = ""
-            end
-        else
-            TextBox.Text = "Clave inválida"
-            TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
-            wait(1)
-            TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-            TextBox.Text = ""
-        end
-    end
-end)
-
-BotonInvitacion.MouseButton1Click:Connect(function()
-    setclipboard("https://discord.com/invite/3pjp7ufjWv")
-end)
-
-BotonUrl.MouseButton1Click:Connect(function()
-    setclipboard("https://luatt11.github.io/Keysistema/")
-end)
-
-while true do
-    wait(0.5)
-    if not claveEsValida() then
-        resetearClave()
-        KeyGui.Enabled = true
-    end
-end
+                
