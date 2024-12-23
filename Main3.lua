@@ -367,16 +367,16 @@ local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.User
 local events = game:GetService("ReplicatedStorage").Package.Events
 
 local boss = {
-    {"Vekuta (SSJBUI)", 6.00e9},
-    {"Wukong Rose", 3.20e9},
-    {"Vekuta (LBSSJ4)", 1.9e9},
-    {"Wukong (LBSSJ4)", 1.1e6},
-    {"Vegetable (LBSSJ4)", 850e6},
-    {"Vis (20%)", 550e6},
-    {"Vills (50%)", 400e6},
-    {"Wukong (Omen)", 75e6},
-    {"Vegetable (GoD in-training)", 200e6},
-    {"SSJG Kakata", 150e6},
+    {"Vekuta (SSJBUI)", 6.375e9},
+    {"Wukong Rose", 4.25e9},
+    {"Vekuta (LBSSJ4)", 3.25e9},
+    {"Wukong (LBSSJ4)", 2.1e6},
+    {"Vegetable (LBSSJ4)", 1.55e9},
+    {"Vis (20%)", 1.05e9},
+    {"Vills (50%)", 675e6},
+    {"Wukong (Omen)", 300e6},
+    {"Vegetable (GoD in-training)", 150e6},
+    {"SSJG Kakata", 100e6},
     {"Broccoli", 55.5e6},
     {"SSJB Wukong", 8e6},
     {"Kai-fist Master", 3225000},
@@ -396,7 +396,7 @@ task.spawn(function()
     while true do
         pcall(function()        
             local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            if checkValue >= 200000000 and game.PlaceId ~= 5151400895 and getIsActive1() then
+            if checkValue >= 150000000 and game.PlaceId ~= 5151400895 and getIsActive1() then
                 local quest, npc = "SSJG Kakata", game.Workspace.Others.NPCs:FindFirstChild("SSJG Kakata")
                 if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest and getIsActive1() then
                     lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
