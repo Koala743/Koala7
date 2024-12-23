@@ -781,13 +781,23 @@ task.spawn(function()
                 bb:CaptureController()
                 bb:ClickButton2(Vector2.new())
             end)
-            if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
-                Ex.ta:InvokeServer()
-            end
         end)
         wait(.2)
     end
 end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            if game.Workspace.Living[lplr.Name].Status.Transformation.Value == "None" then
+                game.ReplicatedStorage.Package.Events.ta:InvokeServer()
+            end
+        end)
+        wait()
+    end
+end)
+
+
 
 --Ciclo Congelamiento  de movimiento /Puños
 task.spawn(function()
@@ -890,13 +900,18 @@ end)
 --Ciclo para Auto = Carga en bills/Tierra
 task.spawn(function()
     while true do
-        pcall(function()                    
+        pcall(function()
             if getIsActive4() and game.PlaceId ~= 5151400895 then
                 game.ReplicatedStorage.Package.Events.cha:InvokeServer("Blacknwhite27")
             else
-                local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
-                if Work and Work ~= "None" then
+                if game.PlaceId == 5151400895 and data.Rebirth.Value < 30000 then
                     game.ReplicatedStorage.Package.Events.cha:InvokeServer("Blacknwhite27")
+                else
+                    local Work = game.Workspace.Living[lplr.Name].Status.Transformation.Value
+                    if Work and Work ~= "None" then
+                   game.ReplicatedStorage.Package.Events.cha:InvokeServer("Blacknwhite27")
+                        print("Transformación activa: ", Work)
+                    end
                 end
             end
         end)
@@ -1017,13 +1032,13 @@ task.spawn(function()
     while true do
         pcall(function()
             Ex.equipskill:InvokeServer("Divine Rose Prominence")
-            wait()
+            wait(1)
             if game.Workspace.Living[lplr.Name].Status.SelectedTransformation.Value == "None" then
                 Ex.equipskill:InvokeServer("Astral Instinct")
             elseif game.Workspace.Living[lplr.Name].Status.SelectedTransformation.Value == "Divine Rose Prominence" then
             end
         end)
-        wait()
+        wait(.1)
     end
 end)
 
