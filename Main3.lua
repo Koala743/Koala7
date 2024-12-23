@@ -1,3 +1,255 @@
+local Fernando = game.CoreGui:FindFirstChild("Fernando")
+if Fernando then
+    return  
+end
+
+local Fernando = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextLabel = Instance.new("TextLabel")
+local Cuadro1 = Instance.new("Frame")
+local Cuadro2 = Instance.new("Frame")
+local Barra1 = Instance.new("ScrollingFrame")
+local Barra2 = Instance.new("ScrollingFrame")
+local Siguiente = Instance.new("TextButton")
+local Mix = Instance.new("TextButton")
+local Borde1 = Instance.new("UIStroke")
+local Borde2 = Instance.new("UIStroke")
+local lplr = game.Players.LocalPlayer
+local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
+
+Fernando.Name = "Fernando"
+Fernando.Parent = game.CoreGui
+
+
+Frame.Parent = Fernando
+Frame.BackgroundTransparency = 1
+Frame.Position = UDim2.new(0.5, -150, 0.4, -130)
+Frame.Size = UDim2.new(0, 410, 0, 30)
+Frame.Active = true
+Frame.Draggable = true
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.Size = UDim2.new(1, 0, 1, 0)
+TextLabel.Text = "Granja Automatico☠️"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 14
+TextLabel.TextStrokeTransparency = 1
+TextLabel.TextScaled = true
+
+Cuadro1.Parent = TextLabel
+Cuadro1.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Cuadro1.Position = UDim2.new(0, 0, 1, 0)
+Cuadro1.Size = UDim2.new(0, 410, 0, 400)
+Cuadro1.Visible = false  -- Comienza oculto
+
+Cuadro2.Parent = TextLabel
+Cuadro2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Cuadro2.Position = UDim2.new(0, 0, 1, 0)
+Cuadro2.Size = UDim2.new(0, 410, 0, 400)
+Cuadro2.Visible = false  -- Comienza oculto
+
+Barra1.Parent = Cuadro1
+Barra1.Size = UDim2.new(1, 0, 1, 0)
+Barra1.CanvasSize = UDim2.new(0, 0, 2, 0)
+Barra1.ScrollBarThickness = 10
+Barra1.BackgroundTransparency = 1
+Barra1.ScrollingDirection = Enum.ScrollingDirection.Y 
+
+Barra2.Parent = Cuadro2
+Barra2.Size = UDim2.new(1, 0, 1, 0)
+Barra2.CanvasSize = UDim2.new(0, 0, 2, 0)
+Barra2.ScrollBarThickness = 10
+Barra2.BackgroundTransparency = 1
+Barra2.ScrollingDirection = Enum.ScrollingDirection.Y 
+
+Siguiente.Parent = Frame
+Siguiente.BackgroundTransparency = 1
+Siguiente.Position = UDim2.new(1, -60, 0, 0)
+Siguiente.Size = UDim2.new(0, 30, 0, 30)
+Siguiente.Text = ">"
+Siguiente.TextColor3 = Color3.fromRGB(255, 255, 255)
+Siguiente.TextSize = 20
+
+Mix.Parent = Frame
+Mix.BackgroundTransparency = 1
+Mix.Position = UDim2.new(1, -90, 0, 0)
+Mix.Size = UDim2.new(0, 30, 0, 30)
+Mix.Text = "+"
+Mix.TextColor3 = Color3.fromRGB(255, 255, 255)
+Mix.TextSize = 20
+
+--incio Borde color\/
+Borde1.Parent = Cuadro1
+Borde1.Thickness = 2
+Borde1.Color = Color3.fromRGB(255, 0, 0) 
+
+Borde2.Parent = Cuadro2
+Borde2.Thickness = 2
+Borde2.Color = Color3.fromRGB(255, 0, 0) 
+--parte 2 de color Borde\/
+
+--Cuadro para txt para ir ah Bills \/
+local textBox = Instance.new("TextBox", Cuadro2)
+textBox.Size = UDim2.new(0, 200, 0, 50)
+textBox.Position = UDim2.new(0.5, -100, 0.5, -25)
+textBox.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+textBox.BorderSizePixel = 6
+textBox.BorderColor3 = Color3.fromRGB(0, 0, 255)
+textBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+textBox.TextSize = 18
+textBox.PlaceholderText = "Introduce un número (Ej. 100M, 1B)"
+textBox.ClearTextOnFocus = true
+Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 12)
+
+local function saveToJSON(fileName, data)
+    writefile(fileName, game:GetService("HttpService"):JSONEncode(data))
+end
+
+local function loadFromJSON(fileName)
+    if isfile(fileName) then
+        return game:GetService("HttpService"):JSONDecode(readfile(fileName))
+    end
+    return nil
+end
+
+local savedData = loadFromJSON("TObills")
+local minStrength = savedData and savedData.minStrength
+if minStrength then textBox.Text = tostring(minStrength) end
+
+textBox.FocusLost:Connect(function()
+    local input = textBox.Text
+    local number, suffix = input:match("^(%d+)([MmBb])$")
+    if number then
+        minStrength = tonumber(number) * (suffix == "M" and 1e6 or 1e9)
+        saveToJSON("TObills", {minStrength = minStrength})
+    else
+        minStrength = nil
+    end
+end)
+--Fin Ciclo de cuadro para ir Bills
+
+
+task.spawn(function()
+    local colors = {
+        Color3.fromRGB(255, 0, 0), -- Rojo
+        Color3.fromRGB(0, 255, 0), -- Verde
+        Color3.fromRGB(0, 0, 255), -- Azul
+        Color3.fromRGB(255, 255, 0) -- Amarillo
+    }
+    local index = 1
+
+    while true do
+        Borde1.Color = colors[index]
+        Borde2.Color = colors[index]
+        index = index + 1
+        if index > #colors then
+            index = 1
+        end
+        task.wait(1) 
+    end
+end)
+--Fin color Borde/\
+
+--incio de color txt\/
+local textProperties = {
+    
+}
+
+for _, props in pairs(textProperties) do
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.Parent = Barra1
+    TextLabel.Size = UDim2.new(0, 200, 0, 36)
+    TextLabel.Position = props.position
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.TextColor3 = props.color
+    TextLabel.Text = props.text
+    TextLabel.TextScaled = true
+end
+ --Fin del color txt/\
+ 
+--Codeg Para Button Minimizar = Maximizar
+local currentPanel = 1
+local isMinimized = true  
+Siguiente.MouseButton1Click:Connect(function()
+    if not isMinimized then
+        if currentPanel == 1 then
+            Cuadro1.Visible = false
+            currentPanel = 2
+            Cuadro2.Visible = true
+        else
+            Cuadro2.Visible = false
+            currentPanel = 1
+            Cuadro1.Visible = true
+        end
+    end
+end)
+
+Mix.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    if isMinimized then
+        Cuadro1.Visible = false
+        Cuadro2.Visible = false
+        Mix.Text = "+"
+    else
+        if currentPanel == 1 then
+            Cuadro1.Visible = true
+        else
+            Cuadro2.Visible = true
+        end
+        Mix.Text = "×"
+    end
+end)
+
+--Aki ya es del interrutor <: \/
+local function SaveSwitchState(isActive, switchName)
+    writefile(switchName.."_SwitchState.json", game:GetService("HttpService"):JSONEncode({SwitchOn = isActive, LastModified = os.time()}))
+end
+
+local function LoadSwitchState(switchName)
+    return isfile(switchName.."_SwitchState.json") and game:GetService("HttpService"):JSONDecode(readfile(switchName.."_SwitchState.json")).SwitchOn or false
+end
+local function createSwitch(parent, position, switchName, initialState)
+    local switchButton = Instance.new("TextButton")
+    switchButton.Parent = parent
+    switchButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    switchButton.BorderSizePixel = 0
+    switchButton.Position = position
+    switchButton.Size = UDim2.new(0, 84, 0, 30)
+    switchButton.Text = ""
+    Instance.new("UICorner", switchButton).CornerRadius = UDim.new(0.4, 0)
+
+    local switchBall = Instance.new("Frame")
+    switchBall.Parent = switchButton
+    switchBall.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    switchBall.Size = UDim2.new(0, 30, 0, 30)
+    switchBall.Position = UDim2.new(0, 5, 0.5, -15)
+    switchBall.BorderSizePixel = 0
+    Instance.new("UICorner", switchBall).CornerRadius = UDim.new(0.5, 0)
+
+    local isActive = initialState
+
+    switchBall.Position, switchBall.BackgroundColor3 = 
+        isActive and UDim2.new(1, -35, 0.5, -15) or UDim2.new(0, 5, 0.5, -15), 
+        isActive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+
+    switchButton.MouseButton1Click:Connect(function()
+        isActive = not isActive
+        switchBall.Position, switchBall.BackgroundColor3 = 
+            isActive and UDim2.new(1, -35, 0.5, -15) or UDim2.new(0, 5, 0.5, -15), 
+            isActive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)        
+        SaveSwitchState(isActive, switchName)
+    end)
+
+    return function() return isActive end
+end
+
+--Casi fin del interrutor /\
+
+
+task.spawn(function()
+    pcall(function()
+
 getgenv().Stats = {}
 
 local lplr = game.Players.LocalPlayer
@@ -592,3 +844,27 @@ end
     end
 end)  
                 
+--fin de todo \/
+       end)    
+    wait(.5)
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            local count = 0
+            local firstFernando
+            for _, Fernando in pairs(game.CoreGui:GetChildren()) do
+                if Fernando.Name == "Fernando" then
+                    count = count + 1
+                    if count == 1 then
+                        firstFernando = Fernando
+                    else
+                        Fernando:Destroy()
+                    end
+                end
+            end
+        end)
+        wait()
+    end
+end)
