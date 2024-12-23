@@ -849,7 +849,7 @@ task.spawn(function()
     while true do
         pcall(function()
             if data.Quest.Value ~= "" then
-                wait(2)
+                task.wait(2)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
                 for _, npc in ipairs(npcFolder:GetChildren()) do
                     if npc:FindFirstChild("HumanoidRootPart") then
@@ -862,7 +862,7 @@ task.spawn(function()
                 end
             end
         end)
-        wait()
+        task.wait(.2)
     end
 end)
                 
