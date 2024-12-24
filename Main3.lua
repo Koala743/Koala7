@@ -362,11 +362,10 @@ local getIsActive5 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.275, 0), "Switch5"
 
 task.spawn(function()
     pcall(function()
-    local lplr = game.Players.LocalPlayer
+local lplr = game.Players.LocalPlayer
 local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
-local events = game:GetService("ReplicatedStorage").Package.Events
 
-local boss = {
+local npcList = {
     {"Vekuta (SSJBUI)", 6.375e9},
     {"Wukong Rose", 4.25e9},
     {"Vekuta (LBSSJ4)", 3.25e9},
@@ -390,32 +389,21 @@ local boss = {
     {"Klirin", 0}
 }
 
-
-
-task.spawn(function()
+spawn(function()
     while true do
-        pcall(function()        
-            local checkValue = math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value)
-            if checkValue >= 150000000 and game.PlaceId ~= 5151400895 and getIsActive1() then
-                local quest, npc = "SSJG Kakata", game.Workspace.Others.NPCs:FindFirstChild("SSJG Kakata")
-                if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest and getIsActive1() then
-                    lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
-                    game:GetService("ReplicatedStorage").Package.Events.Qaction:InvokeServer(npc)
-                end
-            else
-                for _, mission in ipairs(boss) do
-                    if checkValue >= mission[2] and getIsActive1() then
-                        local quest, npc = mission[1], game.Workspace.Others.NPCs:FindFirstChild(mission[1])
-                        if npc and npc:FindFirstChild("HumanoidRootPart") and data.Quest.Value ~= quest then
-                            lplr.Character.HumanoidRootPart.CFrame = npc.HumanoidRootPart.CFrame
-                            game:GetService("ReplicatedStorage").Package.Events.Qaction:InvokeServer(npc)
-                        end
+        pcall(function()
+            if data.Quest.Value == "" then
+                for _, npc in ipairs(npcList) do
+                    local npcName, requiredStrength = npc[1], npc[2]
+                    local npcInstance = game.Workspace.Others.NPCs:FindFirstChild(npcName)
+                    if npcInstance and npcInstance:FindFirstChild("HumanoidRootPart") and data.Strength.Value >= requiredStrength then
+                        lplr.Character.HumanoidRootPart.CFrame = npcInstance.HumanoidRootPart.CFrame
                         break
                     end
                 end
             end
         end)
-       task.wait()
+        wait()
     end
 end)
 
@@ -440,6 +428,27 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
+            local closestNPC = nil
+            local shortestDistance = math.huge
+            for _, npc in pairs(workspace.Others.NPCs:GetChildren()) do
+                local distance = (lplr.Character.HumanoidRootPart.Position - npc.HumanoidRootPart.Position).Magnitude
+                if distance < shortestDistance and distance <= 90 then
+                    shortestDistance = distance
+                    closestNPC = npc
+                end
+            end
+            if closestNPC then
+                game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(closestNPC)
+            end
+        end)
+        task.wait(.8)
+    end
+end)
+
+
+task.spawn(function()
+    while true do
+        pcall(function()
             if data.Quest.Value ~= "" then
                 task.wait(1)
                 local npcFolder = game:GetService("Workspace").Others.NPCs
@@ -454,7 +463,7 @@ task.spawn(function()
                 end
             end
         end)
-        task.wait(.5)
+        task.wait(1)
     end
 end)
 
