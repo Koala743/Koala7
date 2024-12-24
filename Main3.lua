@@ -383,7 +383,7 @@ local npcList = {
     {"Vekuta (SSJBUI)", 6.375e9},
     {"Wukong Rose", 4.25e9},
     {"Vekuta (LBSSJ4)", 3.25e9},
-    {"Wukong (LBSSJ4)", 2.1e6},
+    {"Wukong (LBSSJ4)", 2.1e9},
     {"Vegetable (LBSSJ4)", 1.55e9},
     {"Vis (20%)", 1.05e9},
     {"Vills (50%)", 675e6},
