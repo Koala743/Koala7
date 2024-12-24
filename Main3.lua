@@ -438,24 +438,26 @@ task.spawn(function()
     end
 end)
 
-
-task.spawn(function()
+spawn(function()
     while true do
         pcall(function()
-            local closestNPC = nil
+            local closestNpc = nil
             local shortestDistance = math.huge
-            for _, npc in pairs(workspace.Others.NPCs:GetChildren()) do
-                local distance = (lplr.Character.HumanoidRootPart.Position - npc.HumanoidRootPart.Position).Magnitude
-                if distance < shortestDistance and distance <= 90 then
-                    shortestDistance = distance
-                    closestNPC = npc
+            local humanoidRootPart = lplr.Character:WaitForChild("HumanoidRootPart")
+            for _, npc in pairs(game.Workspace.Others.NPCs:GetChildren()) do
+                if npc:FindFirstChild("HumanoidRootPart") then
+                    local distance = (humanoidRootPart.Position - npc.HumanoidRootPart.Position).magnitude
+                    if distance < shortestDistance then
+                        closestNpc = npc
+                        shortestDistance = distance
+                    end
                 end
             end
-            if closestNPC then
-                game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(closestNPC)
+            if closestNpc and shortestDistance <= 50 then
+                game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(closestNpc)
             end
         end)
-        task.wait(.8)
+        wait(1)
     end
 end)
 
