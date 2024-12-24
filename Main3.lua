@@ -362,6 +362,20 @@ local getIsActive5 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.275, 0), "Switch5"
 
 task.spawn(function()
     pcall(function()
+local sts = {"Strength", "Speed", "Defense", "Energy"}
+function yo()
+    local l = math.huge
+    for _, v in pairs(sts) do
+        local stat = data:FindFirstChild(v)
+        if not stat then return end
+        local st = stat.Value
+        if st < l then
+            l = st
+        end
+    end
+    return l
+end 
+
 local lplr = game.Players.LocalPlayer
 local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
 
@@ -381,8 +395,8 @@ local npcList = {
     {"Kai-fist Master", 3225000},
     {"SSJ2 Wukong", 2250000},
     {"Perfect Atom", 1275000},
-    {"Chilly", 950000},
-    {"Super Vegetable", 498000},
+    {"Chilly", 850000},
+    {"Super Vegetable", 258000},
     {"Mapa", 95000},
     {"Radish", 45000},
     {"Kid Nohag", 20000},
@@ -396,7 +410,7 @@ spawn(function()
                 for _, npc in ipairs(npcList) do
                     local npcName, requiredStrength = npc[1], npc[2]
                     local npcInstance = game.Workspace.Others.NPCs:FindFirstChild(npcName)
-                    if npcInstance and npcInstance:FindFirstChild("HumanoidRootPart") and data.Strength.Value >= requiredStrength then
+                    if npcInstance and npcInstance:FindFirstChild("HumanoidRootPart") and yo() >= requiredStrength then
                         lplr.Character.HumanoidRootPart.CFrame = npcInstance.HumanoidRootPart.CFrame
                         break
                     end
