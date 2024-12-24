@@ -497,7 +497,8 @@ local moves = {"Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick",
 task.spawn(function()
     while true do
         pcall(function()
-            if data.Strength.Value >= 2e5 and data.Quest.Value ~= "" and getIsActive2() then
+        local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)           
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and data.Strength.Value >= 2e5 and data.Quest.Value ~= "" and getIsActive2() then
                 for _, move in pairs(moves) do
                     if not lplr.Status:FindFirstChild(move) then
                         task.spawn(function()
@@ -528,7 +529,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()         
-            if lplr.Status.Transformation.Value ~= "None" then
+            if lplr.Status.Transformation.Value ~= "None" and game.PlaceId == 5151400895 then
                 if getIsActive4() then
                     game:GetService("ReplicatedStorage").Package.Events.cha:InvokeServer("Blacknwhite27")
                 end
@@ -553,7 +554,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive5() then
+            if getIsActive3() then
                 game:GetService("ReplicatedStorage").Package.Events.reb:InvokeServer()
             end
         end)
@@ -626,11 +627,9 @@ task.spawn(function()
                 'SSJ Blue', 'Corrupt SSJ', 'SSJ Rage', 'SSJG', 'SSJ4', 'Mystic', 'LSSJ', 'SSJ3', 
                 'Spirit SSJ', 'SSJ2 Majin', 'SSJ2', 'SSJ Kaioken', 'SSJ', 'FSSJ', 'Kaioken'
             }
-
             local equipRemote = game:GetService("ReplicatedStorage").Package.Events.equipskill
             local transformRemote = game:GetService("ReplicatedStorage").Package.Events.ta
             local player = game.Players.LocalPlayer
-
             if getIsActive1() or getIsActive2() then
                 if player.Character and player.Character.Humanoid and player.Character.Humanoid.Health > 0 and player.Character:FindFirstChild("HumanoidRootPart") then
                     for _, transformation in ipairs(Forms) do
@@ -638,7 +637,6 @@ task.spawn(function()
                             break
                         end
                     end
-
                     if player.Status and player.Status:FindFirstChild("SelectedTransformation") and player.Status:FindFirstChild("Transformation") then
                         local status = player.Status
                         if status.SelectedTransformation.Value ~= status.Transformation.Value then
