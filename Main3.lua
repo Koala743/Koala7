@@ -456,11 +456,12 @@ spawn(function()
                     end
                 end
                 if closestNpc and shortestDistance <= 50 then
-                    game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(closestNpc)
+                    local Event = game:GetService("ReplicatedStorage").Package.Events.Qaction
+                    Event:InvokeServer(closestNpc)
                 end
             end
         end)
-        wait(1)
+        wait()
     end
 end)
 
