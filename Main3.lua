@@ -487,6 +487,19 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while true do
+        pcall(function()
+            game:GetService('Players').LocalPlayer.Idled:Connect(function()
+                local bb = game:GetService('VirtualUser')
+                bb:CaptureController()
+                bb:ClickButton2(Vector2.new())
+            end)
+        end)
+        wait(1)
+    end
+end)
+
 
 --Ciclo Para Auto = Tierra 
 task.spawn(function()
