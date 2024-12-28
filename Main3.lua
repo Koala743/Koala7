@@ -79,10 +79,8 @@ local UICornerBotonUrl = Instance.new("UICorner")
 UICornerBotonUrl.CornerRadius = UDim.new(0.1, 0)
 UICornerBotonUrl.Parent = BotonUrl
 
-local claveValida = false
-
-local function guardarClaveGuardada(clave, jugador)
-    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time(), jugador = jugador}))
+local function guardarClaveGuardada(clave, jugadorID)
+    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time(), jugadorID = jugadorID}))
 end
 
 local function actualizarHistorial(clave)
@@ -100,11 +98,14 @@ end
 local function claveEsValida()
     if isfile(ArchivoClaveGuardada) then
         local datos = HttpService:JSONDecode(readfile(ArchivoClaveGuardada))
+        local jugadorID = datos.jugadorID
         if os.time() - datos.fecha < (24 * 60 * 60) then
-            return datos.jugador
+            if jugadorID == game.Players.LocalPlayer.UserId then
+                return true
+            end
         end
     end
-    return nil
+    return false
 end
 
 local function resetearClave()
@@ -785,7 +786,6 @@ task.spawn(function()
     end
 end)
 loadstring(game:HttpGet('https://raw.githubusercontent.com/Koala743/Koala7/refs/heads/main/Main2.lua'))()
-
 end
 
 spawn(function()
@@ -806,38 +806,28 @@ TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
-        local jugador = game.Players.LocalPlayer.Name
         
         if clave and #clave == 14 then
-            local jugadorConClave = claveEsValida()
-            if jugadorConClave and jugadorConClave ~= jugador then
-                TextBox.Text = "Clave ya utilizada por otro jugador"
+            local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
+            local claveExistente = false
+            for _, v in pairs(historial) do
+                if v == clave then
+                    claveExistente = true
+                    break
+                end
+            end
+
+            if not claveExistente then
+                guardarClaveGuardada(clave, game.Players.LocalPlayer.UserId)
+                actualizarHistorial(clave)
+                KeyGui.Enabled = false
+                lopoi()
+            else
+                TextBox.Text = "Clave ya usada"
                 TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
                 wait(1)
                 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
                 TextBox.Text = ""
-            else
-                local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
-                local claveExistente = false
-                for _, v in pairs(historial) do
-                    if v == clave then
-                        claveExistente = true
-                        break
-                    end
-                end
-
-                if not claveExistente then
-                    guardarClaveGuardada(clave, jugador)
-                    actualizarHistorial(clave)
-                    KeyGui.Enabled = false
-                    lopoi()
-                else
-                    TextBox.Text = "Clave ya usada"
-                    TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
-                    wait(1)
-                    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    TextBox.Text = ""
-                end
             end
         else
             TextBox.Text = "Clave inválida"
@@ -864,3 +854,4 @@ while true do
         KeyGui.Enabled = true
     end
 end
+
