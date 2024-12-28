@@ -403,7 +403,7 @@ local npcList = {
 spawn(function()
     while true do
         pcall(function()
-            if data.Quest.Value == "" then
+            if data.Quest.Value == "" and getIsActive1() then
                 for _, npc in ipairs(npcList) do
                     local npcName, requiredStrength = npc[1], npc[2]
                     local npcInstance = game.Workspace.Others.NPCs:FindFirstChild(npcName)
@@ -439,7 +439,7 @@ end)
 spawn(function()
     while true do
         pcall(function()
-            if data.Quest.Value == "" then
+            if data.Quest.Value == "" and getIsActive1() then
                 local closestNpc = nil
                 local shortestDistance = math.huge
                 local humanoidRootPart = lplr.Character:WaitForChild("HumanoidRootPart")
