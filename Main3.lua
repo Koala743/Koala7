@@ -66,27 +66,21 @@ local UICornerBotonUrl = Instance.new("UICorner")
 UICornerBotonUrl.CornerRadius = UDim.new(0.05, 0)
 UICornerBotonUrl.Parent = BotonUrl
 
-local BotonInvitacion = Instance.new("TextButton")
-BotonInvitacion.Size = UDim2.new(0.157682243, 0, 0.126241136, 0)
-BotonInvitacion.Position = UDim2.new(0.840682243, 0, 0.562241136, 0)
-BotonInvitacion.Text = "🌍"
-BotonInvitacion.Font = Enum.Font.GothamBold
-BotonInvitacion.TextScaled = true
-BotonInvitacion.TextColor3 = Color3.fromRGB(255, 255, 255)
+local BotonInvitacion = Instance.new("ImageButton")
+BotonInvitacion.Size = UDim2.new(0.097682243, 0, 0.116241136, 0)
+BotonInvitacion.Position = UDim2.new(0.870682243, 0, 0.562241136, 0)
+BotonInvitacion.Image = "rbxassetid://17085964685"
 BotonInvitacion.BackgroundTransparency = 1
 BotonInvitacion.BorderSizePixel = 0
 BotonInvitacion.Parent = Frame
-
 
 
 local UICornerBotonUrl = Instance.new("UICorner")
 UICornerBotonUrl.CornerRadius = UDim.new(0.1, 0)
 UICornerBotonUrl.Parent = BotonUrl
 
-local claveValida = false
-
-local function guardarClaveGuardada(clave)
-    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time()}))
+local function guardarClaveGuardada(clave, jugadorID)
+    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time(), jugadorID = jugadorID}))
 end
 
 local function actualizarHistorial(clave)
@@ -104,8 +98,11 @@ end
 local function claveEsValida()
     if isfile(ArchivoClaveGuardada) then
         local datos = HttpService:JSONDecode(readfile(ArchivoClaveGuardada))
+        local jugadorID = datos.jugadorID
         if os.time() - datos.fecha < (24 * 60 * 60) then
-            return true
+            if jugadorID == game.Players.LocalPlayer.UserId then
+                return true
+            end
         end
     end
     return false
@@ -673,26 +670,10 @@ task.spawn(function()
                 end
             end
         end)
-        wait(3)
+        task.wait()
     end
 end)
 
-
-spawn(function()
-    while true do
-        pcall(function()
-            local playerCount = #game.Players:GetPlayers()
-            if playerCount > 1 then
-                if game.PlaceId == 5151400895 then
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
-                else
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
-                end
-            end
-        end)
-        wait(5)
-    end
-end)
 
 local lplr = game.Players.LocalPlayer
 local ldata = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
@@ -804,7 +785,7 @@ task.spawn(function()
         wait()
     end
 end)
-
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Koala743/Koala7/refs/heads/main/Main2.lua'))()
 end
 
 spawn(function()
@@ -837,7 +818,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
             end
 
             if not claveExistente then
-                guardarClaveGuardada(clave)
+                guardarClaveGuardada(clave, game.Players.LocalPlayer.UserId)
                 actualizarHistorial(clave)
                 KeyGui.Enabled = false
                 lopoi()
@@ -873,3 +854,4 @@ while true do
         KeyGui.Enabled = true
     end
 end
+
