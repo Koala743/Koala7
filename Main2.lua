@@ -1733,4 +1733,3 @@ game:GetService("TweenService"):Create(numplrs, TweenInfo.new(.3), {Position = U
 game:GetService("TweenService"):Create(job, TweenInfo.new(.3), {Position = UDim2.new(.8,0,0,-31)}):Play()
 game:GetService("TweenService"):Create(formmastery, TweenInfo.new(.3), {Position = UDim2.new(.65,0,0,-36)}):Play()
 
-loadstring(game:HttpGet("https://gist.githubusercontent.com/JellyJrl/1323d077b0920a460f6208eedb25dece/raw/xfwad"))()
