@@ -518,34 +518,25 @@ SpeedBox.FocusLost:Connect(function()
 	end
 end)
 
+
 CopyStats.Activated:Connect(function()
-	if game.Players:FindFirstChild(targetval.Value.Name) then
-		local plr = targetval.Value
-		local data = game.ReplicatedStorage.Datas:WaitForChild(plr.UserId)
-		local nam = "("..plr.Name..", "..plr.DisplayName..")"
-		if plr.Name == plr.DisplayName then
-			nam = "("..plr.Name..")"
-		end
-		local stats = (data.Strength.Value + data.Speed.Value + data.Defense.Value + data.Energy.Value) / 4
-		local numt = format(stats)
-		local zeni = format(data.Zeni.Value)
-		local rebs = data.Rebirth.Value
-		local rebst = "("..rebs..")"
-		local txt = rebst.." "..nam..", "..numt..", "..zeni..""
-		for i,v in pairs(A) do
-			if rebs >= v[1] then
-				txt = "["..v[2].."] "..txt
-				break
-			end
-		end
-		for i,v in pairs(StatFormats) do
-			if getloweststat(plr) >= v[1] then
-				txt = v[2].." "..txt
-				break
-			end
-		end
-		setclipboard(txt)
-	end
+    local plr = game.Players:FindFirstChild(targetval.Value.Name)
+    if plr then
+        local data = game.ReplicatedStorage.Datas:WaitForChild(plr.UserId)
+        local nam = "("..plr.Name..", "..plr.DisplayName..")"
+        if plr.Name == plr.DisplayName then
+            nam = "("..plr.Name..")"
+        end
+        local strength = format(data.Strength.Value)
+        local zeni = format(data.Zeni.Value)
+        local rebs = data.Rebirth.Value
+        local rebst = rebs
+        local stats = (data.Strength.Value + data.Speed.Value + data.Defense.Value + data.Energy.Value) / 4
+        local statFormatted = format(stats)
+        local health = format(plr.Character:WaitForChild("Humanoid").Health)
+        local txt = "["..strength.."] ["..zeni.."] | "..nam..", Rebirths: "..rebst.." Stats: "..statFormatted.." ["..health.."]"
+        setclipboard(txt)
+    end
 end)
 
 _G.Down = nil
