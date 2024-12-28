@@ -66,17 +66,13 @@ local UICornerBotonUrl = Instance.new("UICorner")
 UICornerBotonUrl.CornerRadius = UDim.new(0.05, 0)
 UICornerBotonUrl.Parent = BotonUrl
 
-local BotonInvitacion = Instance.new("TextButton")
-BotonInvitacion.Size = UDim2.new(0.157682243, 0, 0.126241136, 0)
-BotonInvitacion.Position = UDim2.new(0.840682243, 0, 0.562241136, 0)
-BotonInvitacion.Text = "🌍"
-BotonInvitacion.Font = Enum.Font.GothamBold
-BotonInvitacion.TextScaled = true
-BotonInvitacion.TextColor3 = Color3.fromRGB(255, 255, 255)
+local BotonInvitacion = Instance.new("ImageButton")
+BotonInvitacion.Size = UDim2.new(0.097682243, 0, 0.116241136, 0)
+BotonInvitacion.Position = UDim2.new(0.870682243, 0, 0.562241136, 0)
+BotonInvitacion.Image = "rbxassetid://17085964685"
 BotonInvitacion.BackgroundTransparency = 1
 BotonInvitacion.BorderSizePixel = 0
 BotonInvitacion.Parent = Frame
-
 
 
 local UICornerBotonUrl = Instance.new("UICorner")
@@ -85,8 +81,8 @@ UICornerBotonUrl.Parent = BotonUrl
 
 local claveValida = false
 
-local function guardarClaveGuardada(clave)
-    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time()}))
+local function guardarClaveGuardada(clave, jugador)
+    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time(), jugador = jugador}))
 end
 
 local function actualizarHistorial(clave)
@@ -105,10 +101,10 @@ local function claveEsValida()
     if isfile(ArchivoClaveGuardada) then
         local datos = HttpService:JSONDecode(readfile(ArchivoClaveGuardada))
         if os.time() - datos.fecha < (24 * 60 * 60) then
-            return true
+            return datos.jugador
         end
     end
-    return false
+    return nil
 end
 
 local function resetearClave()
@@ -810,28 +806,38 @@ TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
+        local jugador = game.Players.LocalPlayer.Name
         
         if clave and #clave == 14 then
-            local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
-            local claveExistente = false
-            for _, v in pairs(historial) do
-                if v == clave then
-                    claveExistente = true
-                    break
-                end
-            end
-
-            if not claveExistente then
-                guardarClaveGuardada(clave)
-                actualizarHistorial(clave)
-                KeyGui.Enabled = false
-                lopoi()
-            else
-                TextBox.Text = "Clave ya usada"
+            local jugadorConClave = claveEsValida()
+            if jugadorConClave and jugadorConClave ~= jugador then
+                TextBox.Text = "Clave ya utilizada por otro jugador"
                 TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
                 wait(1)
                 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
                 TextBox.Text = ""
+            else
+                local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
+                local claveExistente = false
+                for _, v in pairs(historial) do
+                    if v == clave then
+                        claveExistente = true
+                        break
+                    end
+                end
+
+                if not claveExistente then
+                    guardarClaveGuardada(clave, jugador)
+                    actualizarHistorial(clave)
+                    KeyGui.Enabled = false
+                    lopoi()
+                else
+                    TextBox.Text = "Clave ya usada"
+                    TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    wait(1)
+                    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    TextBox.Text = ""
+                end
             end
         else
             TextBox.Text = "Clave inválida"
