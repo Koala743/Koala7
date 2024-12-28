@@ -631,19 +631,21 @@ toggleguicorner.CornerRadius = UDim.new(0,5)
 ToggleGuiButton.Activated:Connect(function()
 	if scgui.Enabled == true then  -- If visible, and want to hide
 		pcall(function()
+		game.CoreGui.Fernando.Enabled = false
 			find_iy().Enabled = false
 		end)
 		scgui.Enabled = false
 		vL.Visible = true
 		ToggleGuiButton.Text = "Show GUI"
 		game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList,true)
-
+		game.CoreGui.Fernando.Enabled = true
 	elseif scgui.Enabled == false then -- If hiding, and want to show
 		scgui.Enabled = true
 		pcall(function()
 			find_iy().Enabled = true
 		end)
 		vL.Visible = false
+		game.CoreGui.Fernando.Enabled = false
 		ToggleGuiButton.Text = "Hide GUI"
 		game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList,false)
 	end
@@ -1732,4 +1734,3 @@ game:GetService("TweenService"):Create(srvrs, TweenInfo.new(.3), {Position = UDi
 game:GetService("TweenService"):Create(numplrs, TweenInfo.new(.3), {Position = UDim2.new(.3,0,0,-36)}):Play()
 game:GetService("TweenService"):Create(job, TweenInfo.new(.3), {Position = UDim2.new(.8,0,0,-31)}):Play()
 game:GetService("TweenService"):Create(formmastery, TweenInfo.new(.3), {Position = UDim2.new(.65,0,0,-36)}):Play()
-
