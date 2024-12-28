@@ -258,7 +258,7 @@ local textProperties = {
     {text = "Mel", position = UDim2.new(0.350, 0, 0.115, 0), color = Color3.fromRGB(0, 255, 0)},
     {text = "Reb", position = UDim2.new(-0.160, 0, 0.195, 0), color = Color3.fromRGB(0, 255, 255)},   
     {text = "Puch", position = UDim2.new(0.360, 0, 0.195, 0), color = Color3.fromRGB(0, 0, 255)},
-    {text = "Main", position = UDim2.new(-0.160, 0, 0.270, 0), color = Color3.fromRGB(255, 255, 0)},
+    {text = "Dtroy", position = UDim2.new(-0.160, 0, 0.270, 0), color = Color3.fromRGB(255, 255, 0)},
 }
 
 for _, props in pairs(textProperties) do
@@ -486,6 +486,7 @@ task.spawn(function()
                 bb:CaptureController()
                 bb:ClickButton2(Vector2.new())
             end)
+            game.Workspace.FallenPartsDestroyHeight = 0/0
         end)
         task.wait()
     end
@@ -549,6 +550,23 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while true do
+        pcall(function()
+            local bossMaps = game.Workspace.Others:FindFirstChild("BossMaps") or game.ReplicatedStorage:FindFirstChild("BossMaps")
+            if bossMaps then
+                if getIsActive5()  then              
+                    bossMaps.Parent = game.ReplicatedStorage
+                else
+                    bossMaps.Parent = game.Workspace.Others                  
+                end
+            end
+        end)
+        wait()
+    end
+end)
+
+
 --Ciclo para Auto = Carga
 task.spawn(function()
     while true do
@@ -600,6 +618,28 @@ task.spawn(function()
     end
 end)
 
+
+task.spawn(function()
+    while true do
+        pcall(function()         
+       if getIsActive4() then
+            local kiValue = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.Value
+            local maxKi = game.Players.LocalPlayer.Character:WaitForChild("Stats").Ki.MaxValue
+            local kiPercentage = kiValue / maxKi
+            if data.Quest.Value == "" and kiPercentage <= 0.3 then
+                keypress(Enum.KeyCode.C)
+                keyrelease(Enum.KeyCode.R)
+                Ex.block:InvokeServer(false)
+            else
+              keyrelease(Enum.KeyCode.C)
+               keypress(Enum.KeyCode.R)
+                Ex.block:InvokeServer(true)
+                end 
+            end
+        end)
+       wait()
+    end
+end)
 
 task.spawn(function()
     while true do
