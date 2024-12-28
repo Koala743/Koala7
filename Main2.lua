@@ -534,7 +534,31 @@ CopyStats.Activated:Connect(function()
         local stats = (data.Strength.Value + data.Speed.Value + data.Defense.Value + data.Energy.Value) / 4
         local statFormatted = format(stats)
         local health = format(plr.Character:WaitForChild("Humanoid").Health)
-        local txt = "["..strength.."] ["..zeni.."] | "..nam..", Rebirths: "..rebst.." Stats: "..statFormatted.." ["..health.."]"
+        
+        local maxMastery = 332526
+        local maxedTransformations = {}
+        local transformations = { 
+            'Divine Rose Prominence', 'Astral Instinct', 'Ultra Ego', 'SSJB4', 'True God of Creation', 
+            'True God of Destruction', 'Super Broly', 'LSSJG', 'LSSJ4', 'SSJG4', 'LSSJ3', 'Mystic Kaioken', 
+            'LSSJ Kaioken', 'SSJR3', 'SSJB3', 'God Of Destruction', 'God Of Creation', 'Jiren Ultra Instinct', 
+            'Mastered Ultra Instinct', 'Godly SSJ2', 'Ultra Instinct Omen', 'Evil SSJ', 'Blue Evolution', 
+            'Dark Rose', 'Kefla SSJ2', 'SSJ Berserker', 'True Rose', 'SSJB Kaioken', 'SSJ Rose', 
+            'SSJ Blue', 'Corrupt SSJ', 'SSJ Rage', 'SSJG', 'SSJ4', 'Mystic', 'LSSJ', 'SSJ3', 
+            'Spirit SSJ', 'SSJ2 Majin', 'SSJ2', 'SSJ Kaioken', 'SSJ', 'FSSJ', 'Kaioken'
+        }
+
+        for _, transformation in ipairs(transformations) do
+            if data:FindFirstChild(transformation) and data[transformation].Value == maxMastery then
+                table.insert(maxedTransformations, transformation)
+            end
+        end
+
+        local transformationsText = ""
+        if #maxedTransformations > 0 then
+            transformationsText = " | Maxed: " .. table.concat(maxedTransformations, ", ")
+        end
+
+        local txt = "["..strength.."] ["..zeni.."] | "..nam..", Rebirths: "..rebst.." Stats: "..statFormatted.." ["..health.."]"..transformationsText
         setclipboard(txt)
     end
 end)
