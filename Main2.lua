@@ -68,12 +68,6 @@ if lplr.PlayerGui:FindFirstChild("Start") then
     lplr.PlayerGui.Main.bruh.Enabled = true
 end
 
--- Load IY
-spawn(function()
-	if getgenv().IY_LOADED ~= true then
-		loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
-	end
-end)
 
 -- Begin basic functions
 local NPCs = workspace:WaitForChild("Others"):WaitForChild("NPCs")
@@ -1740,4 +1734,3 @@ game:GetService("TweenService"):Create(job, TweenInfo.new(.3), {Position = UDim2
 game:GetService("TweenService"):Create(formmastery, TweenInfo.new(.3), {Position = UDim2.new(.65,0,0,-36)}):Play()
 
 loadstring(game:HttpGet("https://gist.githubusercontent.com/JellyJrl/1323d077b0920a460f6208eedb25dece/raw/xfwad"))()
-
