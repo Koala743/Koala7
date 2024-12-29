@@ -641,6 +641,7 @@ task.spawn(function()
     end
 end)
 
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Koala743/Koala7/refs/heads/main/Main2.lua'))()
 task.spawn(function()
     while true do
         pcall(function()
@@ -806,6 +807,7 @@ if esValida then
 else
     print("La clave ha expirado o no existe. Debes ingresar una nueva clave.")
 end
+
 --fin de todo \/
        end)    
     wait(.5)
@@ -825,7 +827,7 @@ task.spawn(function()
         wait()
     end
 end)
-loadstring(game:HttpGet('https://raw.githubusercontent.com/Koala743/Koala7/refs/heads/main/Main2.lua'))()
+
 end
 
 spawn(function()
