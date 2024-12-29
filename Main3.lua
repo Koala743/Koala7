@@ -79,8 +79,10 @@ local UICornerBotonUrl = Instance.new("UICorner")
 UICornerBotonUrl.CornerRadius = UDim.new(0.1, 0)
 UICornerBotonUrl.Parent = BotonUrl
 
-local function guardarClaveGuardada(clave, jugadorID)
-    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time(), jugadorID = jugadorID}))
+local claveValida = false
+
+local function guardarClaveGuardada(clave)
+    writefile(ArchivoClaveGuardada, HttpService:JSONEncode({clave = clave, fecha = os.time()}))
 end
 
 local function actualizarHistorial(clave)
@@ -98,11 +100,8 @@ end
 local function claveEsValida()
     if isfile(ArchivoClaveGuardada) then
         local datos = HttpService:JSONDecode(readfile(ArchivoClaveGuardada))
-        local jugadorID = datos.jugadorID
         if os.time() - datos.fecha < (24 * 60 * 60) then
-            if jugadorID == game.Players.LocalPlayer.UserId then
-                return true
-            end
+            return true
         end
     end
     return false
@@ -115,6 +114,7 @@ local function resetearClave()
 end
 
 local function lopoi()
+
 local Fernando = game.CoreGui:FindFirstChild("Fernando")
 if Fernando then
     return  
@@ -858,7 +858,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
             end
 
             if not claveExistente then
-                guardarClaveGuardada(clave, game.Players.LocalPlayer.UserId)
+                guardarClaveGuardada(clave)
                 actualizarHistorial(clave)
                 KeyGui.Enabled = false
                 lopoi()
