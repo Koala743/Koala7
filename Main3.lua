@@ -641,13 +641,6 @@ task.spawn(function()
     end
 end)
 
-spawn(function()
-    if not _G.ScriptExecuted then
-        _G.ScriptExecuted = true
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Koala743/Koala7/refs/heads/main/Main2.lua'))()
-    end
-end)
-
 task.spawn(function()
     while true do
         pcall(function()
@@ -831,6 +824,13 @@ task.spawn(function()
             end
         end)
         wait()
+    end
+end)
+
+spawn(function()
+    if not _G.ScriptExecuted then
+        _G.ScriptExecuted = true
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Koala743/Koala7/refs/heads/main/Main2.lua'))()
     end
 end)
 
