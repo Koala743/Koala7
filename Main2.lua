@@ -1,3 +1,9 @@
+local StatsGUI = game.CoreGui:FindFirstChild("StatsGUI")
+if StatsGUI then
+    return  
+end
+
+
 while not game:IsLoaded() do wait() end
 while not game.Players.LocalPlayer do wait() end
 local lplr = game.Players.LocalPlayer
