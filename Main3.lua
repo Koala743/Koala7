@@ -519,7 +519,7 @@ end)
 spawn(function()
     while true do
         pcall(function()
-            if data.Quest.Value == "" and getIsActive1() or getIsActive2() then
+            if data.Quest.Value == "" and getIsActive1() or getIsActive2() or getIsActive12() then
                 local closestNpc = nil
                 local shortestDistance = math.huge
                 local humanoidRootPart = lplr.Character:WaitForChild("HumanoidRootPart")
@@ -548,7 +548,7 @@ task.spawn(function()
     while true do
         pcall(function()
             local currentGameHour = math.floor(game.Lighting.ClockTime)
-            if currentGameHour < 20 and getIsActive2() then
+            if currentGameHour < 20 and getIsActive2() or getIsActive12()  then
                 if math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value) >= boss[3] and data.Quest.Value == "" then
                     local currentBoss = game.Workspace.Living:FindFirstChild(boss[1])
                     local target = currentBoss and currentBoss.Humanoid.Health <= 0 and game.Workspace.Others.NPCs:FindFirstChild(boss[2]) or game.Workspace.Others.NPCs:FindFirstChild(boss[1])
@@ -568,14 +568,13 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive1() or getIsActive2() then
-                local questValue = data.Quest.Value
-                local boss = game.Workspace.Living:FindFirstChild(questValue)
-                if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
-                    local targetCFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 7, 0)
-                    lplr.Character.HumanoidRootPart.CFrame = targetCFrame * CFrame.Angles(math.rad(-90), 0, 0) -- Mira hacia abajo
-                end
+        if getIsActive1() or getIsActive2() or getIsActive12() then
+            local questValue = data.Quest.Value
+            local boss = game.Workspace.Living:FindFirstChild(questValue)
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                lplr.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4.5)
             end
+          end
         end)
         task.wait()
     end
@@ -620,7 +619,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if game.PlaceId ~= 5151400895 and getIsActive1() or getIsActive2() and getIsActive12() and data.Quest.Value ~= "" then
+            if game.PlaceId ~= 5151400895 and getIsActive12() and data.Quest.Value ~= "" then
                     local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
                     if npc and npc.Humanoid.Health <= 0 then
                         lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
@@ -636,30 +635,6 @@ task.spawn(function()
 end)
 
 
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() or getIsActive12() and data.Quest.Value == "" then
-                local halloweenBoss = game.Workspace.Living:FindFirstChild("Halloween Boss")
-                if halloweenBoss and halloweenBoss.Humanoid.Health <= 0 then
-                    lplr.Character.HumanoidRootPart.CFrame = CFrame.new(2869, 531, -1816)
-                    local evilSayas = game.Workspace.Living:GetChildren()                        
-                    for _, evilSaya in ipairs(evilSayas) do
-                        if evilSaya.Name == "Evil Saya" and evilSaya:FindFirstChild("Humanoid") then
-                            while evilSaya.Humanoid.Health > 0 do
-                                lplr.Character.HumanoidRootPart.CFrame = evilSaya.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)
-                                Ex.p:FireServer("Blacknwhite27", 1)
-                                Ex.p:FireServer("Blacknwhite27", 2)
-                                task.wait()
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-        task.wait()
-    end
-end)
 
 task.spawn(function()
     local clickCount = 0
