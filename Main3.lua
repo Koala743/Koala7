@@ -762,7 +762,7 @@ task.spawn(function()
             end)
             game.Workspace.FallenPartsDestroyHeight = 0/0
         end)
-        task.wait()
+        wait(.2)
     end
 end)
 
@@ -924,7 +924,7 @@ task.spawn(function()
                 masteryLabel.Text = "Mastery"
             end
         end)
-        wait()
+        wait(.1)
     end
 end)
 
