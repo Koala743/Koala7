@@ -658,7 +658,7 @@ ToggleGuiButton.Activated:Connect(function()
 		vL.Visible = true
 		ToggleGuiButton.Text = "Show GUI"
 		game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList,true)
-		game.CoreGui.Fernando.Enabled = false
+		game.CoreGui.fffg.Enabled = false
 		game.Players.LocalPlayer.PlayerGui:WaitForChild("Main").Enabled = true
 	elseif scgui.Enabled == false then -- If hiding, and want to show
 		scgui.Enabled = true		
@@ -668,7 +668,7 @@ ToggleGuiButton.Activated:Connect(function()
 		vL.Visible = false
 		ToggleGuiButton.Text = "Hide GUI"		
 		game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList,false)
-		game.CoreGui.Fernando.Enabled = true
+		game.CoreGui.fffg.Enabled = true
 		game.Players.LocalPlayer.PlayerGui:WaitForChild("Main").Enabled = false
 	end
 end)
@@ -743,33 +743,23 @@ espH.MouseButton1Up:Connect(function()
 	ESPH()
 end)
 
--- ESPh
-_G.espl = true
-if _G.esp == true then
-	espL.Text = "Disable ESPL"
-else
-	espL.Text = "Enable ESPL"
-end
-
-function ESPL()
-	if _G.espl == true then
-		_G.espl = false
-		espL.Text = "Enable ESPL"
-		for i,gui in pairs(espdirectory:GetChildren()) do
-			gui.Enabled = false
-			--gui.Highlight.Enabled = false
-		end
-	elseif _G.espl == false then
-		_G.espl = true
-		espL.Text = "Disable ESPL"
-		for i,gui in pairs(espdirectory:GetChildren()) do
-			gui.Enabled = true
-			--gui.Highlight.Enabled = true
-		end
-	end
-end
-espL.MouseButton1Up:Connect(function()
-	ESPL()
+spawn(function()
+    while true do
+        pcall(function()
+            if scgui.Enabled == true then
+                for i, gui in pairs(espdirectory:GetChildren()) do
+                    gui.Enabled = true
+                end
+                espL.Text = "Disable ESPL"
+            elseif scgui.Enabled == false then
+                for i, gui in pairs(espdirectory:GetChildren()) do
+                    gui.Enabled = false
+                end
+                espL.Text = "Enable ESPL"
+            end
+        end)
+        wait()
+    end
 end)
 
 --Stat abbreviations
