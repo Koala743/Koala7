@@ -1200,23 +1200,33 @@ TextBox.FocusLost:Connect(function(enterPressed)
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
         
-        if clave and #clave == 14 then
-            local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
-            local claveExistente = false
-            for _, v in pairs(historial) do
-                if v == clave then
-                    claveExistente = true
-                    break
+        if clave then
+            -- Validación del patrón de la clave
+            local cumplePatron = clave:match("^(F.*F.*F.*F.*666.*)$") -- Aquí validamos las 4 F y el 666 repetido
+            if cumplePatron and #clave == 65 then
+                local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
+                local claveExistente = false
+                for _, v in pairs(historial) do
+                    if v == clave then
+                        claveExistente = true
+                        break
+                    end
                 end
-            end
 
-            if not claveExistente then
-                guardarClaveGuardada(clave)
-                actualizarHistorial(clave)
-                KeyGui.Enabled = false
-                lopoi()
+                if not claveExistente then
+                    guardarClaveGuardada(clave)
+                    actualizarHistorial(clave)
+                    KeyGui.Enabled = false
+                    lopoi()
+                else
+                    TextBox.Text = "Clave ya usada"
+                    TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    wait(1)
+                    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    TextBox.Text = ""
+                end
             else
-                TextBox.Text = "Clave ya usada"
+                TextBox.Text = "Clave inválida"
                 TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
                 wait(1)
                 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
