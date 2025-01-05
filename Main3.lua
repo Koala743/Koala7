@@ -1201,11 +1201,12 @@ TextBox.FocusLost:Connect(function(enterPressed)
         local clave = texto:match("KEY:%[(.-)%]$")
         
         if clave then
-            -- Validación del patrón de la clave
-            local cumplePatron = clave:match("^(F.*F.*F.*F.*666.*)$") -- Aquí validamos las 4 F y el 666 repetido
-            if cumplePatron and #clave == 65 then
+            local cumplePatron = clave:match("^.*F.*F.*F.*F.*6.*6.*6.*$") and #clave == 65 -- Validar que tenga 4 "F" y 3 "6" distribuidos aleatoriamente
+            
+            if cumplePatron then
                 local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
                 local claveExistente = false
+                
                 for _, v in pairs(historial) do
                     if v == clave then
                         claveExistente = true
