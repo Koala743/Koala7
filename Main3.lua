@@ -1195,20 +1195,45 @@ spawn(function()
     end
 end)
 
+-- Función para calcular la distancia de Levenshtein
+local function calcularDistanciaLevenshtein(a, b)
+    local m = #a
+    local n = #b
+    local dp = {}
+    for i = 0, m do
+        dp[i] = {}
+        dp[i][0] = i
+    end
+    for j = 0, n do
+        dp[0][j] = j
+    end
+    for i = 1, m do
+        for j = 1, n do
+            local cost = (a:sub(i, i) == b:sub(j, j)) and 0 or 1
+            dp[i][j] = math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost)
+        end
+    end
+
+    return dp[m][n]
+end
+
 TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
         
-        if clave then
-            local cumplePatron = clave:match("^.*F.*F.*F.*F.*6.*6.*6.*$") and #clave == 65 -- Validar que tenga 4 "F" y 3 "6" distribuidos aleatoriamente
-            
-            if cumplePatron then
+        if clave and #clave == 64 then
+            local tieneMayuscula = clave:match("%u") ~= nil
+            local tieneMinuscula = clave:match("%l") ~= nil
+            local tieneNumero = clave:match("%d") ~= nil
+
+            if tieneMayuscula and tieneMinuscula and tieneNumero then
                 local historial = HttpService:JSONDecode(isfile(ArchivoHistorial) and readfile(ArchivoHistorial) or "[]")
                 local claveExistente = false
-                
+
                 for _, v in pairs(historial) do
-                    if v == clave then
+                    local distancia = calcularDistanciaLevenshtein(v, clave)
+                    if distancia <= 4 then -- Si la diferencia es 4 o menos, la clave es muy similar
                         claveExistente = true
                         break
                     end
@@ -1220,14 +1245,14 @@ TextBox.FocusLost:Connect(function(enterPressed)
                     KeyGui.Enabled = false
                     lopoi()
                 else
-                    TextBox.Text = "Clave ya usada"
+                    TextBox.Text = "Clave demasiado similar a una anterior"
                     TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
                     wait(1)
                     TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
                     TextBox.Text = ""
                 end
             else
-                TextBox.Text = "Clave inválida"
+                TextBox.Text = "Clave inválida: debe contener mayúsculas, minúsculas y números mezclados"
                 TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
                 wait(1)
                 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
