@@ -1222,7 +1222,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
         local texto = TextBox.Text
         local clave = texto:match("KEY:%[(.-)%]$")
         
-        if clave and #clave == 64 then
+        if clave and #clave == 94 then
             local tieneMayuscula = clave:match("%u") ~= nil
             local tieneMinuscula = clave:match("%l") ~= nil
             local tieneNumero = clave:match("%d") ~= nil
@@ -1233,7 +1233,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
 
                 for _, v in pairs(historial) do
                     local distancia = calcularDistanciaLevenshtein(v, clave)
-                    if distancia <= 4 then -- Si la diferencia es 4 o menos, la clave es muy similar
+                    if distancia <= 10 then -- Si la diferencia es 4 o menos, la clave es muy similar
                         claveExistente = true
                         break
                     end
