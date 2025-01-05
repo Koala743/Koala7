@@ -558,31 +558,11 @@ spawn(function()
 end)
 
 
-local boss = {"SSJG Kakata", "Broccoli", 1e8}
-task.spawn(function()
-    while true do
-        pcall(function()    
-            if getIsActive2() then
-                if math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value) >= boss[3] and data.Quest.Value == "" then
-                    local currentBoss = game.Workspace.Living:FindFirstChild(boss[1])
-                    local target = currentBoss and currentBoss.Humanoid.Health <= 0 and game.Workspace.Others.NPCs:FindFirstChild(boss[2]) or game.Workspace.Others.NPCs:FindFirstChild(boss[1])
-                    if target then
-                        lplr.Character.HumanoidRootPart.CFrame = target.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4)                        
-                    end
-                end
-            end
-        end)
-        task.wait()
-    end
-end)
-
-
-
 --Ciclo Para Auto = Tp Boss A Cualquier Tipo De Boss
 task.spawn(function()
     while true do
         pcall(function()
-        if getIsActive1() or getIsActive2() then
+        if getIsActive1() then
             local questValue = data.Quest.Value
             local boss = game.Workspace.Living:FindFirstChild(questValue)
             if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
@@ -616,7 +596,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if game.PlaceId ~= 5151400895 and data.Quest.Value ~= "" then
+            if game.PlaceId ~= 5151400895 and data.Quest.Value ~= "" and getIsActive2() then
                     local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
                     if npc and npc.Humanoid.Health <= 0 then
                         lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
