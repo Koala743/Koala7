@@ -290,13 +290,29 @@ Fps.Parent = Barra1
 
 local VS = Instance.new("TextLabel")
 VS.Parent = Barra1
-VS.Text = "V [0.5]"
+VS.Text = "V [0.6]"
 VS.Size = UDim2.new(0, 100, 0, 10)
 VS.Position = UDim2.new(0.783, 0, 0.009, 0)
 VS.TextColor3 = Color3.fromRGB(255, 255, 255)
 VS.BackgroundTransparency = 1
 VS.TextSize = 7
 VS.TextStrokeTransparency = 0.8
+
+local TiempoValidez = 24 * 60 * 60
+local ArchivoClave = "ClaveGuardada.json"
+local HttpService = game:GetService("HttpService")
+
+local TiempoGui = Instance.new("ScreenGui")
+local TiempoLabel = Instance.new("TextLabel", Barra1)
+TiempoLabel.Size = UDim2.new(0.2, 0, 0.1, 0)
+TiempoLabel.Position = UDim2.new(0.4, 0, -0.009, 0)
+TiempoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TiempoLabel.TextScaled = true
+TiempoLabel.BackgroundTransparency = 1
+TiempoLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TiempoLabel.BorderSizePixel = 0
+TiempoLabel.Text = "Cargando..."
+
 
 --incio Borde color\/
 Borde1.Parent = Cuadro1
@@ -333,7 +349,7 @@ end)
 --incio de color txt\/
 local textProperties = {
     {text = "Farm", position = UDim2.new(-0.155, 0, 0.115, 0), color = Color3.fromRGB(255, 0, 0)},
-    {text = "Ozaru", position = UDim2.new(0.350, 0, 0.115, 0), color = Color3.fromRGB(0, 255, 0)},
+    {text = "HA🎃", position = UDim2.new(0.350, 0, 0.115, 0), color = Color3.fromRGB(0, 255, 0)},
     {text = "Atck", position = UDim2.new(-0.160, 0, 0.195, 0), color = Color3.fromRGB(0, 255, 255)},   
     {text = "Puch", position = UDim2.new(0.360, 0, 0.195, 0), color = Color3.fromRGB(0, 0, 255)},
     {text = "Reb", position = UDim2.new(-0.160, 0, 0.270, 0), color = Color3.fromRGB(255, 255, 0)},
@@ -345,7 +361,6 @@ local textProperties = {
     {text = "Graf", position = UDim2.new(-0.160, 0, 0.495, 0), color = Color3.fromRGB(100, 200, 100)},   
     {text = "Plant", position = UDim2.new(0.350, 0, 0.495, 0), color = Color3.fromRGB(100, 200, 100)},
     {text = "Zom", position = UDim2.new(-0.160, 0, 0.570, 0), color = Color3.fromRGB(200, 380, 90)},   
-    {text = "HA🎃", position = UDim2.new(0.360, 0, 0.570, 0), color = Color3.fromRGB(100, 200, 100)},  
 }
 
 for _, props in pairs(textProperties) do
@@ -439,7 +454,7 @@ local function createSwitch(parent, position, switchName, initialState)
 end
 
 local getIsActive1 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.120, 0), "Switch1", LoadSwitchState("Switch1"))--Farm
-local getIsActive2 = createSwitch(Barra1, UDim2.new(0.735, 0, 0.115, 0), "Switch2", LoadSwitchState("Switch2"))--Ozaru
+local getIsActive2 = createSwitch(Barra1, UDim2.new(0.735, 0, 0.115, 0), "Switch2", LoadSwitchState("Switch2"))--Hall🎃
 local getIsActive3 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.2, 0), "Switch3", LoadSwitchState("Switch3"))--Atack
 local getIsActive4 = createSwitch(Barra1, UDim2.new(0.735, 0, 0.195, 0), "Switch4", LoadSwitchState("Switch4"))--Puch
 local getIsActive5 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.275, 0), "Switch5", LoadSwitchState("Switch5"))--Rebirth
@@ -449,7 +464,7 @@ local getIsActive8 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.420, 0), "Switch
 local getIsActive9 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.495, 0), "Switch9", LoadSwitchState("Switch9"))--Graf
 local getIsActive10 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.495, 0), "Switch10", LoadSwitchState("Switch10"))--Planet
 local getIsActive11 = createSwitch(Barra1, UDim2.new(0.2, 0, 0.570, 0), "Switch11", LoadSwitchState("Switch11"))--Zom
-local getIsActive12 = createSwitch(Barra1, UDim2.new(0.740, 0, 0.570, 0), "Switch12", LoadSwitchState("Switch12"))--Hall🎃
+
 
 --Casi fin del interrutor /\
 
@@ -519,7 +534,7 @@ end)
 spawn(function()
     while true do
         pcall(function()
-            if data.Quest.Value == "" and getIsActive1() or getIsActive2() or getIsActive12() then
+            if data.Quest.Value == "" and getIsActive1() or getIsActive2() then
                 local closestNpc = nil
                 local shortestDistance = math.huge
                 local humanoidRootPart = lplr.Character:WaitForChild("HumanoidRootPart")
@@ -546,9 +561,8 @@ end)
 local boss = {"SSJG Kakata", "Broccoli", 1e8}
 task.spawn(function()
     while true do
-        pcall(function()
-            local currentGameHour = math.floor(game.Lighting.ClockTime)
-            if currentGameHour < 20 and getIsActive2() or getIsActive12()  then
+        pcall(function()    
+            if getIsActive2() then
                 if math.min(data.Strength.Value, data.Energy.Value, data.Defense.Value, data.Speed.Value) >= boss[3] and data.Quest.Value == "" then
                     local currentBoss = game.Workspace.Living:FindFirstChild(boss[1])
                     local target = currentBoss and currentBoss.Humanoid.Health <= 0 and game.Workspace.Others.NPCs:FindFirstChild(boss[2]) or game.Workspace.Others.NPCs:FindFirstChild(boss[1])
@@ -568,7 +582,7 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-        if getIsActive1() or getIsActive2() or getIsActive12() then
+        if getIsActive1() or getIsActive2() then
             local questValue = data.Quest.Value
             local boss = game.Workspace.Living:FindFirstChild(questValue)
             if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
@@ -597,29 +611,12 @@ task.spawn(function()
 end)
 
 
---Ciclo Para Auto = Quest y Tp Con Tiempo/Ozaruu
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
-                    if data.Quest.Value == "" then
-                        lplr.Character.HumanoidRootPart.CFrame = game.Workspace.Others.NPCs["Kid Nohag"].HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                        game.ReplicatedStorage.Package.Events.Qaction:InvokeServer(game.Workspace.Others.NPCs["Kid Nohag"])
-                    end
-                end
-            end
-        end)
-        wait(0.1)
-    end
-end)
 
 --Ciclo Para Auto = Tp Boss y Halloween_Farm
 task.spawn(function()
     while true do
         pcall(function()
-            if game.PlaceId ~= 5151400895 and getIsActive12() and data.Quest.Value ~= "" then
+            if game.PlaceId ~= 5151400895 and data.Quest.Value ~= "" then
                     local npc = game.Workspace.Living:FindFirstChild(data.Quest.Value)
                     if npc and npc.Humanoid.Health <= 0 then
                         lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-35233, 18, -28942)
@@ -649,24 +646,6 @@ task.spawn(function()
                 elseif data.Quest.Value ~= "" then
                     keypress(Enum.KeyCode.O)
                     clickCount = 0 
-                end
-            end
-        end)
-        task.wait()
-    end
-end)
-
---Ciclo Para Auto = Tp Boss y Ozaru
-task.spawn(function()
-    while true do
-        pcall(function()
-            if getIsActive2() and data.Quest.Value == "Kid Nohag" then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                if currentGameHour >= 20 or currentGameHour < 6 then
-                    local boss = game.Workspace.Living:FindFirstChild("Oozaru")
-                    if boss and boss:FindFirstChild("HumanoidRootPart") then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
-                    end
                 end
             end
         end)
@@ -751,18 +730,53 @@ task.spawn(function()
     end
 end)
 
+
+local Q = data:WaitForChild("Quest")
+local notified = false
+local function NotyQ()
+    if Q.Value ~= "" and not notified then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Misión Iniciada",
+            Text = tostring(Q.Value),
+            Duration = 2
+        })
+        notified = true
+    elseif Q.Value == "" then
+        notified = false
+    end
+end
+NotyQ()
+game.ReplicatedStorage.Datas[lplr.UserId].Quest.Changed:Connect(function()
+    NotyQ()
+end)
+
+
+task.spawn(function()
+    while true do
+        pcall(function()
+           game.Workspace.FallenPartsDestroyHeight = 0/0
+        end)
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        pcall(function()
+            lplr.PlayerGui.Main.MainFrame.Frames.Quest.Visible = false
+        end)
+        task.wait()
+    end
+end)
+
+
 --Ciclo para ancti afk
 task.spawn(function()
     while true do
         pcall(function()
-            game:GetService('Players').LocalPlayer.Idled:Connect(function()
-                local bb = game:GetService('VirtualUser')
-                bb:CaptureController()
-                bb:ClickButton2(Vector2.new())
-            end)
-            game.Workspace.FallenPartsDestroyHeight = 0/0
+          keypress(Enum.KeyCode.L)  
         end)
-        wait(.2)
+        wait(100)
     end
 end)
 
@@ -829,13 +843,6 @@ end)
 task.spawn(function()
     while true do
         pcall(function()
-            if getIsActive2() then
-                local currentGameHour = math.floor(game.Lighting.ClockTime)
-                local currentGameMinute = math.floor((game.Lighting.ClockTime % 1) * 60)
-                if currentGameHour == 6 and currentGameMinute >= 0 and currentGameMinute < 20 then
-                    game.ReplicatedStorage.Package.Events.TP:InvokeServer("Earth")
-                end
-            end
             for _, obj in pairs(game.Workspace:GetDescendants()) do
             if obj:IsA("Sound") or obj.Name == "Effects" or obj:IsA("ParticleEmitter") then
               obj:Destroy()
@@ -859,6 +866,40 @@ task.spawn(function()
         wait()
     end
 end)
+
+local function claveEsValida()
+    if isfile(ArchivoClave) then
+        local datosClave = HttpService:JSONDecode(readfile(ArchivoClave))
+        local tiempoRestante = TiempoValidez - (os.time() - datosClave.fecha)
+        return tiempoRestante > 0, tiempoRestante
+    end
+    return false, 0
+end
+
+local function mostrarTiempoRestante(tiempoRestante)
+    TiempoGui.Enabled = true
+
+    spawn(function()
+        while tiempoRestante > 0 do
+            tiempoRestante = tiempoRestante - 1
+            TiempoLabel.Text = string.format("%02d:%02d:%02d", 
+                math.floor(tiempoRestante / 3600), 
+                math.floor((tiempoRestante % 3600) / 60), 
+                tiempoRestante % 60)
+            wait(1)
+        end
+
+        TiempoGui.Enabled = false
+        print("El tiempo ha expirado. Debes ingresar una nueva clave.")
+    end)
+end
+
+local esValida, tiempoRestante = claveEsValida()
+if esValida then
+    mostrarTiempoRestante(tiempoRestante)
+else
+    print("La clave ha expirado o no existe. Debes ingresar una nueva clave.")
+end
 
 
 task.spawn(function()
@@ -1004,19 +1045,6 @@ if getIsActive9() then
     end
 end
 
-task.spawn(function()
-    while true do
-        pcall(function()
-           if getIsActive6() then           
-             local s = lplr.PlayerGui.Main.MainFrame.Frames.Quest
-                s.Visible = false
-                s.Position = UDim2.new(0.01, 0, 0.4, 0)
-                s.Position = UDim2.new(2, 0, 0, 0)
-            end
-         end)
-        task.wait()
-    end
-end)
 
 --Ciclo Para Auto = Main y Start
 local gui = lplr.PlayerGui.Main.bruh
@@ -1135,6 +1163,7 @@ task.spawn(function()
         task.wait()
     end
 end)
+
 
 
 --fin de todo \/
