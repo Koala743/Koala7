@@ -691,16 +691,22 @@ task.spawn(function()
     end
 end)
 
+
 local moves = {"Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", "God Slicer"}
 task.spawn(function()
     while true do
         pcall(function()
-        local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)           
-            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and data.Strength.Value >= 2e5 and data.Quest.Value ~= "" and getIsActive3() then
+            local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)
+            local Ki = lplr.Character.Stats.Ki
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and 
+                data.Strength.Value >= 2e5 and data.Quest.Value ~= "" and 
+                getIsActive3() and lplr.Character.Humanoid.Health > 0 and 
+                Ki.Value > Ki.MaxValue * 0.15 then
                 for _, move in pairs(moves) do
                     if not lplr.Status:FindFirstChild(move) then
                         task.spawn(function()
                             game.ReplicatedStorage.Package.Events.mel:InvokeServer(move, "Blacknwhite27")
+                            game.ReplicatedStorage.Package.Events.voleys:InvokeServer("Energy Volley", { FaceMouse = false, MouseHit = CFrame.new() }, "Blacknwhite27")
                         end)
                     end
                 end
@@ -709,7 +715,6 @@ task.spawn(function()
         task.wait()
     end
 end)
-
 
 local Q = data:WaitForChild("Quest")
 local notified = false
@@ -819,7 +824,6 @@ task.spawn(function()
     end
 end)
 
---Ciclo Para el Ozaru tp tierra
 task.spawn(function()
     while true do
         pcall(function()
@@ -1213,7 +1217,7 @@ TextBox.FocusLost:Connect(function(enterPressed)
 
                 for _, v in pairs(historial) do
                     local distancia = calcularDistanciaLevenshtein(v, clave)
-                    if distancia <= 13 then 
+                    if distancia <= 14 then 
                         claveExistente = true
                         break
                     end
