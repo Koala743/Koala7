@@ -489,26 +489,26 @@ local lplr = game.Players.LocalPlayer
 local data = game.ReplicatedStorage:WaitForChild("Datas"):WaitForChild(lplr.UserId)
 
 local npcList = {
-    {"Vekuta (SSJBUI)", 6.375e9},
-    {"Wukong Rose", 4.25e9},
-    {"Vekuta (LBSSJ4)", 3.25e9},
-    {"Wukong (LBSSJ4)", 2.1e9},
-    {"Vegetable (LBSSJ4)", 1.55e9},
-    {"Vis (20%)", 1.05e9},
-    {"Vills (50%)", 675e6},
-    {"Wukong (Omen)", 300e6},
-    {"Vegetable (GoD in-training)", 150e6},
-    {"SSJG Kakata", 100e6},
-    {"Broccoli", 55.5e6},
-    {"SSJB Wukong", 8e6},
-    {"Kai-fist Master", 3225000},
-    {"SSJ2 Wukong", 2250000},
-    {"Perfect Atom", 1275000},
-    {"Chilly", 850000},
-    {"Super Vegetable", 258000},
-    {"Mapa", 95000},
-    {"Radish", 45000},
-    {"Kid Nohag", 20000},
+    {"Vekuta (SSJBUI)", 9.375e9},
+    {"Wukong Rose", 9.25e9},
+    {"Vekuta (LBSSJ4)", 5.25e9},
+    {"Wukong (LBSSJ4)", 4.1e9},
+    {"Vegetable (LBSSJ4)", 2.55e9},
+    {"Vis (20%)", 1.95e9},
+    {"Vills (50%)", 875e6},
+    {"Wukong (Omen)", 450e6},
+    {"Vegetable (GoD in-training)", 250e6},
+    {"SSJG Kakata", 200e6},
+    {"Broccoli", 85.5e6},
+    {"SSJB Wukong", 1e7},
+    {"Kai-fist Master", 4225000},
+    {"SSJ2 Wukong", 3250000},
+    {"Perfect Atom", 2275000},
+    {"Chilly", 950000},
+    {"Super Vegetable", 358000},
+    {"Mapa", 105000},
+    {"Radish", 55000},
+    {"Kid Nohag", 40000},
     {"Klirin", 0}
 }
 
@@ -692,14 +692,14 @@ task.spawn(function()
 end)
 
 
-local moves = {"Wolf Fang Fist", "Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", "God Slicer"}
+local moves = {"Meteor Crash", "High Power Rush", "Mach Kick", "Spirit Barrage", "God Slicer"}
 task.spawn(function()
     while true do
         pcall(function()
             local boss = game.Workspace.Living:FindFirstChild(data.Quest.Value)
             local Ki = lplr.Character.Stats.Ki
             if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 and 
-                data.Strength.Value >= 2e5 and data.Quest.Value ~= "" and 
+                data.Strength.Value >= 6e5 and data.Quest.Value ~= "" and 
                 getIsActive3() and lplr.Character.Humanoid.Health > 0 and 
                 Ki.Value > Ki.MaxValue * 0.15 then
                 for _, move in pairs(moves) do
