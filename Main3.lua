@@ -657,10 +657,10 @@ end)
 task.spawn(function()
     while true do
         pcall(function()         
-            if getIsActive10() and game.PlaceId == 5151400895 and yo() <= 200000000 then
+            if getIsActive10() and game.PlaceId == 5151400895 and yo() <= 250e6 then
                 Ex.TP:InvokeServer("Earth")
                 wait()
-            elseif getIsActive10() and game.PlaceId ~= 5151400895 and yo() >= 200000000 then
+            elseif getIsActive10() and game.PlaceId ~= 5151400895 and yo() >= 250e6 then
                Ex.TP:InvokeServer("Vills Planet")
                 wait()                
             end
