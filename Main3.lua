@@ -498,7 +498,7 @@ local npcList = {
     {"Vills (50%)", 875e6},
     {"Wukong (Omen)", 450e6},
     {"Vegetable (GoD in-training)", 250e6},
-    {"SSJG Kakata", 200e6},
+    {"SSJG Kakata", 250e6},
     {"Broccoli", 85.5e6},
     {"SSJB Wukong", 1e7},
     {"Kai-fist Master", 4225000},
