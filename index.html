@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generar Enlace Platoboost</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #00c9ff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #00a2d6;
+    }
+
+    #msg {
+      margin-top: 30px;
+      font-size: 1.1em;
+      font-style: italic;
+    }
+
+    .error {
+      color: #ffbbbb;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔗 Generar y Abrir Enlace Platoboost</h1>
+  <button id="btnGenerate">✨ Generar enlace ahora</button>
+  <p id="msg"></p>
+
+  <script>
+    const service = 1951;
+    const identifier = "client-browser-auto";
+    const hostname = "https://api.platoboost.com";
+
+    document.getElementById("btnGenerate").addEventListener("click", async () => {
+      document.getElementById("msg").textContent = "🔄 Generando enlace...";
+      try {
+        const response = await fetch(`${hostname}/public/start`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ service, identifier })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          const link = data.data.url;
+          document.getElementById("msg").textContent = "✅ Redireccionando al enlace...";
+          window.location.href = link; // Redirige automáticamente
+        } else {
+          document.getElementById("msg").innerHTML = `❌ Error: <span class="error">${data.message}</span>`;
+        }
+      } catch (err) {
+        document.getElementById("msg").innerHTML = `⚠️ Error de red o CORS: <span class="error">${err.message}</span>`;
+      }
+    });
+  </script>
+</body>
+</html>
